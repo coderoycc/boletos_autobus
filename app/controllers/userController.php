@@ -4,8 +4,6 @@ namespace App\Controllers;
 
 use App\Config\Accesos;
 use App\Config\Database;
-use App\Models\Department;
-use App\Models\Resident;
 use App\Models\User;
 use App\Providers\DBAppProvider;
 use App\Providers\DBWebProvider;
@@ -22,9 +20,8 @@ class UserController {
       $usuario->password = hash('sha256', $data['usuario']);
       // print_r($usuario);
       $usuario->role = $data['rol'];
-      $usuario->first_name = $data['nombre'];
+      $usuario->fullname = $data['nombre'];
       $usuario->status = 1;
-      $usuario->gender = 'O';
       $res = $usuario->save();
       if ($res) {
         unset($usuario->password);
@@ -41,7 +38,7 @@ class UserController {
     $pass = $data['pass'];
     $new = $data['newPass'];
     $usuario = new User($id);
-    if ($usuario->id_user == 0) {
+    if ($usuario->id == 0) {
       echo json_encode(array('status' => 'error', 'message' => 'No existe el usuario | idUsuario incorrecto'));
     } else if ($usuario->password != hash('sha256', $pass)) {
       echo json_encode(array('status' => 'error', 'message' => 'La contraseña anterior es incorrecta'));
@@ -76,7 +73,7 @@ class UserController {
     $id = $data['idUsuario'];
     $con = DBWebProvider::getSessionDataDB();
     $usuario = new User($con, $id);
-    if ($usuario->id_user == 0) {
+    if ($usuario->id == 0) {
       Response::error_json(['message' => 'Usuario no encontrado'], 200);
     } else {
       $res = $usuario->delete();
@@ -94,12 +91,12 @@ class UserController {
     $user = $data['usuario'];
     $rol = $data['rol'];
     $usuario = new User($con, $idUsuario);
-    if ($usuario->id_user == 0) {
+    if ($usuario->id == 0) {
       Response::error_json(['message' => 'No existe el usuario | idUsuario incorrecto'], 200);
     } else {
       $usuario->username = $user;
       $usuario->role = $rol;
-      $usuario->first_name = $data['nombre'];
+      $usuario->fullname = $data['nombre'];
       $res = $usuario->save();
       if ($res > 0) {
         Response::success_json('Acutalizado correctamente', [], 200);
@@ -112,7 +109,7 @@ class UserController {
     $id = $data['idUsuario'];
     $con = DBWebProvider::getSessionDataDB();
     $usuario = new User($con, $id);
-    if ($usuario->id_user == 0) {
+    if ($usuario->id == 0) {
       Response::error_json(['message' => 'Usuario no existente'], 200);
     } else {
       if ($usuario->resetPass()) {
@@ -121,51 +118,11 @@ class UserController {
         Response::error_json(['message' => 'No se realizó el cambio la contraseña'], 200);
     }
   }
-  public function get_data_resident($data) {
-    if (!Request::required(['pin', 'user_id'], $data))
-      Response::error_json(['message' => 'Parametros faltantes']);
-
-
-    $condominio_data = Accesos::getCondominio($data['pin']);
-    if (isset($condominio_data['dbname'])) {
-      $con = Database::getInstanceX($condominio_data['dbname']);
-      $resident = new Resident($con, $data['user_id']);
-      $resident->department();
-      unset($resident->password);
-      Response::success_json('Usuario residente', ['residente' => $resident, 'condominio' => $condominio_data]);
-    } else {
-      Response::error_json(['message' => 'Pin incorrecto']);
-    }
-  }
   public function get_admins($data) {
     $con = DBWebProvider::getSessionDataDB();
     if ($con) {
       $admins = User::all_users($con);
       Response::success_json('Administradores', $admins);
     } else Response::error_json(['message' => 'Sin conexión a la base de datos'], 200);
-  }
-  public function search_with_department($query)/*protected*/ {
-    if (!Request::required(['q_user'], $query))
-      Response::error_json(['message' => 'Parametros faltantes']);
-
-    $con = DBAppProvider::get_conecction();
-    $depa_num = $query['depa_num'] ?? null;
-    if ($con) {
-      $rows_data = Resident::search_user_depa($con, $query['q_user'], $depa_num);
-      if ($rows_data) {
-        Response::success_json('Residentes ' . $query['q_user'], $rows_data);
-      } else {
-        Response::success_json('Sin resultados', $rows_data, 200);
-      }
-    } else {
-      Response::error_json(['message' => 'Error, token no detectado'], 500);
-    }
-  }
-  public function get_residents($query) {
-    $con = DBWebProvider::getSessionDataDB();
-    if ($con) {
-      $residents = Resident::all_residents($con);
-      Render::view('resident/list', ['residents' => $residents]);
-    }
   }
 }

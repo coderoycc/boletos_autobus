@@ -13,20 +13,16 @@ class AuthController {
     if (!Request::required(['user', 'password'], $data))
       Response::error_json(['message' => 'Datos incompletos'], 401);
 
-    $condominioData['dbname'] = 'boletos';
-    var_dump($condominioData);
+    $enterpriceData['dbname'] = 'boletos';
+    // var_dump($condominioData);
 
     // $condominioData = Accesos::getCondominio($data['pin']);
     // if (!empty($condominioData)) {
-    $auth = new AuthProvider(null, $condominioData['dbname']);
+    $auth = new AuthProvider(null, $enterpriceData['dbname']);
     $res_auth = $auth->auth_web($data['user'], $data['password']);
     if ($res_auth['user']) {
-      if ($res_auth['admin']) {
-        DBWebProvider::start_session($res_auth['user'], $condominioData);
-        Response::success_json('Login Correcto', []);
-      } else {
-        Response::error_json(['message' => 'Credenciales incorrectas [ADMIN ONLY]'], 401);
-      }
+      DBWebProvider::start_session($res_auth['user'], $enterpriceData);
+      Response::success_json('Login Correcto', []);
     } else {
       Response::error_json(['message' => 'Credenciales incorrectas'], 401);
     }

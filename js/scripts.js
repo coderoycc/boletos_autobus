@@ -22,10 +22,11 @@ function activateRoute() {
   if (arrLocation.length > 1) {
     $parent = $(`a[data-route='${arrLocation[0]}']`);
     $parent.addClass('active');
+    $parent.addClass('shadow-lg');
     $parent.removeClass('collapsed');
     const idCollapse = $parent.attr('data-bs-target');
     $(idCollapse).addClass('show');
-    if(arrLocation[1] == ''){ // index
+    if (arrLocation[1] == '') { // index
       $(`a[data-route='${arrLocation[0]}/index']`).addClass('active');
     }
   } else {

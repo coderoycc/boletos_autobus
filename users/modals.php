@@ -22,8 +22,8 @@
           <div class="mb-2">
             <div class="form-floating mb-3">
               <select class="form-select" name="rol" id="rol_u_nuevo">
-                <option value="admin">ADMINISTRADOR</option>
-                <option value="conserje">CONSERJE</option>
+                <option value="ADMIN">ADMINISTRADOR</option>
+                <option value="VENDEDOR">VENDEDOR</option>
               </select>
               <label for="rol_u_nuevo">Rol</label>
             </div>

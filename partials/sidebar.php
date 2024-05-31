@@ -2,18 +2,24 @@
   <nav class="sb-sidenav accordion bg-primary text-white" id="sidenavAccordion">
     <div class="sb-sidenav-menu">
       <div class="nav">
-        <div class="sb-sidenav-menu-heading">ADMINISTRACIÓN</div>
-        <a class="nav-link" href="../users" data-route="users">
-          <div class="sb-nav-link-icon"><i class="fa-solid fa-user-shield"></i></div>
-          Usuarios del Sistema
+        <?php if ($user->role == "ADMIN") : ?>
+          <div class="sb-sidenav-menu-heading">ADMINISTRACIÓN</div>
+          <a class="nav-link" href="../users" data-route="users">
+            <div class="sb-nav-link-icon"><i class=" fa-lg fa-solid fa-user-shield"></i></div>
+            Usuarios del Sistema
+          </a>
+        <?php endif; ?>
+        <div class="sb-sidenav-menu-heading">BUSES</div>
+        <a class="nav-link" href="../buses" data-route="buses">
+          <div class="sb-nav-link-icon"><i class=" fa-lg fa-solid fa-bus"></i></div>
+          Ver Buses
         </a>
-        <div class="sb-sidenav-menu-heading">RESIDENTES</div>
         <a class="nav-link" href="../residents" data-route="residents">
           <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
-          Residentes
+          Mapeo de asientos
         </a>
 
-        <div class="sb-sidenav-menu-heading">SUSCRIPCIONES</div>
+        <!-- <div class="sb-sidenav-menu-heading">Viajes</div>
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_subscriptions" aria-expanded="false" aria-controls="collapse_subscriptions" data-route="subscriptions">
           <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
           Suscripciones
@@ -25,41 +31,28 @@
             <a class="nav-link" href="../subscriptions" data-route="subscriptions/index">Departamentos con suscripción</a>
             <a class="nav-link" href="../subscriptions/reports.php" data-route="subscriptions/reports.php">Reportes</a>
           </nav>
-        </div>
+        </div> -->
 
-        <div class="sb-sidenav-menu-heading">Condominio</div>
+        <div class="sb-sidenav-menu-heading">Viajes</div>
         <!-- <a class="nav-link" href="/condominiums" data-route="condominiums">
           <div class="sb-nav-link-icon"><i class="fa-solid fa-house-user"></i></div>
           Condominios
         </a> -->
-        <a class="nav-link" href="../departments" data-route="departments">
-          <div class="sb-nav-link-icon"><i class="fa-solid fa-person-shelter"></i></div>
-          Departamentos
+        <a class="nav-link" href="../locations" data-route="locations">
+          <div class="sb-nav-link-icon"><i class="fa-lg fa-solid fa-location-dot"></i></div>
+          Destinos
+        </a>
+        <a class="nav-link" href="../trips" data-route="trips">
+          <div class="sb-nav-link-icon"><i class="fa-lg fa-solid fa-business-time"></i></div>
+          Ver viajes
         </a>
         <a class="nav-link" href="../lockers" data-route="lockers">
-          <div class="sb-nav-link-icon"><i class="fa-solid fa-door-closed"></i></div>
-          Casilleros
+          <div class="sb-nav-link-icon"><i class="fa-lg fa-solid fa-hand-holding-dollar"></i></div>
+          Vender boletos
         </a>
-        <a class="nav-link" href="../services/" data-route="services">
+        <!-- <a class="nav-link" href="../services/" data-route="services">
           <div class="sb-nav-link-icon"><i class="fa-solid fa-cash-register"></i></div>
           Administración de servicios
-        </a>
-
-        <div class="sb-sidenav-menu-heading">MASTER</div>
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_master" aria-expanded="false" aria-controls="collapse_master" data-route="master">
-          <div class="sb-nav-link-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-          Configuraciones
-          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-        </a>
-        <div class="collapse" id="collapse_master" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-          <nav class="sb-sidenav-menu-nested nav">
-            <a class="nav-link" href="../master/nameservices.php" data-route="master/nameservices.php">Nombres de servicios</a>
-            <a class="nav-link" href="../master/ads.php" data-route="master/ads.php">Publicidad</a>
-          </nav>
-        </div>
-        <!-- <a class="nav-link" href="../ads" data-route="ads">
-          <div class="sb-nav-link-icon"><i class="fa-solid fa-film"></i></div>
-          Anuncios
         </a> -->
 
         <!-- <div class="sb-sidenav-menu-heading">Interface</div>
@@ -79,7 +72,7 @@
     </div>
     <div class="sb-sidenav-footer" style="color: var(--bs-verde);">
       <div class="small">Usuario: <b><?= $user->username ?></b></div>
-      <?= strtoupper($condominio->name) ?>
+      <?= 'BOLETOS' ?>
     </div>
   </nav>
 </div>

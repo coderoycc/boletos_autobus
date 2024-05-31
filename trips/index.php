@@ -1,5 +1,6 @@
 <?php
 require_once("../helpers/middlewares/web_auth.php");
+date_default_timezone_set('America/La_Paz');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -27,13 +28,10 @@ require_once("../helpers/middlewares/web_auth.php");
       <main>
         <div class="container-fluid px-4">
           <div class="d-flex justify-content-between mt-4 flex-wrap">
-            <h3>DEPARTAMENTOS</h3>
-            <button class="btn text-white" style="--bs-btn-bg:var(--bs-blue);--btn-custom-bg-hover:var(--bs-complement);" data-bs-toggle="modal" data-bs-target="#depa_add"><i class="fa-solid fa-circle-plus"></i> Nuevo departamento</button>
+            <h3>LISTA DE VIAJES</h3>
+            <button class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#trip_add"><i class="fa-solid fa-circle-plus"></i> Nuevo viaje</button>
           </div>
-          <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Lista</li>
-          </ol>
-          <div class="row" id="content_department"></div>
+          <div class="row" id="trips_content"></div>
         </div>
       </main>
     </div>
@@ -75,32 +73,56 @@ require_once("../helpers/middlewares/web_auth.php");
   </div>
 
   <!-- MODAL AGREGAR -->
-  <div class="modal fade" id="depa_add" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="trip_add" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header bg-info">
-          <h1 class="modal-title text-white fs-5">AGREGAR NUEVO DEPARTAMENTO</h1>
+        <div class="modal-header bg-primary">
+          <h1 class="modal-title text-white fs-5">AGREGAR NUEVO VIAJE</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="form_add_department" onsubmit="return false;">
+          <form id="form_add_trip" onsubmit="return false;">
             <div class="row">
               <div class="col-md-6 mb-2">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="add_dep_number" name="depa_num" placeholder="Nro departamento">
-                  <label for="add_dep_number">Nro. Departamento</label>
+                  <input type="date" class="form-control" name="departure_date" placeholder="Fecha" value="<?= date('Y-m-d') ?>">
+                  <label for="">Fecha de salida</label>
                 </div>
               </div>
               <div class="col-md-6 mb-2">
                 <div class="form-floating">
-                  <input type="number" class="form-control" id="add_dep_bedrooms" name="bedrooms" placeholder="Habitaciones">
-                  <label for="add_dep_bedrooms">Nro. de habitaciones</label>
+                  <input type="time" class="form-control" name="departure_time" placeholder="Hora salida" value="<?= date('H:i') ?>">
+                  <label>Hora de salida</label>
                 </div>
               </div>
-              <div class="col-md-12 mb-2">
+              <div class="col-md-12 my-2">
                 <div class="form-floating">
-                  <textarea class="form-control" id="add_dep_desc" name="descrip" placeholder="Descripcion" style="height:100px;resize:none;"></textarea>
-                  <label for="add_dep_bedrooms">Descripción</label>
+                  <select class="form-select" id="add_trip_origen" name="origin" required></select>
+                  <label for="destination">Lugar de origen</label>
+                </div>
+              </div>
+              <div class="col-md-12 my-2">
+                <div class="form-floating">
+                  <select class="form-select" id="add_trip_destination" name="destination" required></select>
+                  <label for="add_trip_destination">Lugar destino</label>
+                </div>
+              </div>
+              <div class="col-md-6 mb-2">
+                <div class="form-floating">
+                  <input type="number" step="any" class="form-control" name="min_price" placeholder="0.0">
+                  <label for="">Precio mínimo</label>
+                </div>
+              </div>
+              <div class="col-md-6 mb-2">
+                <div class="form-floating">
+                  <input type="number" step="any" class="form-control" name="price" placeholder="0.0">
+                  <label>Precio</label>
+                </div>
+              </div>
+              <div class="col-md-12 my-2">
+                <div class="form-floating">
+                  <select class="form-select" id="buses_selected" name="bus"></select>
+                  <label for="buses_selected">Bus encargado</label>
                 </div>
               </div>
             </div>
@@ -108,7 +130,7 @@ require_once("../helpers/middlewares/web_auth.php");
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-info text-white" data-bs-dismiss="modal" onclick="add_depa()">Agregar</button>
+          <button type="button" class="btn btn-primary text-white" data-bs-dismiss="modal" onclick="add_trip()">Agregar</button>
         </div>
       </div>
     </div>

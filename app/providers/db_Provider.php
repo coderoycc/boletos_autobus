@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use App\Config\Database;
-use App\Models\Resident;
-use App\Models\Subscription;
 
 class DBWebProvider {
   public static function session_exists(): bool {
@@ -44,12 +42,12 @@ class DBAppProvider {
       return false;
     return true;
   }
-  public static function get_resident(): Resident {
-    $con = DBAppProvider::get_conecction();
-    $id_user = $GLOBALS['payload']['user_id'];
-    $resident = new Resident($con, $id_user);
-    return $resident;
-  }
+  // public static function get_resident(): Resident {
+  //   $con = DBAppProvider::get_conecction();
+  //   $id_user = $GLOBALS['payload']['user_id'];
+  //   $resident = new Resident($con, $id_user);
+  //   return $resident;
+  // }
   public static function get_conecction() {
     if (self::exist()) {
       $con = Database::getInstanceX(self::get_db_name());
@@ -67,12 +65,12 @@ class DBAppProvider {
     $sub_object = base64_decode(json_decode($sub_object, true));
     return $sub_object[$target];
   }
-  public static function get_sub(): Subscription {
-    $sub_object = base64_decode($GLOBALS['payload']['us_su']);
-    $sub_object = base64_decode($sub_object);
-    $con = self::get_conecction();
-    $id = str_replace("S-", "", $sub_object);
-    $sub = new Subscription($con, $id);
-    return $sub;
-  }
+  // public static function get_sub(): Subscription {
+  //   $sub_object = base64_decode($GLOBALS['payload']['us_su']);
+  //   $sub_object = base64_decode($sub_object);
+  //   $con = self::get_conecction();
+  //   $id = str_replace("S-", "", $sub_object);
+  //   $sub = new Subscription($con, $id);
+  //   return $sub;
+  // }
 }

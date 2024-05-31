@@ -43,20 +43,20 @@ async function listarUsuarios() {
     let htmlTable = '';
     $.each(data, (i, item) => {
       htmlTable += `<tr>
-        <td>${item.id_user}</td>
-        <td>${item.first_name.toUpperCase()} ${item.last_name.toUpperCase()}</td>
+        <td>${item.id}</td>
+        <td>${item.fullname.toUpperCase()}</td>
         <td class="text-center">${item.username}</td>
         <td class="text-center">${item.role.toUpperCase()}</td>
         <td>
           <div class="d-flex justify-content-around">
             <div>
-              <button class="btn btn-primary rounded-circle" type="button" data-bs-toggle="modal" data-bs-target="#modal_usuario_edit" data-usuario="${item.username}" data-rol="${item.role}" data-nombre="${item.first_name.toUpperCase()} ${item.last_name.toUpperCase()}" data-id="${item.id_user}" ><i class="fa fa-pencil"></i></button>
+              <button class="btn btn-primary rounded-circle" type="button" data-bs-toggle="modal" data-bs-target="#modal_usuario_edit" data-usuario="${item.username}" data-rol="${item.role}" data-nombre="${item.fullname.toUpperCase()}" data-id="${item.id}" ><i class="fa fa-pencil"></i></button>
             </div>
             <div>
-              <button class="btn btn-secondary rounded-circle" title="Restablecer contraseña" type="button" data-bs-toggle="modal" data-bs-target="#modal_reset_pass" data-id="${item.id_user}"><i class="fa fa-lock"></i></button>
+              <button class="btn btn-secondary rounded-circle" title="Restablecer contraseña" type="button" data-bs-toggle="modal" data-bs-target="#modal_reset_pass" data-id="${item.id}"><i class="fa fa-lock"></i></button>
             </div>
             <div>
-              <button class="btn btn-danger rounded-circle" title="eliminar usuario" type="button" data-bs-toggle="modal" data-bs-target="#modal_delete_usuario" data-id="${item.id_user}"><i class="fa fa-trash"></i></button>
+              <button class="btn btn-danger rounded-circle" title="eliminar usuario" type="button" data-bs-toggle="modal" data-bs-target="#modal_delete_usuario" data-id="${item.id}"><i class="fa fa-trash"></i></button>
             </div>
           </div>
         </td>
