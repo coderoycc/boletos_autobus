@@ -1,0 +1,82 @@
+div.seatCharts-container {
+	width: 300px;
+}
+div.seatCharts-cell {
+
+	height: 48px;
+	width: 48px;
+	margin: 3px;
+	float: left;
+	text-align: center;
+	outline: none;
+	font-size: 16px;
+	line-height:16px;
+	color: var(--bs-secondary);
+	padding-top: 13px;
+
+}
+div.seatCharts-seat {
+	/*background-color: green;*/
+	color: var(--bs-secondary);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	cursor: default;
+}
+div.seatCharts-seat:focus {
+	border: none;
+}
+/*
+.seatCharts-seat:focus {
+	outline: none; layto 2-1 -- 2-2; semiacamas 2-2
+}
+*/
+
+div.seatCharts-space {
+	background-color: white;
+}
+div.seatCharts-row {
+	height: 60px;
+	padding-left: 16px;
+	padding-top: 8px;
+}
+
+div.seatCharts-row:after {
+	clear: both;
+}
+
+div.seatCharts-seat.selected {
+	/*background-color: aqua;*/
+	background-color: var(--bs-yellow);
+	color: var(--bs-dark);
+}
+
+div.seatCharts-seat.focused {
+	/*background-color: #6db131;*/
+	background-color: var(--bs-primary);
+	opacity: 0.5;
+	cursor: pointer;
+	color: var(--bs-light);
+	font-weight: bold;
+}
+
+div.seatCharts-seat.available {
+	/*background-color: green;*/
+	border: var(--bs-secondary) 2px solid;
+
+}
+
+div.seatCharts-seat.unavailable {
+	/*background-color: red;*/
+	background-color: var(--bs-secondary);
+	color: var(--bs-light);
+	cursor: not-allowed;
+}
+
+ul.seatCharts-legendList {
+	list-style: none;
+}
+li.seatCharts-legendItem {
+	margin-top: 10px;
+	line-height: 2;
+}

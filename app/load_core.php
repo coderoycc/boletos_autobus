@@ -8,7 +8,7 @@ require_once '../helpers/resources/response.php';
 require_once './controllers/authController.php';
 require_once './providers/authProvider.php';
 require_once './providers/db_Provider.php';
-$entidades = ['user', 'bus', 'location', 'trip'];
+$entidades = ['user', 'bus', 'location', 'trip', 'client'];
 foreach ($entidades as $entidad) {
   require_once("models/" . $entidad . ".php");
   require_once("controllers/" . $entidad . "Controller.php");
