@@ -9,8 +9,8 @@ const getReservedSeats = async ( ) => {
 /**
  * Obtener datos del viaje
  */
-const getCardTripData = async (params,level = '.') => {
-    const URL = `${level}/components/trip_data_view.php`;
-    const request = await fetch(URL, requestOptionsPost(params));
+const getCardTripData = async (trip_id) => {
+    const URL = `../app/trip/cardData?id=${trip_id}`;
+    const request = await fetch(URL, requestOptionsGet());
     return (await request.text());
 };

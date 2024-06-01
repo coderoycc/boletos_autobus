@@ -114,8 +114,8 @@ $(document).ready(async function() {
         }
     });
 
-    const params = convertToFormData({...seatsRequest.data.trip, ...seatsRequest.data.bus, departure: seatsRequest.data.departure.location, destination: seatsRequest.data.destination.location});
-    const cardRequest = await getCardTripData(params);
+    const tripId = getParam(window.location, 'trip_id');
+    const cardRequest = await getCardTripData(tripId);
     $('#trip-data').html(cardRequest);
     $('#precio-asiento').val(parseFloat(seatsRequest.data.trip.base_price));
 });
