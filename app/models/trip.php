@@ -65,4 +65,19 @@ class Trip {
     }
     return false;
   }
+  public static function all($con, $filters) {
+    try {
+      $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa FROM trips a 
+        INNER JOIN locations b ON a.location_id_origin = b.id
+        INNER JOIN locations c ON a.location_id_dest = c.id
+        INNER JOIN buses d ON a.bus_id = d.id;";
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      return $rows;
+    } catch (\Throwable $th) {
+      var_dump($th);
+    }
+    return [];
+  }
 }

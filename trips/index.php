@@ -31,7 +31,7 @@ date_default_timezone_set('America/La_Paz');
             <h3>LISTA DE VIAJES</h3>
             <button class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#trip_add"><i class="fa-solid fa-circle-plus"></i> Nuevo viaje</button>
           </div>
-          <div class="row" id="trips_content"></div>
+          <div class="row mt-3" id="trips_content"></div>
         </div>
       </main>
     </div>
@@ -56,17 +56,17 @@ date_default_timezone_set('America/La_Paz');
 
 
   <!-- MODAL EDITAR -->
-  <div class="modal fade" id="depa_edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="trip_edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header bg-info">
-          <h1 class="modal-title text-white fs-5">EDITAR DEPARTAMENTO</h1>
+        <div class="modal-header bg-primary">
+          <h1 class="modal-title text-white fs-5">Editar Viaje</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="modal_content_edit"></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-info text-white" data-bs-dismiss="modal" onclick="update_department()">Actualizar</button>
+          <button type="button" class="btn btn-primary text-white" data-bs-dismiss="modal" onclick="trip_update()">Actualizar</button>
         </div>
       </div>
     </div>

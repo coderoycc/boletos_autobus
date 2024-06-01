@@ -5,23 +5,24 @@ $(document).ready(() => {
   load_buses();
 });
 
-$(document).on('show.bs.modal', "#depa_edit", open_modal_edit)
+$(document).on('show.bs.modal', "#trip_edit", open_modal_edit)
 $(document).on('show.bs.modal', '#depa_delete', open_modal_delete)
 $(document).on('change', '#add_trip_origen', destination_values)
+$(document).on('change', '#edit_trip_origen', destination_values_edit)
 
 async function list_data() {
   const res = await $.ajax({
-    url: '../app/trips/all',
+    url: '../app/trip/get_table',
     type: 'GET',
     dataType: 'html',
   });
-  $("#content_department").html(res)
-  $("#table_departments").DataTable({
+  $("#trips_content").html(res)
+  $("#table_trips").DataTable({
     language: lenguaje,
     info: false,
     scrollX: true,
     columnDefs: [
-      // { orderable: false, targets: [5, 7] }
+      { orderable: false, targets: [1, 8] }
     ],
   })
 }
@@ -49,17 +50,17 @@ async function delete_department() {
 async function open_modal_edit(e) {
   const id = e.relatedTarget.dataset.id
   const res = await $.ajax({
-    url: `../app/department/content_edit`,
+    url: `../app/trip/content_edit`,
     type: 'GET',
     data: { id },
     dataType: 'html',
   });
   $("#modal_content_edit").html(res);
 }
-async function update_department() {
-  const data = $("#form_update_department").serializeArray();
+async function trip_update() {
+  const data = $("#form_edit_trip").serializeArray();
   const res = await $.ajax({
-    url: `../app/department/update`,
+    url: `../app/trip/update`,
     type: 'PUT',
     data,
     dataType: 'json',
@@ -101,16 +102,19 @@ async function load_locations() {
   }
 }
 function destination_values(e) {
-  $("#add_trip_destination").html(html_locations())
+  $("#add_trip_destination").html(html_locations(false, e.target.value))
 }
-function html_locations(origen = false) {
+function destination_values_edit(e) {
+  $("#edit_trip_destination").html(html_locations(false, e.target.value))
+}
+function html_locations(origen = false, curr_id) {
   let opt_html = '<option value="">SELECCIONE</option>';
   if (origen) {
     locations.forEach(item => {
       opt_html += `<option value="${item.id}">${item.location.toUpperCase()}</option>`
     });
   } else {
-    const curr_id = $("#add_trip_origen").val();
+    curr_id = parseInt(curr_id);
     locations.forEach(item => {
       if (item.id != curr_id)
         opt_html += `<option value="${item.id}">${item.location.toUpperCase()}</option>`

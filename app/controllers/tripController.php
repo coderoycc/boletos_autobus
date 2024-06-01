@@ -2,8 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Models\Bus;
+use App\Models\Location;
 use App\Models\Trip;
 use App\Providers\DBWebProvider;
+use Helpers\Resources\Render;
 use Helpers\Resources\Response;
 
 class TripController {
@@ -21,6 +24,50 @@ class TripController {
       Response::success_json('Agregado correctamente', [], 200);
     } else {
       Response::error_json(['message' => 'NO se agrego'], 200);
+    }
+  }
+  public function get_table($query) {
+    $con = DBWebProvider::getSessionDataDB();
+    $trips = Trip::all($con, $query);
+    Render::view('trips/list', ['trips' => $trips]);
+  }
+  public function content_edit($query) {
+    $con = DBWebProvider::getSessionDataDB();
+    $trip = new Trip($con, $query['id']);
+    if ($trip->id) {
+      $buses = Bus::all($con);
+      $locations = Location::all($con);
+      Render::view('trips/modal_edit_content', ['trip' => $trip, 'locations' => $locations, 'buses' => $buses]);
+    } else {
+      Render::view('error_html', ['message' => 'Parametro ID no encontrado', 'message_details' => '404 Trip not found']);
+    }
+  }
+  public function update($data) {
+    $con = DBWebProvider::getSessionDataDB();
+    $trip = new Trip($con, $data['trip_id']);
+    $trip->bus_id = $data['bus'];
+    $trip->departure_date = $data['departure_date'];
+    $trip->departure_time = $data['departure_time'];
+    $trip->location_id_origin = $data['origin'];
+    $trip->location_id_dest = $data['destination'];
+    $trip->min_price = floatval($data['min_price']);
+    $trip->price = floatval($data['price']);
+    if ($trip->save()) {
+      Response::success_json('Actualizado correctamente', [], 200);
+    } else {
+      Response::error_json(['message' => 'NO se actualizo'], 200);
+    }
+  }
+  public function cardData($query) {
+    $con = DBWebProvider::getSessionDataDB();
+    $trip = new Trip($con, $query['id']);
+    if ($trip->id) {
+      $bus = new Bus($con, $trip->bus_id);
+      $origin = new Location($con, $trip->location_id_origin);
+      $destination = new Location($con, $trip->location_id_dest);
+      Render::view('trips/card_data', ['trip' => $trip, 'bus' => $bus, 'origin' => $origin, 'destination' => $destination]);
+    } else {
+      Render::view('error_html', ['message' => 'Ocurrió un error, contacte con el administrador', 'message_details' => '404 Trip not found']);
     }
   }
 }
