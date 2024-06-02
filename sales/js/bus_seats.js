@@ -3,15 +3,17 @@ var selectedID = null;
 		
 $(document).ready(async function() {
 
-    const seatsRequest = await getDistributions();
+    const tripId = getParam(window.location, 'trip_id');
     
-    if(!seatsRequest.success){
-        console.log(seatsRequest.message);
+    const requestDataDistributions = await getDataDistributions(tripId);
+    
+    if(!requestDataDistributions.success){
+        console.log(requestDataDistributions.message);
         return;
     }
 
-    const floor1 = seatsRequest.data.floor2;
-    const reserved = seatsRequest.data.reserved;
+    const floor1 = requestDataDistributions.data.floor1;
+    const reserved = requestDataDistributions.data.reserved;
     const mapFloor = mapSeats(floor1);
     const unavailable = unavailableSeats(floor1, reserved);
 
@@ -114,10 +116,9 @@ $(document).ready(async function() {
         }
     });
 
-    const tripId = getParam(window.location, 'trip_id');
     const cardRequest = await getCardTripData(tripId);
     $('#trip-data').html(cardRequest);
-    $('#precio-asiento').val(parseFloat(seatsRequest.data.trip.base_price));
+    $('#precio-asiento').val(parseFloat(requestDataDistributions.data.trip.price));
 });
 
 function recalculateTotal(sc) {

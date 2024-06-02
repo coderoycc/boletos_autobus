@@ -41,7 +41,7 @@
               </div>
               <img src="../assets/img/rear_bus.png" class="img-fluid" width="300"/>
             </div>
-            <div class="col-md align-self-end mb-3">
+            <div class="col-md mb-3">
               <div class="row">
                 <div class="col-md-12">
                   <p class="fw-semibold text-secondary">Seleccione un asiento para la venta:</p>
@@ -69,7 +69,7 @@
   <script src="../js/options.js"></script>
   <script src="../js/functions.js"></script>
   <script src="../js/forms.js"></script>
-  <script src="../js/services/distributions.js"></script>
+  <script src="../js/services/trips.js"></script>
   <script src="../js/services/seats.js"></script>
   <script src="../js/services/clients.js"></script>
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>

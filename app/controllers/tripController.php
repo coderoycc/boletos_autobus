@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Models\Bus;
 use App\Models\Location;
 use App\Models\Trip;
+use App\Models\Distribution;
+use App\Models\Ticket;
 use App\Providers\DBWebProvider;
 use Helpers\Resources\Render;
 use Helpers\Resources\Response;
@@ -70,4 +72,28 @@ class TripController {
       Render::view('error_html', ['message' => 'Ocurrió un error, contacte con el administrador', 'message_details' => '404 Trip not found']);
     }
   }
+
+  public function getDataDistribution($query){
+    $con = DBWebProvider::getSessionDataDB();
+    $trip = new Trip($con, $query['trip_id']);
+    
+    if ($trip->id) {
+      $bus = new Bus($con, $trip->bus_id);
+      if($bus->id){
+        $distributions = Distribution::getDistributionData($con, $bus->distribution_id);
+        $reserved = Ticket::reservedSeats($con, $trip->id);
+        Response::success_json('Consulta realizada correctamente', [
+          'floor1' => $distributions['1'],
+          'floor2' => $distributions['2'],
+          'reserved' => $reserved,
+          'trip' => $trip,
+        ], 200);
+      }else{
+        Response::error_json(['message' => 'El id de bus es incorrecto.'], 200);
+      }
+    }else{
+      Response::error_json(['message' => 'El id de viaje es incorrecto.'], 200);
+    }
+  }
+
 }
