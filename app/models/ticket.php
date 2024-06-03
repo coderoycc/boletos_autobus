@@ -16,11 +16,31 @@ class Ticket {
     public int $sold_by;
     public float $price;
 
-    public function __construct($db = null){
+    public function __construct($db = null, $id = null){
         $this->objectNull();
         if($db){
             $this->con = $db;
+            if ($id != null) {
+                $sql = "SELECT * 
+                        FROM tickets WHERE id = :id";
+                $stmt = $this->con->prepare($sql);
+                $stmt->execute(['id' => $id]);
+                $row = $stmt->fetch();
+                if ($row) {
+                  $this->load($row);
+                }
+            }
         }
+    }
+
+    public function load($row) {
+        $this->id = $row['id'];
+        $this->seat_number = $row['seat_number'];
+        $this->trip_id = $row['trip_id'];
+        $this->client_id = $row['client_id'];
+        $this->created_at = $row['created_at'];
+        $this->sold_by = $row['sold_by'];
+        $this->price = $row['price'];
     }
 
     public function objectNull() {

@@ -17,11 +17,33 @@ class Client {
     public int $user_id;
     public string $created_at;
 
-    public function __construct($db = null){
+    public function __construct($db = null, $id = null){
         $this->objectNull();
         if($db){
             $this->con = $db;
+            if ($id != null) {
+                $sql = "SELECT * 
+                        FROM clients WHERE id = :id";
+                $stmt = $this->con->prepare($sql);
+                $stmt->execute(['id' => $id]);
+                $row = $stmt->fetch();
+                if ($row) {
+                  $this->load($row);
+                }
+            }
         }
+    }
+
+    public function load($row) {
+        $this->id = $row['id'];
+        $this->name = $row['name'];
+        $this->lastname = $row['lastname'];
+        $this->mothers_lastname = $row['mothers_lastname'];
+        $this->ci = $row['ci'];
+        $this->nit = $row['nit'];
+        $this->is_minor = $row['is_minor'];
+        $this->user_id = $row['user_id'];
+        $this->created_at = $row['created_at'];
     }
 
     public function objectNull() {
