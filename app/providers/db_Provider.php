@@ -16,6 +16,10 @@ class DBWebProvider {
     $_SESSION['credentials'] = json_encode($condominio);
     session_write_close();
   }
+  public static function start_session_app($credentials) {
+    $_SESSION['credentials'] = json_encode($credentials);
+    session_write_close();
+  }
   public static function session_end() {
     session_unset();
     session_destroy();

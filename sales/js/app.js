@@ -109,16 +109,19 @@ $('#btn-create-sale').on('click', async (e) => {
     if(!isFormValidity(form)){ return; }
     const client = $('#documento-cliente').val();
     const seat = $('#numero-asiento').val();
-    if(client == ''){
+    const trip = $('#cliente-selected').val();
+    if(client == '' || trip == ''){
+        $(`#btn-create-sale`).prop('disabled', false);
         $.toast({
             heading: ACTION,
-            text: 'Debe seleccionar un cliente.',
+            text: 'Debe seleccionar un cliente registrado.',
             icon: 'error',
             loader: true,
             position: 'top-right',
         }); return;
     }
     if(seat == ''){
+        $(`#btn-create-sale`).prop('disabled', false);
         $.toast({
             heading: ACTION,
             text: 'Debe seleccionar un asiento',
@@ -136,15 +139,15 @@ $('#btn-create-sale').on('click', async (e) => {
             showCancelButton: true,
             allowOutsideClick: false,
             confirmButtonText: `<i class="fa fa-print"></i> Imprimir`,
-            cancelButtonText: `<i class="fa fa-check"></i> Aceptar`,
+            cancelButtonText: `<i class="fa fa-check"></i> Cerrar`,
           }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 executeBluetoothPrinter(requestSale.data.ticket);
+                location.reload();
             } else if (result.isCancel) {
-                
+                location.reload();
             };
-            location.reload();
         });
         //setTimeout(() => , 1500);
     }else{
