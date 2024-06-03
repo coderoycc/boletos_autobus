@@ -4,6 +4,7 @@ var selectedID = null;
 $(document).ready(async function() {
 
     const tripId = getParam(window.location, 'trip_id');
+    $('#trip-id').val(tripId);
     
     const requestDataDistributions = await getDataDistributions(tripId);
     

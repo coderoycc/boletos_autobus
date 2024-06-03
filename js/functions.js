@@ -38,3 +38,29 @@ const getParam = (url, parametro) => {
         ? ""
         : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
+
+const executeBluetoothPrinter = (ticket) => {
+    console.log(ticket);
+    // EJECUTAR LA FUNCION DENTRO DEL METODO DE VENDER: 
+    // vender(caso_evento_significativo, descripcion_evento)
+    /*const ACCION = 'APP PRINTER';
+    if (document.getElementById("manejoWebinventarioPrint")) {
+      manejoWebinventarioPrint = $('#manejoWebinventarioPrint').val();
+      if(manejoWebinventarioPrint == 'SI'){
+        const SO = (navigator.userAgent.match(/Android/i) != null);
+        if(SO){
+          // Preparando datos para enviar a la aplicacion de impresion
+          const dbName = getCookieValue('base_server');
+          const server = getCookieValue('ipconfig');
+          const deepLink = `app://printer.com/sale/${saleId}|${dbName}|${server}`;
+          // Abriendo la aplicacion de Impresion
+          window.location.href = deepLink;
+        }
+        console.log(ACCION, SO ? 'Ejecutando aplicación' : 'El Sistema Operativo no es Android.');
+      }else{
+        console.log(ACCION, "Sin permisos de impresion");
+      }
+    }else{
+      console.log(ACCION, "input no definido");
+    }*/
+  }

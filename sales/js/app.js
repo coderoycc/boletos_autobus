@@ -101,3 +101,61 @@ const clearDataClient = () => {
     $('#check-menor').prop('checked', false);
     $('#radio-ci').click();
 }
+
+$('#btn-create-sale').on('click', async (e) => {
+    const ACTION = 'REGISTRAR VENTA';
+    $(`#btn-create-sale`).prop('disabled', true);
+    const form = document.getElementById('sale-data-form');
+    if(!isFormValidity(form)){ return; }
+    const client = $('#documento-cliente').val();
+    const seat = $('#numero-asiento').val();
+    if(client == ''){
+        $.toast({
+            heading: ACTION,
+            text: 'Debe seleccionar un cliente.',
+            icon: 'error',
+            loader: true,
+            position: 'top-right',
+        }); return;
+    }
+    if(seat == ''){
+        $.toast({
+            heading: ACTION,
+            text: 'Debe seleccionar un asiento',
+            icon: 'error',
+            loader: true,
+            position: 'top-right',
+        }); return;
+    }
+    const requestSale = await createSale([form]);
+    if(requestSale.success){
+        Swal.fire({
+            title: ACTION,
+            icon: 'success',
+            text: requestSale.message,
+            showCancelButton: true,
+            allowOutsideClick: false,
+            confirmButtonText: `<i class="fa fa-print"></i> Imprimir`,
+            cancelButtonText: `<i class="fa fa-check"></i> Aceptar`,
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                executeBluetoothPrinter(requestSale.data.ticket);
+            } else if (result.isCancel) {
+                
+            };
+            location.reload();
+        });
+        //setTimeout(() => , 1500);
+    }else{
+        $(`#btn-create-sale`).prop('disabled', false);
+    }
+    $.toast({
+        heading: ACTION,
+        text: requestSale.message,
+        icon: requestSale.success ? 'success' : 'error',
+        loader: true,
+        position: 'top-right',
+    });
+    console.log(ACTION, requestSale.message);
+});

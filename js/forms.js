@@ -43,7 +43,6 @@ const convertFormToURLSearchParams = (forms) => {
     forms.forEach((form) => {
         const formData = new FormData(form);
         for(let [name, value, type] of formData) {
-            console.log(name, value);
             params.append(name, value);
         }
     });

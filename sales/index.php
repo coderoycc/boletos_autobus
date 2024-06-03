@@ -14,9 +14,11 @@
   <link rel="stylesheet" href="../assets/jquery/jqueryToast.min.css" />
   <link rel="stylesheet" href="../css/custom.css" />
   <link rel="stylesheet" href="../assets/seat-charts/jquery.seat-charts.css" />
+  <link rel="stylesheet" href="../assets/sweetalert2/sweetalert2.min.css" />
   <script src="../assets/fontawesome/fontawesome6.min.js"></script>
   <script src="../assets/jquery/jquery.js"></script>
   <script src="../assets/jquery/jqueryToast.min.js"></script>
+  <script src="../assets/sweetalert2/sweetalert2.min.js"></script>
 </head>
 
 <body class="sb-nav-fixed">
@@ -56,7 +58,7 @@
                 </div>
                 <div class="col-md-12 mb-3 text-end">
                   <button type="button" class="btn btn-danger me-2 mb-2 mt-2"><i class="fas fa-times me-2"></i>Cancelar</button>
-                  <button type="button" class="btn btn-success mb-2 mt-2"><i class="fas fa-save me-2"></i>Realizar Venta</button>
+                  <button type="button" class="btn btn-success mb-2 mt-2" id="btn-create-sale"><i class="fas fa-save me-2"></i>Realizar Venta</button>
                 </div>
               </div>
             </div>
@@ -72,6 +74,7 @@
   <script src="../js/services/trips.js"></script>
   <script src="../js/services/seats.js"></script>
   <script src="../js/services/clients.js"></script>
+  <script src="../js/services/tickets.js"></script>
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>
