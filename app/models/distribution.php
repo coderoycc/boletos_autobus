@@ -46,5 +46,17 @@ class Distribution {
         }
         return [];
     }
+    public static function distros($con){
+        try {
+            $sql = "SELECT * FROM distributions;";
+            $stmt = $con->prepare($sql);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $rows;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        return [];
+    }
 
 }

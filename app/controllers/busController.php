@@ -3,11 +3,17 @@
 namespace App\Controllers;
 
 use App\Models\Bus;
+use App\Models\Distribution;
 use App\Providers\DBWebProvider;
 use Helpers\Resources\Render;
 use Helpers\Resources\Response;
 
 class BusController {
+  public function card_add_new($query){
+    $connect = DBWebProvider::getSessionDataDB();
+    $distros = Distribution::distros($connect);
+    Render::view('buses/new_bus', ['distros' => $distros]);
+  }
   public function list_all($query) {
     $conection = DBWebProvider::getSessionDataDB();
     $buses = Bus::all($conection);

@@ -13,6 +13,7 @@ require_once("../helpers/middlewares/web_auth.php");
   <link href="../css/styles.css" rel="stylesheet" />
   <link rel="stylesheet" href="../assets/jquery/jqueryToast.min.css">
   <link rel="stylesheet" href="../css/custom.css">
+  <link rel="stylesheet" href="../assets/seat-charts/jquery.seat-charts.css" />
   <script src="../assets/fontawesome/fontawesome6.min.js"></script>
   <script src="../assets/jquery/jquery.js"></script>
   <script src="../assets/jquery/jqueryToast.min.js"></script>
@@ -26,8 +27,8 @@ require_once("../helpers/middlewares/web_auth.php");
       <main>
         <div class="container-fluid px-4">
           <div class="d-flex justify-content-between mt-4 flex-wrap">
-            <h3>Todos los Buses</h3>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#location_add"><i class="fa-lg fa-solid fa-map-location-dot"></i> Agregar nuevo bus</button>
+            <h3>Buses</h3>
+            <button class="btn btn-primary" onclick="add_new()"><i class="fa-lg fa-solid fa-map-location-dot"></i> Agregar nuevo bus</button>
           </div>
           <div class="row" id="data_buses"></div>
         </div>
@@ -95,6 +96,7 @@ require_once("../helpers/middlewares/web_auth.php");
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>
   <script src="../assets/datatables/datatables.bootstrap5.min.js"></script>
+  <script src="../assets/seat-charts/jquery.seat-charts.min.js"></script>
   <script src="./js/app.js"></script>
 </body>
 
