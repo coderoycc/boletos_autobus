@@ -37,6 +37,12 @@ class Trip {
     $this->min_price = 0;
     $this->price = 0;
   }
+  public function origin(): Location {
+    return new Location($this->con, $this->location_id_origin);
+  }
+  public function destination(): Location {
+    return new Location($this->con, $this->location_id_dest);
+  }
   public function load($row) {
     $this->id = $row['id'];
     $this->departure_time = $row['departure_time'];

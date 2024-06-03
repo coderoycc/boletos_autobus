@@ -14,10 +14,10 @@
           <div class="sb-nav-link-icon"><i class=" fa-lg fa-solid fa-bus"></i></div>
           Ver Buses
         </a>
-        <a class="nav-link" href="../residents" data-route="residents">
+        <!-- <a class="nav-link" href="../residents" data-route="residents">
           <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
           Mapeo de asientos
-        </a>
+        </a> -->
 
         <!-- <div class="sb-sidenav-menu-heading">Viajes</div>
         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_subscriptions" aria-expanded="false" aria-controls="collapse_subscriptions" data-route="subscriptions">
@@ -46,9 +46,9 @@
           <div class="sb-nav-link-icon"><i class="fa-lg fa-solid fa-business-time"></i></div>
           Ver viajes
         </a>
-        <a class="nav-link" href="../lockers" data-route="lockers">
-          <div class="sb-nav-link-icon"><i class="fa-lg fa-solid fa-hand-holding-dollar"></i></div>
-          Vender boletos
+        <a class="nav-link" href="../tickets" data-route="tickets">
+          <div class="sb-nav-link-icon"><i class="fa-lg fa-solid fa-ticket"></i></div>
+          Boletos
         </a>
         <!-- <a class="nav-link" href="../services/" data-route="services">
           <div class="sb-nav-link-icon"><i class="fa-solid fa-cash-register"></i></div>
@@ -67,7 +67,11 @@
             <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
           </nav>
         </div> -->
-
+        <div class="sb-sidenav-menu-heading">Reportes</div>
+        <a class="nav-link" href="../reports/sales.php" data-route="reports/sales.php">
+          <div class="sb-nav-link-icon"><i class="fa-lg fa-solid fa-chart-simple"></i></div>
+          Ventas
+        </a>
       </div>
     </div>
     <div class="sb-sidenav-footer" style="color: var(--bs-verde);">

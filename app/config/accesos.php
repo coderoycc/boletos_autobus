@@ -69,6 +69,9 @@ class Accesos {
     }
     return $domain;
   }
+  public static function enterprice_data() {
+    return ['name' => 'Buses', 'nit' => '110110254', 'location' => 'Potosí - Bolivia'];
+  }
 
   public static function getCondominio($pin) {
     $res = [];
