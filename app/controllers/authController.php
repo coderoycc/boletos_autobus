@@ -13,7 +13,8 @@ class AuthController {
     if (!Request::required(['user', 'password'], $data))
       Response::error_json(['message' => 'Datos incompletos'], 401);
 
-    $enterpriceData['dbname'] = 'boletos';
+    //$enterpriceData['dbname'] = 'boletos';
+    $enterpriceData['dbname'] = 'boletos_25_diciembre';
     // var_dump($condominioData);
 
     // $condominioData = Accesos::getCondominio($data['pin']);

@@ -9,15 +9,19 @@ class ReportPrintApp {
 
     static function ticketSaleDetail($ticket, $client, $trip, $origin, $destination, $bus){
         $created_at = date_create_from_format('Y-m-d H:i:s.v', $ticket->created_at);
-        $departure = date_create_from_format('Y-m-d H:i:s', $trip->departure_date." ".$trip->departure_time);
+        $departure = date_create_from_format(
+            'Y-m-d H:i:s.v',
+            $trip->departure_date." ".
+            (strlen($trip->departure_time) == 12 ? $trip->departure_time : substr($trip->departure_time, 0, -4))
+        );
         $lines = array(
             new FormatLine(Configurations::$MODE_FONT_SIZE, Configurations::$FONT_SIZE_0),
             new FormatLine(Configurations::$MODE_ALIGN_TEXT, Configurations::$ALIGN_CENTER),
-            new FormatLine(Configurations::$MODE_TEXT, '25 DE DICIEMBRE'),
+            new FormatLine(Configurations::$MODE_TEXT, '"25 DE DICIEMBRE"'),
             new FormatLine(Configurations::$MODE_TEXT, '(2)22222'),
             new FormatLine(Configurations::$MODE_TEXT, 'UYUNI - POTOSI'),
             new FormatLine(Configurations::$MODE_TEXT, Configurations::$LINE_FORMAT_0),
-            new FormatLine(Configurations::$MODE_TEXT, "N° VENTA #".$ticket->id),
+            new FormatLine(Configurations::$MODE_TEXT, "BOLETO #".$ticket->id),
             new FormatLine(Configurations::$MODE_TEXT, Configurations::$LINE_FORMAT_0),
             new FormatLine(Configurations::$MODE_ALIGN_TEXT, Configurations::$ALIGN_LEFT),
             new FormatLine(Configurations::$MODE_TEXT, "Cliente: ".strtoupper($client->lastname != '' ? $client->lastname : $client->mothers_lastname)),

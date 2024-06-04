@@ -23,3 +23,11 @@ const createClient = async (form) => {
     const request = await fetch(URL, requestOptionsPost(params));
     return (await validateResponse(request));
 };
+/**
+ * Obtener listado de clientes registrados
+ */
+const getAllClientsView = async ( ) => {
+    const URL = `../app/client/getAllClientsView`;
+    const request = await fetch(URL, requestOptionsGet( ));
+    return (await request.text());
+};

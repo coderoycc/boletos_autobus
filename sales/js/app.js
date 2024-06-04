@@ -36,7 +36,7 @@ $('#btn-search-client').on('click', async (e) => {
     const requestClient = filter == 'ci'
             ? await showClientByCi(data.ci) 
             : await showClientByNit(data.nit);
-    clearDataClient();
+    //clearDataClient();
     if(requestClient.success){ 
         loadDataClient(requestClient.data[0]);
     }
@@ -57,7 +57,7 @@ $('#btn-create-client').on('click', async (e) => {
         return;
     }
     const requestClient = await createClient([form]);
-    if(requestClient){
+    if(requestClient.success){
         const client = requestClient.data.client;
         const filter = $('input[name="filter"]:checked').val();
         $('#documento-cliente').val(client[filter]);
@@ -75,10 +75,21 @@ $('#btn-create-client').on('click', async (e) => {
 });
 
 $('#btn-select-client').on('click', (e) => {
-    const filter = $('input[name="filter"]:checked').val();
-    $('#documento-cliente').val($(`#${filter}-cliente`).val());
-    $('#cliente-selected').val($('#id-cliente').val());
-    $('#select-client-modal').modal('hide');
+    const client_id = $('#id-cliente').val();
+    if(client_id != ''){
+        const filter = $('input[name="filter"]:checked').val();
+        $('#documento-cliente').val($(`#${filter}-cliente`).val());
+        $('#cliente-selected').val($('#id-cliente').val());
+        $('#select-client-modal').modal('hide');
+    }else{
+        $.toast({
+            heading: 'SELECCIONAR CLIENTE',
+            text: 'Ingrese un CI o NIT y presione en BUSCAR, o cree un nuevo cliente.',
+            icon: 'warning',
+            loader: true,
+            position: 'top-right',
+        });
+    }
 });
 
 const loadDataClient = (client) => {
@@ -104,9 +115,11 @@ const clearDataClient = () => {
 
 $('#btn-create-sale').on('click', async (e) => {
     const ACTION = 'REGISTRAR VENTA';
-    $(`#btn-create-sale`).prop('disabled', true);
     const form = document.getElementById('sale-data-form');
-    if(!isFormValidity(form)){ return; }
+    if(!isFormValidity(form)){ 
+        return;
+    }
+    $(`#btn-create-sale`).prop('disabled', true);
     const client = $('#documento-cliente').val();
     const seat = $('#numero-asiento').val();
     const trip = $('#cliente-selected').val();
@@ -149,7 +162,6 @@ $('#btn-create-sale').on('click', async (e) => {
                 location.reload();
             };
         });
-        //setTimeout(() => , 1500);
     }else{
         $(`#btn-create-sale`).prop('disabled', false);
     }

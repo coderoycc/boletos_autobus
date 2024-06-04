@@ -35,10 +35,21 @@ class TicketController {
         }
     }
 
-    public function PrintTicketApp($data){
-        if (!Request::required(['ticket_id', 'db_name'], $data)) {
+    public function reservedSeats($query){
+        if (!Request::required(['trip_id'], $query))
             Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
-        }
+
+        $trip_id = $query['trip_id'];
+        $con = DBWebProvider::getSessionDataDB();
+        Response::success_json('Datos de la venta cargados correctamente.', [
+            'reserved' => Ticket::reservedSeats($con, $trip_id),
+        ]);
+    }
+
+    public function PrintTicketApp($data){
+        if (!Request::required(['ticket_id', 'db_name'], $data))
+            Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
+
         DBWebProvider::start_session_app(['dbname' => $data['db_name']]);
         $con = DBWebProvider::getSessionDataDB();
         $ticket = new Ticket($con, $data['ticket_id']);

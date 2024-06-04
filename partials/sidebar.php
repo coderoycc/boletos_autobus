@@ -9,6 +9,10 @@
             Usuarios del Sistema
           </a>
         <?php endif; ?>
+        <a class="nav-link" href="../clients" data-route="clients">
+          <div class="sb-nav-link-icon"><i class=" fa-lg fa-solid fa-user"></i></div>
+          Clientes
+        </a>
         <div class="sb-sidenav-menu-heading">BUSES</div>
         <a class="nav-link" href="../buses" data-route="buses">
           <div class="sb-nav-link-icon"><i class=" fa-lg fa-solid fa-bus"></i></div>

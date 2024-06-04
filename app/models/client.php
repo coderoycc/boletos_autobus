@@ -96,7 +96,7 @@ class Client {
             $sql = "SELECT c.id, c.name, c.lastname, c.mothers_lastname, 
                             c.ci, c.nit, c.is_minor
                     FROM clients c
-                    WHERE (c.ci LIKE '%$ci%' AND '$ci' <> '');";
+                    WHERE (c.ci = '$ci' AND '$ci' <> '');";
             $stmt = $con->prepare($sql);
             $stmt->execute([]);
             $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -112,7 +112,7 @@ class Client {
             $sql = "SELECT c.id, c.name, c.lastname, c.mothers_lastname, 
                             c.ci, c.nit, c.is_minor
                     FROM clients c
-                    WHERE (c.nit LIKE '%$nit%' AND '$nit' <> '');";
+                    WHERE (c.nit = '$nit' AND '$nit' <> '');";
             $stmt = $con->prepare($sql);
             $stmt->execute([]);
             $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -121,6 +121,51 @@ class Client {
             //var_dump($th);
         }
         return [];
+    }
+
+    public static function getAllClients($con){
+        try{
+            $sql = "SELECT c.*, u.username
+                    FROM clients c
+                    LEFT JOIN users u ON c.user_id = u.id;";
+            $stmt = $con->prepare($sql);
+            $stmt->execute();
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }catch(\Throwable $th){
+            //var_dump($th);
+        }
+        return [];
+    }
+
+    public static function existsByCi($con, $ci){
+        try{
+            $sql = "SELECT c.*
+                    FROM clients c
+                    WHERE c.ci = '$ci' AND '$ci' <> '';";
+            $stmt = $con->prepare($sql);
+            $stmt->execute( );
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return count($res) > 0;
+        }catch(\Throwable $th){
+            //var_dump($th);
+        }
+        return true;
+    }
+
+    public static function existsByNit($con, $nit){
+        try{
+            $sql = "SELECT c.*
+                    FROM clients c
+                    WHERE c.nit = '$nit' AND '$nit' <> '';";
+            $stmt = $con->prepare($sql);
+            $stmt->execute( );
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return count($res) > 0;
+        }catch(\Throwable $th){
+            //var_dump($th);
+        }
+        return true;
     }
 
 }

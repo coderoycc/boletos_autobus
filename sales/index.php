@@ -36,12 +36,27 @@
           </div>
           <div class="row align-items-center">
             <div class="col-md mb-3" style="max-width: 320px;">
-              <button type="button" class="btn btn-outline-secondary w-100 mb-3" id="button-update-seats"><i class="fas fa-refresh me-2"></i>Actualizar Asientos</button>
-              <img src="../assets/img/front_bus.png" class="img-fluid" width="300"/>
-              <div id="seat-map">
-                
+              <button type="button" class="btn btn-outline-primary w-100 mb-3" id="button-update-seats"><i class="fas fa-refresh me-2"></i>Actualizar Asientos</button>
+              <div class="btn-group w-100 mb-3" role="group">
+                <input type="radio" class="btn-check" name="options-floor" id="upper-floor" autocomplete="off" value="upper" checked>
+                <label class="btn btn-outline-secondary" for="upper-floor"><i class="fas fa-chevron-circle-up me-2"></i>Piso Superior</label>
+                <input type="radio" class="btn-check" name="options-floor" id="lower-floor" autocomplete="off" value="lower">
+                <label class="btn btn-outline-secondary" for="lower-floor"><i class="fas fa-chevron-circle-down me-2"></i>Piso Inferior</label>
               </div>
-              <img src="../assets/img/rear_bus.png" class="img-fluid" width="300"/>
+              <div class="w-100" id="container-upper-floor">
+                <img src="../assets/img/front_bus.png" class="img-fluid" width="300"/>
+                <div id="seat-map-upper">
+                  
+                </div>
+                <img src="../assets/img/rear_bus.png" class="img-fluid" width="300"/>
+              </div>
+              <div class="w-100" style="display: none;" id="container-lower-floor">
+                <img src="../assets/img/front_bus.png" class="img-fluid" width="300"/>
+                <div id="seat-map-lower">
+                  
+                </div>
+                <img src="../assets/img/rear_bus.png" class="img-fluid" width="300"/>
+              </div>
             </div>
             <div class="col-md mb-3">
               <div class="row">

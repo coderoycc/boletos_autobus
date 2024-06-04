@@ -17,8 +17,8 @@
         <tr>
           <td class="fw-bold">Precio Base:</td>
           <td class="text-center"><?= number_format($trip->price, 2) . " Bs" ?></td>
-          <td class="fw-bold"></td>
-          <td></td>
+          <td class="fw-bold">Precio Mínimo:</td>
+          <td class="text-center"><?= number_format($trip->min_price, 2) . " Bs" ?></td>
         </tr>
         <tr class="bg-info text-light fw-bold">
           <td colspan="4"><i class="fas fa-bus ms-2 me-2"></i>Bus</td>

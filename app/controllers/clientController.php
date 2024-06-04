@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Client;
 use App\Providers\DBWebProvider;
 use Helpers\Resources\Response;
+use Helpers\Resources\Render;
 
 class ClientController {
 
@@ -41,6 +42,13 @@ class ClientController {
     public function create($data){
         $con = DBWebProvider::getSessionDataDB();
         if ($con) {
+            if(Client::existsByCi($con, $data['ci']))
+                Response::error_json(['message' => 'El CI ingresado ya se encuentra registrado.'], 200);
+
+
+            if(Client::existsByNit($con, $data['nit']))
+                Response::error_json(['message' => 'El NIT ingresado ya se encuentra registrado.'], 200);
+               
             $client = new Client($con);
             $client->name = $data['name'];
             $client->lastname = $data['lastname'];
@@ -59,6 +67,12 @@ class ClientController {
         }else{
             Response::error_json(['message' => 'Error conexion instancia.'], 200);
         }
+    }
+
+    public function getAllClientsView($query){
+        $con = DBWebProvider::getSessionDataDB();
+        $clients = Client::getAllClients($con);
+        Render::view('clients/client_list_view', ['clients' => $clients]);
     }
 
 }
