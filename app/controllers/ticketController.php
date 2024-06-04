@@ -41,7 +41,7 @@ class TicketController {
 
         $trip_id = $query['trip_id'];
         $con = DBWebProvider::getSessionDataDB();
-        Response::success_json('Datos de la venta cargados correctamente.', [
+        Response::success_json('Lista de asientos reservados actualizada correctamente.', [
             'reserved' => Ticket::reservedSeats($con, $trip_id),
         ]);
     }
