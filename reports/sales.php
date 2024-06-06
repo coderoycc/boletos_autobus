@@ -29,30 +29,33 @@ require_once("../helpers/middlewares/web_auth.php");
             <h3>Reporte de ventas</h3>
           </div>
           <div class="row">
-            <div class="fs-5 text-secondary"> Filtro de fechas y destino para generar el reporte PDF</div>
+            <div class="fs-5 text-secondary"> Filtros para generar el reporte PDF</div>
           </div>
           <form id="form_params_report">
-            <div class="row mt-3">
-              <div class="col-md-3 my-2">
-                <div class="form-floating">
-                  <input class="form-control" id="start" type="date" name="start" placeholder="Fecha de inicio" value="<?= date('Y') . '-01-01' ?>" />
-                  <label for="start">Fecha de inicio</label>
+            <div class="card">
+              <div class="card-body">
+                <div class="row mt-2">
+                  <div class="col-md-2">
+                    <label class="form-label fw-semibold text-secondary" for="start">Fecha de inicio</label>
+                    <input class="form-control" id="start" type="date" name="start" placeholder="Fecha de inicio" value="<?= date('Y') . '-01-01' ?>" />
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label fw-semibold text-secondary" for="end">Fecha final</label>
+                    <input class="form-control" id="end" type="date" name="end" placeholder="Fecha final" value="<?= date('Y-m-d') ?>" />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label fw-semibold text-secondary" for="locations">Destino</label>
+                    <select class="form-select" id="locations" name="location_id"></select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label fw-semibold text-secondary" for="locations">Usuario vendedor</label>
+                    <select class="form-select" id="users" name="user_id">
+                    </select>
+                  </div>
+                  <div class="col-md-2 mt-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success" id="search"><i class="fa-lg fa-solid fa-file-pdf"></i> Generar reporte</button>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-3 my-2">
-                <div class="form-floating">
-                  <input class="form-control" id="end" type="date" name="end" placeholder="Fecha final" value="<?= date('Y-m-d') ?>" />
-                  <label for="end">Fecha final</label>
-                </div>
-              </div>
-              <div class="col-md-3 my-2">
-                <div class="form-floating">
-                  <select class="form-select" id="locations" name="location_id"></select>
-                  <label for="locations">Destino</label>
-                </div>
-              </div>
-              <div class="col-md-3 d-flex align-items-center my-2">
-                <button type="submit" class="btn btn-success" id="search"><i class="fa-lg fa-solid fa-file-pdf"></i> Generar reporte</button>
               </div>
             </div>
           </form>

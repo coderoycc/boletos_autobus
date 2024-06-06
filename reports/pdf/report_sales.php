@@ -2,6 +2,7 @@
 
 use App\Models\Location;
 use App\Models\Ticket;
+use App\Models\User;
 use App\Providers\DBWebProvider;
 
 session_start();
@@ -12,6 +13,7 @@ require_once(__DIR__ . '/../../app/providers/db_Provider.php');
 require_once(__DIR__ . '/../../tcpdf/tcpdf.php');
 require_once(__DIR__ . '/../../app/models/location.php');
 require_once(__DIR__ . '/../../app/models/ticket.php');
+require_once(__DIR__ . '/../../app/models/user.php');
 
 ob_start();
 error_reporting(E_ALL & ~E_NOTICE);
@@ -21,12 +23,19 @@ $title1 = 'Reporte de Ventas';
 $inicio = $_GET['start'] == '' ? date('Y-m') . '-01' : $_GET['start'];
 $final = $_GET['end'] == '' ? date('Y-m') . '-01' : $_GET['end'];
 $id_location = $_GET['location_id'] ?? 0;
+$user_id = $_GET['user_id'] ?? 0;
 $con = DBWebProvider::getSessionDataDB();
 $location_name = 'TODOS LOS DESTINOS';
 if ($id_location > 0) {
   $location = new Location($con, $id_location);
   $location_name = strtoupper($location->location);
 }
+$user_name = "TODOS LOS USUARIOS";
+if ($user_id > 0) {
+  $user = new User($con, $user_id);
+  $user_name = strtoupper($user->fullname);
+}
+
 $autor = "© STIS " . date('Y');
 $style = array(
   'border' => false,
@@ -34,7 +43,7 @@ $style = array(
   'fgcolor' => array(0, 0, 0),
   'bgcolor' => false
 );
-$details = 'Desde ' . date('d/m/Y', strtotime($inicio)) . ' hasta ' . date('d/m/Y', strtotime($final)) . '  ' . $location_name;
+$details = 'Desde ' . date('d/m/Y', strtotime($inicio)) . ' hasta ' . date('d/m/Y', strtotime($final));
 
 
 class MYPDF extends TCPDF {
@@ -47,7 +56,7 @@ class MYPDF extends TCPDF {
   public function Footer() {
     $this->SetY(-15);
     $this->SetFont('helvetica', 'I', 8);
-    $this->Cell(0, 10, 'Pag. ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+    $this->Cell(0, 10, 'Pág. ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
   }
 }
 
@@ -74,14 +83,15 @@ $pdf->setPrintFooter(true);
 $pdf->SetMargins(10, 10, 10, false);
 $pdf->SetFont('times', '', 12);
 $pdf->addPage();
-$linea1 = '_____________________________________________________________________________________________________________________';
+// $linea1 = '_____________________________________________________________________________________________________________________';
 $content = '';
 $content .= '
   <h1 style="text-align:center;"> Reporte de ventas </h1>
 ';
 $pdf->writeHTML($content, true, 0, true, 0);
-$pdf->MultiCell(200, 2, $details, 0, 'L', 0, 1, '', '17', true);
-$pdf->MultiCell(300, 2, '', 0, 'L', 0, 1, '', '19', true);
+$pdf->MultiCell(275, 2, $location_name, 0, 'C', 0, 1, '', '17', true);
+$pdf->MultiCell(200, 2, $details, 0, 'L', 0, 1, '', '21', true);
+$pdf->MultiCell(300, 5, 'Boletos vendidos por: ' . $user_name, 0, 'R', 0, 1, '-20', '21', true);
 $pdf->SetFont('times', '', 11);
 $tabla = '<table border="1" cellpadding="2">
     <thead>
@@ -97,7 +107,7 @@ $tabla = '<table border="1" cellpadding="2">
     </thead>
     <tbody>';
 $preto = 0;
-$lista_venta = Ticket::get_ticket_all($con, ['start' => $inicio, 'end' => $final, 'location_id' => $id_location]);
+$lista_venta = Ticket::get_ticket_all($con, ['start' => $inicio, 'end' => $final, 'location_id' => $id_location, 'user_id' => $user_id]);
 // var_dump($lista_venta);
 // die();
 
@@ -125,8 +135,8 @@ if (sizeof($lista_venta) == 0) {
   }
   $tabla .= '
       <tr>
-        <td colspand="6" style="width:650px;text-align:right;">Total: </td>
-        <td  style="text-align:right;width:119px;">' . number_format($total, 2) . '</td>
+        <td colspand="6" style="width:650px;text-align:right;font-size:110%;">Total Bs.: </td>
+        <td style="text-align:right;width:119px;height:22px;font-weight:bold;font-size:120%;">' . number_format($total, 2) . '</td>
       </tr>';
 }
 

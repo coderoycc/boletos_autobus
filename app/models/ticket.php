@@ -118,7 +118,8 @@ class Ticket {
       $start = $query['start'] ?? date('Y-m') . '-01';
       $end = $query['end'] ?? date('Y-m-d');
       $q_loca_id = isset($query['location_id']) && $query['location_id'] != 0 ? ' d.id = ' . $query['location_id'] . ' AND' : '';
-      $where = "$q_loca_id b.departure_date BETWEEN '$start' AND '$end'";
+      $q_user_id = isset($query['user_id']) && $query['user_id'] != 0 ? ' AND a.sold_by = ' . $query['user_id'] : '';
+      $where = "$q_loca_id b.departure_date BETWEEN '$start' AND '$end'" . $q_user_id;
       $order = " ORDER BY b.departure_date ASC, a.seat_number ASC;";
       $stmt = $con->prepare($sql . $where . $order);
       $stmt->execute();

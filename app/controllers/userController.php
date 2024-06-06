@@ -52,27 +52,27 @@ class UserController {
     }
   }
 
-  public function changePassword($data){
+  public function changePassword($data) {
     if (!Request::required(['password'], $data))
-            Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
+      Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
 
     $con = DBWebProvider::getSessionDataDB();
     $password = hash('sha256', $data['password']);
     $newPassword = $data['new_password'];
     $id = json_decode($_SESSION['user'])->id;
     $user = new User($con, $id);
-    if($user->id > 0){
-      if($user->password == $password){
+    if ($user->id > 0) {
+      if ($user->password == $password) {
         $res = $user->newPass($newPassword);
         if ($res > 0) {
           Response::success_json('Contraseña cambiada correctamente.', []);
-        }else{
+        } else {
           Response::error_json(['message' => 'Ocurrio un error al cambiar la contraseña, intenta mas tarde.'], 200);
         }
-      }else{
+      } else {
         Response::error_json(['message' => 'Contraseña actual incorrecta.'], 200);
       }
-    }else{
+    } else {
       Response::error_json(['message' => 'Usuario no encontrado.'], 200);
     }
   }
