@@ -20,6 +20,8 @@ class BusController {
         $bus->created_at = date('Y-m-d H:i:s');
         $bus->color = $data['color'];
         $bus->brand = $data['brand'];
+        $bus->driver = $data['driver'];
+        $bus->license = $data['license'];
         $res = $bus->save();
         if($res){
             Response::success_json('Bus creado correctamente.', ['bus' => $bus]);
