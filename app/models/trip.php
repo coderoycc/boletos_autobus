@@ -73,10 +73,12 @@ class Trip {
   }
   public static function all($con, $filters) {
     try {
+      $date = $filters['date'] ?? date('Y-m-d');
       $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa FROM trips a 
         INNER JOIN locations b ON a.location_id_origin = b.id
         INNER JOIN locations c ON a.location_id_dest = c.id
-        INNER JOIN buses d ON a.bus_id = d.id;";
+        INNER JOIN buses d ON a.bus_id = d.id
+        WHERE a.departure_date = '$date';";
       $stmt = $con->prepare($sql);
       $stmt->execute();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

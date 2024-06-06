@@ -12,7 +12,7 @@ use Helpers\Resources\Render;
 use Helpers\Resources\Response;
 
 class TripController {
-  
+
   public function create($data, $files = null) {
     $con = DBWebProvider::getSessionDataDB();
     $trip = new Trip($con);
@@ -31,8 +31,9 @@ class TripController {
   }
   public function get_table($query) {
     $con = DBWebProvider::getSessionDataDB();
+    $date = $query['date'] ?? date('Y-m-d');
     $trips = Trip::all($con, $query);
-    Render::view('trips/list', ['trips' => $trips]);
+    Render::view('trips/list', ['trips' => $trips, 'date' => $date]);
   }
   public function content_edit($query) {
     $con = DBWebProvider::getSessionDataDB();
@@ -74,13 +75,13 @@ class TripController {
     }
   }
 
-  public function getDataDistribution($query){
+  public function getDataDistribution($query) {
     $con = DBWebProvider::getSessionDataDB();
     $trip = new Trip($con, $query['trip_id']);
-    
+
     if ($trip->id) {
       $bus = new Bus($con, $trip->bus_id);
-      if($bus->id){
+      if ($bus->id) {
         $distributions = Distribution::getDistributionData($con, $bus->distribution_id);
         $reserved = Ticket::reservedSeats($con, $trip->id);
         Response::success_json('Consulta realizada correctamente', [
@@ -89,12 +90,11 @@ class TripController {
           'reserved' => $reserved,
           'trip' => $trip,
         ], 200);
-      }else{
+      } else {
         Response::error_json(['message' => 'El id de bus es incorrecto.'], 200);
       }
-    }else{
+    } else {
       Response::error_json(['message' => 'El id de viaje es incorrecto.'], 200);
     }
   }
-
 }

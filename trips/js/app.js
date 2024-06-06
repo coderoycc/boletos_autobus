@@ -9,12 +9,14 @@ $(document).on('show.bs.modal', "#trip_edit", open_modal_edit)
 $(document).on('show.bs.modal', '#depa_delete', open_modal_delete)
 $(document).on('change', '#add_trip_origen', destination_values)
 $(document).on('change', '#edit_trip_origen', destination_values_edit)
+$(document).on('click', "#list_search", list__from_filters)
 
-async function list_data() {
+async function list_data(data = {}) {
   const res = await $.ajax({
     url: '../app/trip/get_table',
     type: 'GET',
     dataType: 'html',
+    data
   });
   $("#trips_content").html(res)
   $("#table_trips").DataTable({
@@ -138,4 +140,8 @@ async function load_buses() {
   if (res.success) {
     $("#buses_selected").html(html_buses(res.data));
   }
+}
+function list__from_filters(e) {
+  const date = $("#trip_date").val();
+  list_data({ date })
 }
