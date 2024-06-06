@@ -1,3 +1,5 @@
+var state_update = false;
+var state_create = false;
 $(document).ready(() => {
   list()
 })
@@ -15,7 +17,7 @@ async function list() {
   })
   $("#data_buses").html(res)
 }
-async function add_new(){
+async function add_new() {
   const res = await $.ajax({
     url: '../app/bus/card_add_new',
     type: 'GET',
@@ -27,9 +29,9 @@ async function add_new(){
   );
   $("#col__data").html(res)
 }
-async function show_distro_card(e){
+async function show_distro_card(e) {
   const id = e.target.value;
-  if(id == '') return;
+  if (id == '') return;
   const res = await $.ajax({
     url: '../app/distribution/card_distro_seats',
     type: 'GET',
@@ -38,25 +40,28 @@ async function show_distro_card(e){
   });
   $("#col__details").html(res)
 }
-async function show_card_new_distro(e){
-  
+async function show_card_new_distro(e) {
+
 }
 
-const createNewBus = async ( ) => {
+const createNewBus = async () => {
+  if (state_create) return;
+
+  state_create = true;
   const form = document.getElementById('data-bus-form');
-  if(!isFormValidity(form)){ return; }
+  if (!isFormValidity(form)) { return; }
 
   const ACTION = 'CREAR NUEVO BUS';
   const request = await createBus([form]);
-  if(request.success){ 
+  if (request.success) {
     list();
-  }
+  } else state_create = false;
   $.toast({
-      heading: ACTION,
-      text: request.message,
-      icon: request.success ? 'success' : 'error',
-      loader: true,
-      position: 'top-right',
+    heading: ACTION,
+    text: request.message,
+    icon: request.success ? 'success' : 'error',
+    loader: true,
+    position: 'top-right',
   });
   console.log(ACTION, request.message);
 };
@@ -77,21 +82,26 @@ const updateView = async (busId) => {
   $("#col__data").html(response);
 }
 
-const updateDataBus = async ( ) => {
+const updateDataBus = async () => {
+  if (state_update) return;
+
+  state_update = true;
   const form = document.getElementById('data-bus-update-form');
-  if(!isFormValidity(form)){ return; }
+  if (!isFormValidity(form)) { return; }
 
   const ACTION = 'ACTUALIZAR BUS';
   const request = await updateBus([form]);
-  if(request.success){ 
+  if (request.success) {
     list();
+  } else {
+    state_update = false;
   }
   $.toast({
-      heading: ACTION,
-      text: request.message,
-      icon: request.success ? 'success' : 'error',
-      loader: true,
-      position: 'top-right',
+    heading: ACTION,
+    text: request.message,
+    icon: request.success ? 'success' : 'error',
+    loader: true,
+    position: 'top-right',
   });
   console.log(ACTION, request.message);
 };
