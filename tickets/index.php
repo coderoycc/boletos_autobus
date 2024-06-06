@@ -23,6 +23,7 @@
 <body class="sb-nav-fixed">
   <?php 
     include("components/ticket_detail_modal.php"); 
+    include("components/ticket_delete_modal.php"); 
     include("../partials/header.php"); 
   ?>
   <div id="layoutSidenav">

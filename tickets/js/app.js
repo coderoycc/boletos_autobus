@@ -35,8 +35,8 @@ const htmlLocations = ( ) => {
 };
 
 $('#ticket-detail-modal').on('show.bs.modal', async (e) => {
-  const ticket_id = e.relatedTarget.dataset.ticket;
-  const request = await getTicketDetailView(ticket_id);
+  const ticketId = e.relatedTarget.dataset.ticket;
+  const request = await getTicketDetailView(ticketId);
   $('#ticket-detail').html(request);
 });
 
@@ -46,4 +46,23 @@ $('#ticket-detail-modal').on('hidden.bs.modal', (e) => {
 
 $('#btn-search-filter').on('click', (e) => {
   listAllTickets();
+});
+
+$('#ticket-delete-modal').on('show.bs.modal', async (e) => {
+  const ticketId = e.relatedTarget.dataset.ticket;
+  document.getElementById('ticket-id-delete').value = ticketId;
+});
+
+$('#ticket-delete-modal').on('hide.bs.modal', async (e) => {
+  $('#ticket-password-confirm').val('');
+  $('#ticket-id-delete').val('');
+});
+
+$('#btn-delete-ticket').on('click', async ( ) => {
+  const ACTION = 'ELIMINAR BOLETO';
+  const form = document.getElementById('delete-ticket-form');
+  if(isFormValidity(form)){
+    const request = await deleteSoldTicket([form]);
+    toast(ACTION, request.message, request.success ? 'success' : 'error');
+  }
 });

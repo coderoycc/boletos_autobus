@@ -80,68 +80,69 @@ $(document).ready(async function() {
     //let's pretend some seats have already been booked
     //sc.get(['1_2', '4_1', '7_1', '7_2']).status('unavailable');
     sc.get(unavailable).status('unavailable');
-
     /**
      * PISO 2
      * */
     const floor2 = requestDataDistributions.data.floor2;
-    const mapFloorLower = mapSeats(floor2);
-    const unavailableLower = unavailableSeats(floor2, reserved);
-    var sc_lower = $('#seat-map-lower').seatCharts({
-        map: mapFloorLower,
-        seats: {
-            f: {
-                price   : 100,
-                classes : 'first-class', //your custom CSS class
-                category: 'First Class'
+    if(floor2.length > 0){
+        const mapFloorLower = mapSeats(floor2);
+        const unavailableLower = unavailableSeats(floor2, reserved);
+        var sc_lower = $('#seat-map-lower').seatCharts({
+            map: mapFloorLower,
+            seats: {
+                f: {
+                    price   : 100,
+                    classes : 'first-class', //your custom CSS class
+                    category: 'First Class'
+                },
+                e: {
+                    price   : 40,
+                    classes : 'economy-class', //your custom CSS class
+                    category: 'Economy Class'
+                }					
+            
             },
-            e: {
-                price   : 40,
-                classes : 'economy-class', //your custom CSS class
-                category: 'Economy Class'
-            }					
-        
-        },
-        naming : {
-            top : false,
-            left: false,
-            getLabel : function (character, row, column) {
-                return floor2[row - 1][column - 1];
+            naming : {
+                top : false,
+                left: false,
+                getLabel : function (character, row, column) {
+                    return floor2[row - 1][column - 1];
+                },
             },
-        },
-        legend : {
-            node : $('#legend'),
-            items : [
-                [ 'f', 'available',   'First Class' ],
-                [ 'e', 'available',   'Economy Class'],
-                [ 'f', 'unavailable', 'Already Booked']
-            ]					
-        },
-        click: function () {
-            if (this.status() == 'available') {
-                resetSelected();
-                const id = this.settings.id;
-                selectedID = id;
-                const label = this.settings.label;
-                $('#numero-asiento').val(label);
-                $('#documento-cliente').click( );
-                $('#documento-cliente').focus( );
-                return 'selected';
-            } else if (this.status() == 'selected') {
-                resetSelected();
-                //remove the item from our cart
-                $('#cart-item-'+this.settings.id).remove();
-                //seat has been vacated
-                return 'available';
-            } else if (this.status() == 'unavailable') {
-                //seat has been already booked
-                return 'unavailable';
-            } else {
-                return this.style();
+            legend : {
+                node : $('#legend'),
+                items : [
+                    [ 'f', 'available',   'First Class' ],
+                    [ 'e', 'available',   'Economy Class'],
+                    [ 'f', 'unavailable', 'Already Booked']
+                ]					
+            },
+            click: function () {
+                if (this.status() == 'available') {
+                    resetSelected();
+                    const id = this.settings.id;
+                    selectedID = id;
+                    const label = this.settings.label;
+                    $('#numero-asiento').val(label);
+                    $('#documento-cliente').click( );
+                    $('#documento-cliente').focus( );
+                    return 'selected';
+                } else if (this.status() == 'selected') {
+                    resetSelected();
+                    //remove the item from our cart
+                    $('#cart-item-'+this.settings.id).remove();
+                    //seat has been vacated
+                    return 'available';
+                } else if (this.status() == 'unavailable') {
+                    //seat has been already booked
+                    return 'unavailable';
+                } else {
+                    return this.style();
+                }
             }
-        }
-    });
-    sc_lower.get(unavailableLower).status('unavailable');
+        });
+        sc_lower.get(unavailableLower).status('unavailable');
+    }
     /**
      * ACTUALIZAR DISPONIBILIDAD DE ASIENTOS
      */

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Ticket;
 use App\Models\Client;
+use App\Models\User;
 use App\Models\Trip;
 use App\Models\Location;
 use App\Models\Bus;
@@ -101,6 +102,25 @@ class TicketController {
         Render::view('tickets/ticket_list_view', [
             'records' => $records,
         ]);
+    }
+
+    public function deleteSoldTicket($data){
+        if (!Request::required(['password', 'ticket_id'], $data))
+            Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
+
+        $con = DBWebProvider::getSessionDataDB();
+        $id = $data['ticket_id'];
+        $password = hash('sha256', $data['password']);
+        $userId = json_decode($_SESSION['user'])->id;
+
+        $user = new User($con, $userId);
+
+        if($password == $user->password){
+            $ticket = new Ticket($con, $id);
+            
+        }else{
+            Response::error_json(['message' => 'Contraseña ingresada incorrecta.'], 200);
+        }
     }
 
 }

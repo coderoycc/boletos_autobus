@@ -15,10 +15,12 @@
           <td class="text-center"><?= date('H:i', strtotime($trip->departure_time)) ?></td>
         </tr>
         <tr>
-          <td class="fw-bold">Precio Base:</td>
+          <td class="fw-bold" data-bs-toggle="collapse" data-bs-target="#minimum-price" aria-expanded="false">Precio Base:</td>
           <td class="text-center"><?= number_format($trip->price, 2) . " Bs" ?></td>
-          <td class="fw-bold">Precio Mínimo:</td>
-          <td class="text-center"><?= number_format($trip->min_price, 2) . " Bs" ?></td>
+          <td class="fw-bold collapse"  id="minimum-price">Mínimo:</td>
+          <td class="text-center collapse" id="minimum-price">
+              <?= number_format($trip->min_price, 2) . " Bs" ?>
+          </td>
         </tr>
         <tr class="bg-info text-light fw-bold">
           <td colspan="4"><i class="fas fa-bus ms-2 me-2"></i>Bus</td>
@@ -42,3 +44,8 @@
     </div>
   </div>
 </div>
+<!--
+  <td colspan="2" class="text-left collapse" id="minimum-price">
+    <span class="fw-bold">Mínimo:</span> <?= number_format($trip->min_price, 2) . " Bs" ?>
+  </td>
+-->

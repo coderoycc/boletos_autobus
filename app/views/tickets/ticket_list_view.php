@@ -7,7 +7,7 @@
                         <th rowspan="2">#</th>
                         <th rowspan="2" class="table-success text-center">Bus</th>
                         <th colspan="4" class="table-primary text-center">Viaje</th>
-                        <th colspan="3" class="table-warning text-center">Venta</th>
+                        <th colspan="4" class="table-warning text-center">Venta</th>
                         <th rowspan="2">Acciones</th>
                     </tr>
                     <tr>
@@ -18,6 +18,7 @@
                         <th class="table-warning">Asiento</th>
                         <th class="table-warning">Usuario</th>
                         <th class="table-warning">Fecha</th>
+                        <th class="table-warning">Cliente</th>
                     </tr>
                 </thead>
                 <?php foreach($records as $key => $record){ ?>
@@ -31,8 +32,10 @@
                     <td class="text-center fw-bold text-primary"><?=strtoupper($record['seat_number'])?></td>
                     <td align="center"><span class="badge text-bg-light"><?=strtoupper($record['username'])?></span></td>
                     <td align="center"><?=(new DateTime($record['sold_datetime']))->format('d/m/Y')." ".(new DateTime($record['sold_datetime']))->format('H:i')?></td>
+                    <td align="center"><?=$record['client']?></td>
                     <td class="text-center">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticket-detail-modal" data-ticket="<?=$record['ticket']?>"><i class="fas fa-qrcode"></i></button>
+                        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#ticket-detail-modal" data-ticket="<?=$record['ticket']?>"><i class="fas fa-qrcode"></i></button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ticket-delete-modal" data-ticket="<?=$record['ticket']?>"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>
                 <?php } ?>

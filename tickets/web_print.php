@@ -6,12 +6,14 @@ require_once('../app/providers/db_Provider.php');
 require_once('../tcpdf/tcpdf.php');
 require_once('../app/models/trip.php');
 require_once('../app/models/client.php');
+require_once('../app/models/user.php');
 require_once('../app/models/ticket.php');
 require_once('../app/models/location.php');
 require_once('./letras-numeros.php');
 
 use App\Config\Accesos;
 use App\Models\Client;
+use App\Models\User;
 use App\Models\Ticket;
 use App\Models\Trip;
 use App\Providers\DBWebProvider;
@@ -27,6 +29,11 @@ if (!isset($_GET['tid'])) {
   $subdominio = $datos_emp['name'];
   $nombre_suc = 'Sucursal Central';
   $ciudad = $datos_emp['location'];
+  $routes = "Uyuni - Oruro - Potosí - La Paz - Cocha.";
+  $companyName = "Trans. 25 de Diciembre";
+  $phone = "67258945";
+  $laneNumber = "3";
+  $footerMessage = "El pasajero debe estar 30 minutos antes de la salida del bus, <b>NO SE ACEPTAN DEVOLUCIONES</b>.";
   $ticket = new Ticket($con, $_GET['tid']);
   // var_dump($ticket);
   if ($ticket->id == 0) {
@@ -38,8 +45,10 @@ if (!isset($_GET['tid'])) {
   $origen = $trip->origin();
   $destino = $trip->destination();
   $client = new Client($con, $ticket->client_id);
+  $user = new User($con, $ticket->sold_by);
   $width = 210;
-  $height = 225;
+  //$height = 225;
+  $height = 260;
 
   // Calculamos alto de pagina (unicamente por el campo detalle_envio) Es el unico que puede ser mas grande
   $tam_fuente = 8;
@@ -79,25 +88,22 @@ if (!isset($_GET['tid'])) {
   $nit_ci = ($client->nit == '') ? $client->ci : $client->nit;
   $costo_literal = numtoletras($costo);
   // $porPagar = $envio->pagado ?? 'POR PAGAR';
+  $dataCenter = "";
   $tabla = '<table border="0" cellpadding="0">
   <tr>
-    <td colspan="380" align="center"><b style="font-size:110%;">Nombre de la empresa</b></td>
+    <td colspan="380" align="center"><b style="font-size:110%;">' . $companyName . '</b></td>
     <td colspan="120"></td>
   </tr>
   <tr>
-    <td colspan="380" align="center"><b>' . $subdominio . '</b></td>
+    <td colspan="380" align="center">' . $routes . '</td>
     <td colspan="120"></td>
   </tr>
   <tr>
-    <td colspan="380" align="center">' . $ciudad . '</td>
+    <td colspan="380" align="center" >Cel. ' . $phone . ' </td>
     <td colspan="120"></td>
   </tr>
   <tr>
-    <td colspan="380" align="center" >Tel. 2878383 </td>
-    <td colspan="120"></td>
-  </tr>
-  <tr>
-    <td colspan="380" align="center"><b style="font-size:120%;">Venta #' . $ticket->id . '</b>
+    <td colspan="380" align="center"><b style="font-size:120%;">Boleto #' . $ticket->id . '</b>
     </td>
   </tr>
   <tr>
@@ -111,6 +117,7 @@ if (!isset($_GET['tid'])) {
     </td>
   </tr>
   </table>';
+  $dataCenter .= $tabla;
   $tabla .= '<table border="0" cellpadding="0">
               <tr><td colspan="500" style="font-size:50%;"></td></tr>
               <tr><td colspan="500"><b>Cliente: </b>' . strtoupper($client->name . ' ' . $client->lastname) . '</td></tr>
@@ -118,7 +125,7 @@ if (!isset($_GET['tid'])) {
               <tr><td colspan="500"><b>Fecha de emisión: </b>' . date('d/m/Y H:i', strtotime($ticket->created_at)) . '</td></tr>
               </table>';
 
-  $tabla .= '<table border="0" cellpadding="0">
+  $tabla1 = '<table border="0" cellpadding="0">
               <tr>
                 <td colspan="500" style="font-size:50%;border-top:1pt solid #6e6e6e"></td>
               </tr>
@@ -132,11 +139,17 @@ if (!isset($_GET['tid'])) {
                 <td colspan="500"><b>Fecha y hora de salida: </b>' . date('d/m/Y', strtotime($trip->departure_date)) . ' ' . date('H:i', strtotime($trip->departure_time)) . ' </td>
               </tr>
               <tr>
+                <td colspan="500"><b>Usuario: </b>' . strtoupper($user->username) . ' </td>
+              </tr>
+              <tr>
                 <td colspan="250"><b>ASIENTO: ' . $ticket->seat_number . '</b></td>
+                <td colspan="250"><b>CARRIL: ' . $laneNumber . '</b></td>
               </tr>
             </table>';
+  $tabla .= $tabla1;
+  $dataCenter .= $tabla1;
 
-  $tabla .= '<style>.border-bottom{border-bottom:1px dashed #000;}.text-85{font-size:85%;}</style>
+  $tabla2 = '<style>.border-bottom{border-bottom:1px dashed #000;}.text-85{font-size:85%;}</style>
     <table border="0" cellpadding="2">
     <tr><td colspan="500" style="font-size:40%;"></td></tr>
     <tr>
@@ -154,8 +167,19 @@ if (!isset($_GET['tid'])) {
     </tr>
     <tr>
       <td colspan="50"></td><td colspan="450">' . $costo_literal . '</td>
+    </tr>';
+  $tabla .= $tabla2.'<tr>
+      <td colspan="500">' . $footerMessage. '</td>
     </tr>
   </table>';
+  $dataCenter .= $tabla2.'</table>';
+
+  $tabla .= '<table border="0" cellpadding="2">
+              <tr><td colspan="500" style="font-size:40%;"></td></tr>
+              <tr><td colspan="500" style="font-size:40%;"></td></tr>
+            </table>';
+
+  $tabla .= $dataCenter;
 
   // $tabla .= '<table border="0" cellpadding="0"><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr>';
   // $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td></tr>';

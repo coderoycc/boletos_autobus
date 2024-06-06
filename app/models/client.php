@@ -138,6 +138,22 @@ class Client {
         return [];
     }
 
+    public static function getAllClientsByTrip($con, $trip_id){
+        try{
+            $sql = "SELECT c.*
+                    FROM  tickets t
+                    LEFT JOIN clients c ON c.id = t.client_id
+                    WHERE t.trip_id = $trip_id;";
+            $stmt = $con->prepare($sql);
+            $stmt->execute();
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }catch(\Throwable $th){
+            //var_dump($th);
+        }
+        return [];
+    }
+
     public static function existsByCi($con, $ci){
         try{
             $sql = "SELECT c.*

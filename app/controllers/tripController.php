@@ -12,6 +12,7 @@ use Helpers\Resources\Render;
 use Helpers\Resources\Response;
 
 class TripController {
+  
   public function create($data, $files = null) {
     $con = DBWebProvider::getSessionDataDB();
     $trip = new Trip($con);

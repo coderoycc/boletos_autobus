@@ -9,7 +9,7 @@
     </div>
     <div class="col-md-6 mb-2">
       <div class="form-floating">
-        <input type="time" class="form-control" name="departure_time" placeholder="Hora salida" value="<?= $trip->departure_time ?>">
+        <input type="time" class="form-control" name="departure_time" placeholder="Hora salida" value="<?= (new DateTime($trip->departure_time))->format('H:i') ?>">
         <label>Hora de salida</label>
       </div>
     </div>

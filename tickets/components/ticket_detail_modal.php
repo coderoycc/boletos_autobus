@@ -1,8 +1,8 @@
 <div class="modal fade" tabindex="-1" id="ticket-detail-modal">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-secondary"><i class="fas fa-qrcode me-2"></i>QR Boleto</h5>
+      <div class="modal-header text-bg-primary">
+        <h5 class="modal-title"><i class="fas fa-qrcode me-2"></i>QR Boleto</h5>
       </div>
       <div class="modal-body">
         <div class="row">

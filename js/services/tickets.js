@@ -32,3 +32,12 @@ const getAllTicketsView = async (form) => {
     const request = await fetch(URL, requestOptionsPost(params));
     return (await request.text());
 };
+/**
+ * Eliminar boleto vendido
+ */
+const deleteSoldTicket = async (form) => {
+    const URL = `../app/ticket/deleteSoldTicket`;
+    const params = convertFormToURLSearchParams(form);
+    const request = await fetch(URL, requestOptionsPost(params));
+    return (await request.text());
+};
