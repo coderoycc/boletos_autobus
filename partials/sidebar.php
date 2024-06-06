@@ -79,7 +79,7 @@
       </div>
     </div>
     <div class="sb-sidenav-footer" style="color: var(--bs-verde);">
-      <div class="small">Usuario: <b><?= $user->username ?></b></div>
+      <div class="small">Usuario: <b><?= ucfirst($user->username) ?></b></div>
       <?= 'BOLETOS' ?>
     </div>
   </nav>
