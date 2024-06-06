@@ -107,6 +107,36 @@ class Ticket {
     }
   }
 
+  public function delete() {
+    if ($this->con == null) {
+      return -1;
+    }
+    try {
+      $resp = 0;
+      $this->con->beginTransaction();
+      $sql = "DELETE 
+              FROM tickets  
+              WHERE id = :id;";
+      $params = [
+        'id' => $this->id,
+      ];
+      $stmt = $this->con->prepare($sql);
+      $res = $stmt->execute($params);
+      if ($res) {
+        $this->con->commit();
+        $resp = 1;
+      } else {
+        $resp = -1;
+        $this->con->rollBack();
+      }
+      return $resp;
+    } catch (\Throwable $th) {
+      //print_r($th);
+      $this->con->rollBack();
+      return -1;
+    }
+  }
+
   public static function get_ticket_all($con, $query) {
     try {
       $sql = "SELECT a.id as id_ticket, a.price as monto_fin, a.seat_number, b.*, c.location as origen, d.location as destino, e.ci, e.nit, e.name, e.lastname, e.mothers_lastname 

@@ -35,8 +35,8 @@
                     <td align="center"><?=$record['client']?></td>
                     <td class="text-center">
                         <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#ticket-detail-modal" data-ticket="<?=$record['ticket']?>"><i class="fas fa-qrcode"></i></button>
-                        <a class="btn btn-light me-2" href="../tickets/web_print.php?tid=<?=$record['ticket']?>" target="_blank"><i class="fas fa-file-pdf"></i></button>
-                        <!-- <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ticket-delete-modal" data-ticket="<?=$record['ticket']?>"><i class="fas fa-trash"></i></button>-->
+                        <a class="btn btn-light me-2" href="../tickets/web_print.php?tid=<?=$record['ticket']?>" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ticket-delete-modal" data-ticket="<?=$record['ticket']?>"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>
                 <?php } ?>

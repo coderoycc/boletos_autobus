@@ -61,8 +61,16 @@ $('#ticket-delete-modal').on('hide.bs.modal', async (e) => {
 $('#btn-delete-ticket').on('click', async ( ) => {
   const ACTION = 'ELIMINAR BOLETO';
   const form = document.getElementById('delete-ticket-form');
+  const btnDelete = document.getElementById('btn-delete-ticket');
+  btnDelete.disabled = true;
   if(isFormValidity(form)){
     const request = await deleteSoldTicket([form]);
+    console.log(request);
+    if(request.success){
+      location.reload();
+    }
     toast(ACTION, request.message, request.success ? 'success' : 'error');
+    console.log(ACTION, request.message);
   }
+  btnDelete.disabled = false;
 });

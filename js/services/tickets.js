@@ -39,5 +39,5 @@ const deleteSoldTicket = async (form) => {
     const URL = `../app/ticket/deleteSoldTicket`;
     const params = convertFormToURLSearchParams(form);
     const request = await fetch(URL, requestOptionsPost(params));
-    return (await request.text());
+    return (await validateResponse(request));
 };

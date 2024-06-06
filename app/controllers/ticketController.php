@@ -117,7 +117,12 @@ class TicketController {
 
         if($password == $user->password){
             $ticket = new Ticket($con, $id);
-            
+            $res = $ticket->delete();
+            if($res){
+                Response::success_json('Venta eliminada correctamente.', []);
+            }else{
+                Response::error_json(['message' => 'No se pudo eliminar la venta.'], 200);
+            }
         }else{
             Response::error_json(['message' => 'Contraseña ingresada incorrecta.'], 200);
         }
