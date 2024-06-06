@@ -14,8 +14,6 @@ class Bus {
   public string $created_at;
   public string $color;
   public string $brand;
-  public string $driver;
-  public string $license;
 
   public function __construct($con = null, $id = null) {
     $this->objectNull();
@@ -39,8 +37,6 @@ class Bus {
     $this->created_at = "";
     $this->color = "";
     $this->brand = "";
-    $this->driver = "";
-    $this->license = "";
   }
   public function load($row) {
     $this->id = $row['id'];
@@ -50,8 +46,6 @@ class Bus {
     $this->created_at = $row['created_at'];
     $this->color = $row['color'];
     $this->brand = $row['brand'];
-    $this->driver = $row['driver'];
-    $this->license = $row['license'];
   }
   public static function all($con) {
     try {
@@ -72,8 +66,8 @@ class Bus {
         $resp = 0;
         $this->con->beginTransaction();
         $sql = "INSERT 
-                INTO buses (placa, description, distribution_id, created_at, color, brand, driver, license) 
-                VALUES (:plate, :description, :distribution_id, :created_at, :color, :brand, :driver, :license);";
+                INTO buses (placa, description, distribution_id, created_at, color, brand) 
+                VALUES (:plate, :description, :distribution_id, :created_at, :color, :brand);";
         $params = [
             'plate' => $this->placa,
             'description' => $this->description,
@@ -81,8 +75,6 @@ class Bus {
             'created_at' => $this->created_at,
             'color' => $this->color,
             'brand' => $this->brand,
-            'driver' => $this->driver,
-            'license' => $this->license,
         ];
         $stmt = $this->con->prepare($sql);
         $res = $stmt->execute($params);
@@ -110,7 +102,7 @@ public function update(){
       $resp = 0;
       $sql = "UPDATE buses 
               SET placa = :plate, description = :description, distribution_id = :distribution_id,
-                  created_at = :created_at, color = :color, brand = :brand, driver = :driver, license = :license
+                  created_at = :created_at, color = :color, brand = :brand
               WHERE id = :id;";
       $params = [
           'plate' => $this->placa,
@@ -119,8 +111,6 @@ public function update(){
           'created_at' => $this->created_at,
           'color' => $this->color,
           'brand' => $this->brand,
-          'driver' => $this->driver,
-          'license' => $this->license,
           'id' => $this->id,
       ];
       $stmt = $this->con->prepare($sql);

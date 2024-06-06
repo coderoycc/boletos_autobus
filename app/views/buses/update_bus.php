@@ -21,14 +21,6 @@
       <input type="text" class="form-control" id="brand" placeholder="Marca" name="brand" required value="<?=$bus->brand?>">
       <label for="brand">Marca</label>
     </div>
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="driver" placeholder="Conductor" name="driver" required value="<?=$bus->driver?>">
-      <label for="driver">Conductor</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="number" class="form-control" id="license" placeholder="Numero de Licencia" name="license" required value="<?=$bus->license?>">
-      <label for="license">Número de Licencia</label>
-    </div>
     <div class="form-floating">
       <select class="form-select" id="distro_type" placeholder="Tipo de distribucion de asientos" name="distribution_id" required>
         <option value="">--- seleccione ---</option>

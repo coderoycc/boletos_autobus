@@ -116,10 +116,15 @@ if (!isset($_GET['tid'])) {
     </td>
   </tr>
   </table>';
-  $dataCenter .= $tabla;
+  $dataCenter .= '<table border="0" cellpadding="0">
+                    <tr>
+                      <td colspan="380" align="center"><b style="font-size:120%;">Boleto #' . $ticket->id . '</b>
+                      </td>
+                    </tr>
+                  </table>';
   $tabla .= '<table border="0" cellpadding="0">
               <tr><td colspan="500" style="font-size:50%;"></td></tr>
-              <tr><td colspan="500"><b>Cliente: </b>' . strtoupper($client->name . ' ' . $client->lastname) . '</td></tr>
+              <tr><td colspan="500"><b>Cliente: </b>' . strtoupper($client->name . ' ' . $client->lastname . ' ' . $client->mothers_lastname) . '</td></tr>
               <tr><td colspan="500"><b>NIT/CI/CEX: </b> ' . $nit_ci . '</td></tr>
               <tr><td colspan="500"><b>Fecha de emisión: </b>' . date('d/m/Y H:i', strtotime($ticket->created_at)) . '</td></tr>
               </table>';

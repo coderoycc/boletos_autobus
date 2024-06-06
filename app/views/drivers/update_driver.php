@@ -22,7 +22,7 @@
           <option value="C" <?= ($driver->category == "C" ? "selected" : "") ?>>C</option>
 
         </select>
-        <label for="category">Distribución de asientos</label>
+        <label for="category">Categoria</label>
       </div>
     </form>
   </div>
