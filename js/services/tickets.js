@@ -15,3 +15,20 @@ const getReservedSeats = async (trip_id) => {
     const request = await fetch(URL, requestOptionsGet( ));
     return (await validateResponse(request));
 };
+/**
+ * Obtener detalles de la venta
+ */
+const getTicketDetailView = async (ticket_id) => {
+    const URL = `../app/ticket/ticketDetail?ticket_id=${ticket_id}`;
+    const request = await fetch(URL, requestOptionsGet( ));
+    return (await request.text());
+};
+/**
+ * Obtener detalles de la venta
+ */
+const getAllTicketsView = async (form) => {
+    const URL = `../app/ticket/getAllTicketsView`;
+    const params = convertFormToURLSearchParams(form);
+    const request = await fetch(URL, requestOptionsPost(params));
+    return (await request.text());
+};

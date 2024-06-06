@@ -1,30 +1,49 @@
-$(document).ready(() => {
-  ticket_list();
-  load_locations();
-})
-async function ticket_list() {
-  const res = await $.ajax({
-    url: '../app/ticket/table_list',
-    type: 'GET',
-    dataType: 'html',
+$(document).ready(async () => {
+  await loadLocations();
+  await listAllTickets();
+});
+
+const listAllTickets = async ( ) => {
+  const form = document.getElementById('data-filter-form');
+  if(!isFormValidity(form)){ return; }
+
+  $("#list_tickets").html('');
+  const request = await getAllTicketsView([form]);
+  $("#list_tickets").html(request);
+  $("#tickets-table").DataTable({
+    language: lenguaje,
+    info: false,
+    scrollX: true,
   });
-  $("#list_tickets").html(res);
-}
-async function load_locations() {
-  const res = await $.ajax({
-    url: '../app/location/all',
-    type: 'GET',
-    dataType: 'json',
-  });
-  if (res.success) {
-    locations = res.data;
-    $("#floatingSelect").html(html_locations());
+  $('.dataTables_filter').hide();
+};
+
+const loadLocations = async ( ) => {
+  const request = await getAllLocations();
+  if (request.success) {
+    locations = request.data;
+    $("#destination").html(htmlLocations());
   }
-}
-function html_locations() {
-  let opt_html = '<option value="0">TODOS LOS DESTINOS</option>';
+};
+
+const htmlLocations = ( ) => {
+  let opt_html = '<option value="0" selected> - Seleccionar Todo - </option>';
   locations.forEach(item => {
     opt_html += `<option value="${item.id}">${item.location.toUpperCase()}</option>`
   });
   return opt_html;
-}
+};
+
+$('#ticket-detail-modal').on('show.bs.modal', async (e) => {
+  const ticket_id = e.relatedTarget.dataset.ticket;
+  const request = await getTicketDetailView(ticket_id);
+  $('#ticket-detail').html(request);
+});
+
+$('#ticket-detail-modal').on('hidden.bs.modal', (e) => {
+  $('#ticket-detail').html('');
+});
+
+$('#btn-search-filter').on('click', (e) => {
+  listAllTickets();
+});

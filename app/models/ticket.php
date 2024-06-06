@@ -22,7 +22,7 @@ class Ticket {
       $this->con = $db;
       if ($id != null) {
         $sql = "SELECT * 
-                        FROM tickets WHERE id = :id";
+                FROM tickets WHERE id = :id";
         $stmt = $this->con->prepare($sql);
         $stmt->execute(['id' => $id]);
         $row = $stmt->fetch();
@@ -121,6 +121,39 @@ class Ticket {
       $where = "$q_loca_id b.departure_date BETWEEN '$start' AND '$end'";
       $order = " ORDER BY b.departure_date ASC, a.seat_number ASC;";
       $stmt = $con->prepare($sql . $where . $order);
+      $stmt->execute();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      return $rows;
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+    return [];
+  }
+
+  public static function index($con, $data) {
+    try {
+      $client = $data['client'];
+      $destination = $data['destination'];
+      $initial = $data['initial_date'];
+      $final = $data['final_date'];
+      $filterByDestination = intval($destination) > 0 ? "AND tr.location_id_dest = $destination " : "";
+      $sql = "SELECT t.id as ticket, t.price as sold_price, t.seat_number, t.created_at as sold_datetime,
+                      b.description as bus_description, b.placa,
+                      tr.*, o.location as origin, d.location as destination, 
+                      e.ci, e.nit, CONCAT(e.name, ' ', e.lastname, ' ', e.mothers_lastname) AS client,
+                      u.username
+              FROM tickets t
+              LEFT JOIN trips tr ON t.trip_id = tr.id
+              LEFT JOIN locations o ON tr.location_id_origin = o.id 
+              LEFT JOIN locations d ON tr.location_id_dest = d.id
+              LEFT JOIN clients e ON t.client_id = e.id
+              LEFT JOIN buses b ON b.id = tr.bus_id
+              LEFT JOIN users u ON u.id = t.sold_by
+              WHERE (tr.departure_date BETWEEN '$initial' AND '$final')
+                    AND CONCAT(e.name, ' ', e.lastname, ' ', e.mothers_lastname) LIKE '%$client%'
+                    $filterByDestination
+              ORDER BY t.id DESC;";
+      $stmt = $con->prepare($sql);
       $stmt->execute();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
       return $rows;

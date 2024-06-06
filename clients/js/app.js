@@ -9,5 +9,5 @@ const loadAllClients = async () => {
     columnDefs: [
       { orderable: false, targets: [1, 7] }
     ],
-  })
+  });
 };

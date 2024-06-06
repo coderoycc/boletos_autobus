@@ -10,6 +10,7 @@ use App\Models\Bus;
 use App\Providers\DBWebProvider;
 use Helpers\Resources\Request;
 use Helpers\Resources\Response;
+use Helpers\Resources\Render;
 use Helpers\Resources\ReportPrintApp;
 
 class TicketController {
@@ -66,6 +67,40 @@ class TicketController {
         }else{
             Response::error_json(['message' => 'No se encontro los datos de la venta.'], 200);
         }
+    }
+
+    public function TicketDetail($query){
+        $query['db_name'] = 'boletos_25_diciembre';
+        $db_name = $query['db_name'];
+        $ticket_id = $query['ticket_id'];
+        DBWebProvider::start_session_app(['dbname' => $db_name]);
+        $con = DBWebProvider::getSessionDataDB();
+        $ticket = new Ticket($con, $ticket_id);
+        if($ticket->id > 0){
+            $client = new Client($con, $ticket->client_id);
+            $trip = new Trip($con, $ticket->trip_id);
+            $origin = new Location($con, $trip->location_id_origin);
+            $destination = new Location($con, $trip->location_id_dest);
+            $bus = new Bus($con, $trip->bus_id);
+            Render::view('tickets/card_detail_view', [
+                'ticket' => $ticket, 
+                'client' => $client,
+                'trip' => $trip,
+                'origin' => $origin,
+                'destination' => $destination,
+                'bus' => $bus,
+            ]);
+        }else{
+            Render::view('error_html', ['message' => 'Datos de la venta no encontrados, contacte con el administrador', 'message_details' => '404 Ticket not found']);
+        }
+    }
+
+    public function getAllTicketsView($data){
+        $con = DBWebProvider::getSessionDataDB();
+        $records = Ticket::index($con, $data);
+        Render::view('tickets/ticket_list_view', [
+            'records' => $records,
+        ]);
     }
 
 }
