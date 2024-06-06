@@ -3,6 +3,7 @@ $(document).ready(() => {
   list_data()
   load_locations();
   load_buses();
+  loadDrivers();
 });
 
 $(document).on('show.bs.modal', "#trip_edit", open_modal_edit)
@@ -77,7 +78,6 @@ async function trip_update() {
 
 async function add_trip() {
   const data = $("#form_add_trip").serializeArray();
-  console.log(data)
   const res = await $.ajax({
     url: `../app/trip/create`,
     type: 'POST',
@@ -140,6 +140,24 @@ async function load_buses() {
   if (res.success) {
     $("#buses_selected").html(html_buses(res.data));
   }
+}
+const loadDrivers = async ( ) => {
+  const res = await $.ajax({
+    url: '../app/driver/list_all',
+    type: 'GET',
+    dataType: 'json',
+  });
+  console.log(res);
+  if (res.success) {
+    $("#drivers_selected").html(htmlDrivers(res.data));
+  }
+}
+const htmlDrivers = (drivers) => {
+  let html = '<option value=""> - Seleccionar Conductor - </option>';
+  drivers.forEach((item) => {
+    html += `<option value="${item.id}">${item.fullname}</span></option>`
+  })
+  return html;
 }
 function list__from_filters(e) {
   const date = $("#trip_date").val();

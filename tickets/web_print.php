@@ -47,7 +47,6 @@ if (!isset($_GET['tid'])) {
   $client = new Client($con, $ticket->client_id);
   $user = new User($con, $ticket->sold_by);
   $width = 210;
-  //$height = 225;
   $height = 260;
 
   // Calculamos alto de pagina (unicamente por el campo detalle_envio) Es el unico que puede ser mas grande

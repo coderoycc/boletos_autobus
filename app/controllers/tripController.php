@@ -7,6 +7,7 @@ use App\Models\Location;
 use App\Models\Trip;
 use App\Models\Distribution;
 use App\Models\Ticket;
+use App\Models\Driver;
 use App\Providers\DBWebProvider;
 use Helpers\Resources\Render;
 use Helpers\Resources\Response;
@@ -23,6 +24,7 @@ class TripController {
     $trip->location_id_dest = $data['destination'];
     $trip->min_price = floatval($data['min_price']);
     $trip->price = floatval($data['price']);
+    $trip->driver_id = intval($data['driver_id']);
     if ($trip->save()) {
       Response::success_json('Agregado correctamente', [], 200);
     } else {
@@ -40,8 +42,9 @@ class TripController {
     $trip = new Trip($con, $query['id']);
     if ($trip->id) {
       $buses = Bus::all($con);
+      $drivers = Driver::all($con);
       $locations = Location::all($con);
-      Render::view('trips/modal_edit_content', ['trip' => $trip, 'locations' => $locations, 'buses' => $buses]);
+      Render::view('trips/modal_edit_content', ['trip' => $trip, 'locations' => $locations, 'buses' => $buses, 'drivers' => $drivers]);
     } else {
       Render::view('error_html', ['message' => 'Parametro ID no encontrado', 'message_details' => '404 Trip not found']);
     }
@@ -56,6 +59,7 @@ class TripController {
     $trip->location_id_dest = $data['destination'];
     $trip->min_price = floatval($data['min_price']);
     $trip->price = floatval($data['price']);
+    $trip->driver_id = intval($data['driver_id']);
     if ($trip->save()) {
       Response::success_json('Actualizado correctamente', [], 200);
     } else {

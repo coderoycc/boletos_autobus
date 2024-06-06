@@ -57,5 +57,15 @@
         <label for="buses_edit">Bus encargado</label>
       </div>
     </div>
+    <div class="col-md-12 my-2">
+      <div class="form-floating">
+        <select class="form-select" id="drivers_edit" name="driver_id">
+          <?php foreach ($drivers as $driver) : ?>
+            <option value="<?= $driver['id'] ?>" <?= $driver['id'] == $trip->driver_id ? 'selected' : '' ?>><?= $driver['fullname'] ?></option>
+          <?php endforeach; ?>
+        </select>
+        <label for="Drivers_edit">Conductor Designado</label>
+      </div>
+    </div>
   </div>
 </form>

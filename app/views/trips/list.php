@@ -15,6 +15,7 @@
         <th>Fecha</th>
         <th>Hora de salida</th>
         <th>Placa Bus</th>
+        <th>Conductor</th>
         <th>Origen</th>
         <th>Destino</th>
         <th>Precio Mínimo</th>
@@ -30,6 +31,7 @@
           <td class="text-center"><?= date('d/m/Y', strtotime($trip['departure_date'])) ?></td>
           <td class="text-center"><?= date('H:i', strtotime($trip['departure_time'])) ?></td>
           <td class="text-center"><?= strtoupper($trip['placa']) ?></td>
+          <td class="text-center"><?= strtoupper($trip['conductor']) ?></td>
           <td class="text-center"><?= strtoupper($trip['origen']) ?></td>
           <td class="text-center"><?= strtoupper($trip['destino']) ?></td>
           <td class="text-end"><?= number_format($trip['min_price'], 2) ?></td>
