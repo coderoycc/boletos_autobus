@@ -41,3 +41,22 @@ async function show_distro_card(e){
 async function show_card_new_distro(e){
   
 }
+
+const createNewBus = async ( ) => {
+  const form = document.getElementById('data-bus-form');
+  if(!isFormValidity(form)){ return; }
+
+  const ACTION = 'CREAR NUEVO BUS';
+  const request = await createBus([form]);
+  if(request.success){ 
+    list();
+  }
+  $.toast({
+      heading: ACTION,
+      text: request.message,
+      icon: request.success ? 'success' : 'error',
+      loader: true,
+      position: 'top-right',
+  });
+  console.log(ACTION, request.message);
+};

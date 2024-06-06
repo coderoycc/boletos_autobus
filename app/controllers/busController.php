@@ -9,6 +9,26 @@ use Helpers\Resources\Render;
 use Helpers\Resources\Response;
 
 class BusController {
+
+  public function create($data){
+    $con = DBWebProvider::getSessionDataDB();
+    if ($con) {
+        $bus = new Bus($con);
+        $bus->placa = $data['plate'];
+        $bus->description = $data['description'];
+        $bus->distribution_id = $data['distribution_id'];
+        $bus->created_at = date('Y-m-d H:i:s');
+        $res = $bus->save();
+        if($res){
+            Response::success_json('Bus creado correctamente.', ['bus' => $bus]);
+        }else{
+            Response::error_json(['message' => 'Error al crear el cliente.'], 200);
+        }
+    }else{
+        Response::error_json(['message' => 'Error conexion instancia.'], 200);
+    }
+  }
+
   public function card_add_new($query){
     $connect = DBWebProvider::getSessionDataDB();
     $distros = Distribution::distros($connect);

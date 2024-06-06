@@ -51,4 +51,37 @@ class Bus {
     }
     return [];
   }
+
+  public function save(){
+    if ($this->con == null){ return -1; }
+    try{
+        $resp = 0;
+        $this->con->beginTransaction();
+        $sql = "INSERT 
+                INTO buses (placa, description, distribution_id, created_at) 
+                VALUES (:plate, :description, :distribution_id, :created_at);";
+        $params = [
+            'plate' => $this->placa,
+            'description' => $this->description,
+            'distribution_id' => $this->distribution_id,
+            'created_at' => $this->created_at,
+        ];
+        $stmt = $this->con->prepare($sql);
+        $res = $stmt->execute($params);
+        if ($res) {
+            $this->con->commit();
+            $this->id = $this->con->lastInsertId();
+            $resp = $this->id;
+        } else {
+            $resp = -1;
+            $this->con->rollBack();
+        }
+        return $resp;
+    }catch(\Throwable $th){
+        //print_r($th);
+        $this->con->rollBack();
+        return -1;
+    }
+}
+
 }

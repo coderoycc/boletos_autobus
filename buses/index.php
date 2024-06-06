@@ -92,6 +92,10 @@ require_once("../helpers/middlewares/web_auth.php");
     </div>
   </div>
 
+  <script src="../js/options.js"></script>
+  <script src="../js/functions.js"></script>
+  <script src="../js/forms.js"></script>
+  <script src="../js/services/buses.js"></script>
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>
