@@ -12,6 +12,14 @@
       <input type="text" class="form-control" id="description" placeholder="Descripcion" name="description" required>
       <label for="description">Descripción</label>
     </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="color" placeholder="Color" name="color" required>
+      <label for="color">Color</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="brand" placeholder="Marca" name="brand" required>
+      <label for="brand">Marca</label>
+    </div>
     <div class="form-floating">
       <select class="form-select" id="distro_type" placeholder="Tipo de distribucion de asientos" name="distribution_id" required>
         <option value="">--- seleccione ---</option>
@@ -24,6 +32,6 @@
     </form>
   </div>
   <div class="card-footer d-flex justify-content-center">
-    <button type="button" class="btn btn-success" onclick="createNewBus()">GUARDAR</button>
+    <button type="button" class="btn btn-success" onclick="createNewBus()"><i class="fas fa-save me-2"></i>Guardar</button>
   </div>
 </div>

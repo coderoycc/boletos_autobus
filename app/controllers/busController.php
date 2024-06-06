@@ -18,6 +18,8 @@ class BusController {
         $bus->description = $data['description'];
         $bus->distribution_id = $data['distribution_id'];
         $bus->created_at = date('Y-m-d H:i:s');
+        $bus->color = $data['color'];
+        $bus->brand = $data['brand'];
         $res = $bus->save();
         if($res){
             Response::success_json('Bus creado correctamente.', ['bus' => $bus]);

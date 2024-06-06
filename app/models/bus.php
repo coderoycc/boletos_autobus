@@ -5,12 +5,16 @@ namespace App\Models;
 use PDO;
 
 class Bus {
+  
   private $con;
   public int $id;
   public string $placa;
   public string $description;
   public int $distribution_id;
   public string $created_at;
+  public string $color;
+  public string $brand;
+
   public function __construct($con = null, $id = null) {
     $this->objectNull();
     if ($con != null) {
@@ -31,6 +35,8 @@ class Bus {
     $this->description = "";
     $this->distribution_id = 0;
     $this->created_at = "";
+    $this->color = "";
+    $this->brand = "";
   }
   public function load($row) {
     $this->id = $row['id'];
@@ -38,6 +44,8 @@ class Bus {
     $this->description = $row['description'];
     $this->distribution_id = $row['distribution_id'];
     $this->created_at = $row['created_at'];
+    $this->color = $row['color'];
+    $this->brand = $row['brand'];
   }
   public static function all($con) {
     try {
@@ -58,13 +66,15 @@ class Bus {
         $resp = 0;
         $this->con->beginTransaction();
         $sql = "INSERT 
-                INTO buses (placa, description, distribution_id, created_at) 
-                VALUES (:plate, :description, :distribution_id, :created_at);";
+                INTO buses (placa, description, distribution_id, created_at, color, brand) 
+                VALUES (:plate, :description, :distribution_id, :created_at, :color, :brand);";
         $params = [
             'plate' => $this->placa,
             'description' => $this->description,
             'distribution_id' => $this->distribution_id,
             'created_at' => $this->created_at,
+            'color' => $this->color,
+            'brand' => $this->brand,
         ];
         $stmt = $this->con->prepare($sql);
         $res = $stmt->execute($params);
