@@ -8,6 +8,10 @@
             <div class="sb-nav-link-icon"><i class=" fa-lg fa-solid fa-user-shield"></i></div>
             Usuarios del Sistema
           </a>
+          <a class="nav-link" href="../drivers" data-route="drivers">
+            <div class="sb-nav-link-icon"><i class="fa-lg fa-solid fa-id-card"></i></div>
+            Choferes
+          </a>
         <?php endif; ?>
         <a class="nav-link" href="../clients" data-route="clients">
           <div class="sb-nav-link-icon"><i class=" fa-lg fa-solid fa-user"></i></div>

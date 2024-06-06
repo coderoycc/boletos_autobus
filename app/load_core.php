@@ -9,7 +9,7 @@ require_once '../helpers/resources/reportPrintApp.php';
 require_once './controllers/authController.php';
 require_once './providers/authProvider.php';
 require_once './providers/db_Provider.php';
-$entidades = ['user', 'bus', 'location', 'trip', 'client', 'distribution', 'ticket'];
+$entidades = ['user', 'bus', 'location', 'trip', 'client', 'distribution', 'ticket', 'driver'];
 foreach ($entidades as $entidad) {
   require_once("models/" . $entidad . ".php");
   require_once("controllers/" . $entidad . "Controller.php");
