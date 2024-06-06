@@ -18,7 +18,7 @@
           <td class="text-center"><?= $driver['category'] ?></td>
           <td class="text-center">
             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-              <button type="button" class="btn btn-outline-danger"><i class="fa fa-solid fa-trash"></i> Dar Baja</button>
+              <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#driver_delete" data-id="<?= $driver['id'] ?>"><i class="fa fa-solid fa-trash"></i> Dar Baja</button>
               <button type="button" class="btn btn-outline-primary" onclick="updateView(<?= $driver['id'] ?>)"><i class="fa fa-solid fa-pen"></i> Editar</button>
             </div>
           </td>

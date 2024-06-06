@@ -37,10 +37,9 @@ class DriverController {
       $driver->category = $data['category'];
       $driver->fullname = $data['fullname'];
       $driver->license = $data['license'];
-      $driver->state = $data['state'];
       $res = $driver->update();
       if ($res) {
-        Response::success_json('Bus creado actualizado correctamente.', []);
+        Response::success_json('Chofer actualizado correctamente.', []);
       } else {
         Response::error_json(['message' => 'Error al crear el cliente.'], 200);
       }
@@ -54,7 +53,7 @@ class DriverController {
     $distros = Distribution::distros($connect);
     Render::view('drivers/new_driver', ['distros' => $distros]);
   }
-  public function driver_update($data) {
+  public function card_update($data) {
     if (!Request::required(['driver_id'], $data))
       Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
 
@@ -76,5 +75,16 @@ class DriverController {
     $conecion = DBWebProvider::getSessionDataDB();
     $drivers = Driver::all($conecion);
     Render::view('drivers/list', ['drivers' => $drivers]);
+  }
+  public function down_driver($data) {
+    $conection = DBWebProvider::getSessionDataDB();
+    $driver = new Driver($conection, intval($data['driver_id']));
+    $driver->state = 'INACTIVO';
+    $res = $driver->update();
+    if ($res) {
+      Response::success_json('Conductor actualizado correctamente.', []);
+    } else {
+      Response::error_json(['message' => 'Error al actualizar el conductor.'], 200);
+    }
   }
 }

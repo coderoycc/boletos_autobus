@@ -27,8 +27,8 @@ require_once("../helpers/middlewares/web_auth.php");
       <main>
         <div class="container-fluid px-4">
           <div class="d-flex justify-content-between mt-4 flex-wrap">
-            <h3>Buses</h3>
-            <button class="btn btn-primary" onclick="add_new()"><i class="fa-lg fa-solid fa-map-location-dot"></i> Agregar nuevo bus</button>
+            <h3>Choferes</h3>
+            <button class="btn btn-primary" onclick="add_new()"><i class="fa-lg fa-solid fa-map-location-dot"></i> Agregar nuevo chofer</button>
           </div>
           <div class="row" id="data_buses"></div>
         </div>
@@ -41,17 +41,17 @@ require_once("../helpers/middlewares/web_auth.php");
 
 
   <!-- MODAL ELIMINAR -->
-  <div class="modal fade" id="depa_delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="driver_delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header bg-danger">
-          <h1 class="modal-title text-white fs-5">¿ELIMINAR DESTINO?</h1>
+          <h1 class="modal-title text-white fs-5">¿DAR DE BAJA AL CHOFER?</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <input type="hidden" id="id_location_delete">
+        <input type="hidden" id="driver_id_delete">
         <div class="modal-footer justify-content-center">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger text-white" data-bs-dismiss="modal" onclick="delete_location()">Eliminar</button>
+          <button type="button" class="btn btn-danger text-white" data-bs-dismiss="modal" onclick="down_driver()">DAR DE BAJA</button>
         </div>
       </div>
     </div>

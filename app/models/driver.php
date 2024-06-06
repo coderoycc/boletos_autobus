@@ -80,7 +80,7 @@ class Driver {
     $this->con->beginTransaction();
     try {
       $resp = 0;
-      $sql = "UPDATE drivers SET fullname = :fullname, category = :category, license = :license
+      $sql = "UPDATE drivers SET fullname = :fullname, category = :category, license = :license, state = :state
               WHERE id = :id;";
       $params = [
         'category' => $this->category,
@@ -106,7 +106,7 @@ class Driver {
     }
   }
   public static function all($con) {
-    $sql = "SELECT * FROM drivers";
+    $sql = "SELECT * FROM drivers WHERE state = 'ACTIVO'";
     $stmt = $con->prepare($sql);
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

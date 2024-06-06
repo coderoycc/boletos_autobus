@@ -5,8 +5,16 @@ $(document).ready(() => {
 /** EVENTS start **/
 $(document).on('change', '#distro_type', show_distro_card)
 $(document).on('click', '#btn__new_distro', show_card_new_distro)
+$(document).on('show.bs.modal', '#driver_delete', show_driver_delete)
 /** EVENTS end **/
 
+
+function show_driver_delete(e) {
+  console.log(e.relatedTarget.dataset)
+  const id = e.relatedTarget.dataset.id;
+  console.log(id)
+  $('#driver_id_delete').val(id);
+}
 async function list() {
   const res = await $.ajax({
     url: '../app/driver/all',
@@ -42,12 +50,12 @@ async function show_card_new_distro(e) {
 
 }
 
-const createNewBus = async () => {
-  const form = document.getElementById('data-bus-form');
+const createNewDriver = async () => {
+  const form = document.getElementById('data-driver-form');
   if (!isFormValidity(form)) { return; }
 
-  const ACTION = 'CREAR NUEVO BUS';
-  const request = await createBus([form]);
+  const ACTION = 'CREAR NUEVO Driver';
+  const request = await createDriver([form]);
   if (request.success) {
     list();
   }
@@ -61,12 +69,12 @@ const createNewBus = async () => {
   console.log(ACTION, request.message);
 };
 
-const updateView = async (busId) => {
+const updateView = async (driver_id) => {
   const response = await $.ajax({
-    url: '../app/bus/card_update',
+    url: '../app/driver/card_update',
     type: 'POST',
     data: {
-      bus_id: busId,
+      driver_id,
     },
     dataType: 'html'
   });
@@ -77,12 +85,12 @@ const updateView = async (busId) => {
   $("#col__data").html(response);
 }
 
-const updateDataBus = async () => {
-  const form = document.getElementById('data-bus-update-form');
+const updateDataDriver = async () => {
+  const form = document.getElementById('data-driver-update-form');
   if (!isFormValidity(form)) { return; }
 
   const ACTION = 'ACTUALIZAR BUS';
-  const request = await updateBus([form]);
+  const request = await updateDriver([form]);
   if (request.success) {
     list();
   }
@@ -95,3 +103,19 @@ const updateDataBus = async () => {
   });
   console.log(ACTION, request.message);
 };
+
+async function down_driver() {
+  const driver_id = $("#driver_id_delete").val();
+  const res = await $.ajax({
+    url: '../app/driver/down_driver',
+    type: 'POST',
+    data: { driver_id },
+    dataType: 'json'
+  })
+  if (res.success) {
+    list();
+    toast('Operación exitosa', res.message, 'success', 2500)
+  } else {
+    toast('Operación fallida', res.message, 'error', 3500)
+  }
+}
