@@ -102,4 +102,42 @@ class Bus {
     }
 }
 
+public function update(){
+  if ($this->con == null){ return -1; }
+
+  $this->con->beginTransaction();
+  try{
+      $resp = 0;
+      $sql = "UPDATE buses 
+              SET placa = :plate, description = :description, distribution_id = :distribution_id,
+                  created_at = :created_at, color = :color, brand = :brand, driver = :driver, license = :license
+              WHERE id = :id;";
+      $params = [
+          'plate' => $this->placa,
+          'description' => $this->description,
+          'distribution_id' => $this->distribution_id,
+          'created_at' => $this->created_at,
+          'color' => $this->color,
+          'brand' => $this->brand,
+          'driver' => $this->driver,
+          'license' => $this->license,
+          'id' => $this->id,
+      ];
+      $stmt = $this->con->prepare($sql);
+      $res = $stmt->execute($params);
+      if ($res) {
+          $this->con->commit();
+          $resp = $this->id;
+      } else {
+          $resp = -1;
+          $this->con->rollBack();
+      }
+      return $resp;
+  }catch(\Throwable $th){
+      //print_r($th);
+      $this->con->rollBack();
+      return -1;
+  }
+}
+
 }

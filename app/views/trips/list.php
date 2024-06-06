@@ -28,7 +28,7 @@
             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
               <a href="../sales/?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-outline-success"><i class="fa-lg fa-solid fa-hand-holding-dollar"></i> Vender Boletos</a>
               <button type="button" class="btn btn-outline-primary" data-bs-target="#trip_edit" data-bs-toggle="modal" data-id="<?= $trip['id'] ?>"><i class="fa fa-solid fa-pen"></i> Editar</button>
-              <a href="../reports/pdf/report_trip_clients.php?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-danger" target="_blank"><i class="fa-lg fa-solid fa-file-pdf"></i> Clientes</a>
+              <a href="../reports/pdf/report_trip_clients.php?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-danger" target="_blank"><i class="fa-lg fa-solid fa-file-pdf"></i> Pasajeros</a>
             </div>
           </td>
         </tr>

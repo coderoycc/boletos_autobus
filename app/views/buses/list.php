@@ -25,7 +25,7 @@
           <td class="text-center">
             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
               <button type="button" class="btn btn-outline-danger"><i class="fa fa-solid fa-trash"></i> Dar Baja</button>
-              <button type="button" class="btn btn-outline-primary"><i class="fa fa-solid fa-pen"></i> Editar</button>
+              <button type="button" class="btn btn-outline-primary" onclick="updateView(<?= $bus['id'] ?>)"><i class="fa fa-solid fa-pen"></i> Editar</button>
             </div>
           </td>
         </tr>

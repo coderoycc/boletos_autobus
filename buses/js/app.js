@@ -60,3 +60,38 @@ const createNewBus = async ( ) => {
   });
   console.log(ACTION, request.message);
 };
+
+const updateView = async (busId) => {
+  const response = await $.ajax({
+    url: '../app/bus/card_update',
+    type: 'POST',
+    data: {
+      bus_id: busId,
+    },
+    dataType: 'html'
+  });
+  $("#data_buses").html(`
+    <div class="col-md-5" id="col__data"></div>
+    <div class="col-md-7" id="col__details"></div>`
+  );
+  $("#col__data").html(response);
+}
+
+const updateDataBus = async ( ) => {
+  const form = document.getElementById('data-bus-update-form');
+  if(!isFormValidity(form)){ return; }
+
+  const ACTION = 'ACTUALIZAR BUS';
+  const request = await updateBus([form]);
+  if(request.success){ 
+    list();
+  }
+  $.toast({
+      heading: ACTION,
+      text: request.message,
+      icon: request.success ? 'success' : 'error',
+      loader: true,
+      position: 'top-right',
+  });
+  console.log(ACTION, request.message);
+};

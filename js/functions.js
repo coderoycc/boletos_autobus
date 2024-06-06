@@ -53,6 +53,7 @@ const executeBluetoothPrinter = (ticket) => {
     const deepLink = `app://printer.com/sale/${ticket.id}|${dbName}`;
     // Abriendo la aplicacion de Impresion
     window.location.href = deepLink;
+    window.open(`../tickets/web_print.php?tid=${ticket.id}`, '_blank');
   } else {
     window.open(`../tickets/web_print.php?tid=${ticket.id}`, '_blank');
   }
