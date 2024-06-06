@@ -1,3 +1,13 @@
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-5 d-flex flex-wrap justify-content-around">
+      <p class="fs-4 fw-semibold text-secondary mb-0">Viajes de la fecha</p>
+      <div class="input-group " style="width:auto !important;">
+        <input type="date" id="trip_date" class="fw-semibold border-secondary text-secondary form-control" value="<?= $date ?>">
+        <button class="btn btn-outline-secondary" type="button" id="list_search"><i class="fa-lg fa fa-solid fa-search"></i></button>
+      </div>
+    </div>
+  </div>
+
   <table class="table table-striped" id="table_trips" width="100%">
     <thead>
       <tr class="text-center">
