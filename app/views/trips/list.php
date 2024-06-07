@@ -38,9 +38,10 @@
           <td class="text-end"><?= number_format($trip['price'], 2) ?></td>
           <td class="text-center">
             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-              <a href="../sales/?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-outline-success"><i class="fa-lg fa-solid fa-hand-holding-dollar"></i> Vender Boletos</a>
+              <a href="../sales/?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-outline-success"><i class="fa-lg fa-solid fa-hand-holding-dollar"></i> Vender</a>
               <button type="button" class="btn btn-outline-primary" data-bs-target="#trip_edit" data-bs-toggle="modal" data-id="<?= $trip['id'] ?>"><i class="fa fa-solid fa-pen"></i> Editar</button>
               <a href="../reports/pdf/report_trip_clients.php?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-danger" target="_blank"><i class="fa-lg fa-solid fa-file-pdf"></i> Pasajeros</a>
+              <a href="../reports/pdf/report_payout.php?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-warning" target="_blank"><i class="fa-lg fa-solid fa-file-pdf"></i> Boleta</a>
             </div>
           </td>
         </tr>

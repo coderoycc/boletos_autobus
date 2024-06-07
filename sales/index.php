@@ -24,7 +24,6 @@
 <body class="sb-nav-fixed">
   <?php 
     include("../partials/header.php");
-    include("components/select_client_modal.php");
   ?>
   <div id="layoutSidenav"> <!-- contenedor -->
     <?php include("../partials/sidebar.php"); ?>
@@ -66,7 +65,12 @@
                 <div class="col-md-12 mb-3" id="trip-data">
                   
                 </div>
-                <div class="col-md-12 mb-3">
+                <div class="col-md-8 mb-3">
+                  <?php
+                    include('components/client_data_form.php');
+                  ?>
+                </div>
+                <div class="col-md-4 mb-3">
                   <?php
                     include('components/sale_data_form.php');
                   ?>
@@ -90,6 +94,7 @@
   <script src="../js/services/seats.js"></script>
   <script src="../js/services/clients.js"></script>
   <script src="../js/services/tickets.js"></script>
+  <script src="../js/services/locations.js"></script>
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>

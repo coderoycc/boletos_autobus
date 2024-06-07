@@ -15,6 +15,7 @@ class Ticket {
   public String $created_at;
   public int $sold_by;
   public float $price;
+  public int $intermediate_id;
 
   public function __construct($db = null, $id = null) {
     $this->objectNull();
@@ -41,6 +42,7 @@ class Ticket {
     $this->created_at = $row['created_at'];
     $this->sold_by = $row['sold_by'];
     $this->price = $row['price'];
+    $this->intermediate_id = $row['intermediate_id'] ?? 0;
   }
 
   public function objectNull() {
@@ -51,6 +53,7 @@ class Ticket {
     $this->created_at = '';
     $this->sold_by = 0;
     $this->price = 0.0;
+    $this->intermediate_id = 0;
   }
 
   public static function reservedSeats($con, $trip_id) {
@@ -82,12 +85,13 @@ class Ticket {
       $resp = 0;
       $this->con->beginTransaction();
       $sql = "INSERT 
-                    INTO tickets (seat_number, trip_id, client_id, created_at, sold_by, price) 
-                    VALUES (:seat_number, :trip_id, :client_id, :created_at, :sold_by, :price);";
+                    INTO tickets (seat_number, trip_id, client_id, created_at, sold_by, price, intermediate_id)
+                    VALUES (:seat_number, :trip_id, :client_id, :created_at, :sold_by, :price, :intermediate_id);";
       $params = [
         'seat_number' => $this->seat_number, 'trip_id' => $this->trip_id,
         'client_id' => $this->client_id, 'created_at' => $this->created_at,
-        'sold_by' => $this->sold_by, 'price' => $this->price
+        'sold_by' => $this->sold_by, 'price' => $this->price,
+        'intermediate_id' => $this->intermediate_id,
       ];
       $stmt = $this->con->prepare($sql);
       $res = $stmt->execute($params);

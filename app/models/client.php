@@ -127,7 +127,8 @@ class Client {
         try{
             $sql = "SELECT c.*, u.username
                     FROM clients c
-                    LEFT JOIN users u ON c.user_id = u.id;";
+                    LEFT JOIN users u ON c.user_id = u.id
+                    ORDER BY c.id DESC;";
             $stmt = $con->prepare($sql);
             $stmt->execute();
             $res = $stmt->fetchAll(PDO::FETCH_ASSOC);

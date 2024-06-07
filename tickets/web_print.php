@@ -16,6 +16,7 @@ use App\Models\Client;
 use App\Models\User;
 use App\Models\Ticket;
 use App\Models\Trip;
+use App\Models\Location;
 use App\Providers\DBWebProvider;
 
 if (!isset($_GET['tid'])) {
@@ -46,6 +47,8 @@ if (!isset($_GET['tid'])) {
   $destino = $trip->destination();
   $client = new Client($con, $ticket->client_id);
   $user = new User($con, $ticket->sold_by);
+  $intermediate = new Location($con, ($ticket->intermediate_id == 0 ? null : $ticket->intermediate_id));
+
   $width = 210;
   $height = 260;
 
@@ -137,7 +140,7 @@ if (!isset($_GET['tid'])) {
                 <td colspan="500"><b>Lugar origen: </b> ' . strtoupper($origen->location) . '</td>
               </tr>
               <tr>
-                <td colspan="500"><b>Lugar destino: </b> ' . strtoupper($destino->location) . '</td>
+                <td colspan="500"><b>Lugar destino: </b> ' . strtoupper($destino->location) . ' ' . ($intermediate->id == 0 ? '' : '('.strtoupper($intermediate->location).')') . '</td>
               </tr>
               <tr>
                 <td colspan="500"><b>Fecha y hora de salida: </b>' . date('d/m/Y', strtotime($trip->departure_date)) . ' ' . date('H:i', strtotime($trip->departure_time)) . ' </td>

@@ -4,6 +4,8 @@ var typeSeat = 'upper';
 		
 $(document).ready(async function() {
 
+    loadLocations();
+    
     const tripId = getParam(window.location, 'trip_id');
     $('#trip-id').val(tripId);
     
@@ -59,8 +61,7 @@ $(document).ready(async function() {
                 selectedID = id;
                 const label = this.settings.label;
                 $('#numero-asiento').val(label);
-                $('#documento-cliente').click( );
-                $('#documento-cliente').focus( );
+                $('#ci-cliente').focus( );
                 return 'selected';
             } else if (this.status() == 'selected') {
                 resetSelected();
@@ -124,8 +125,7 @@ $(document).ready(async function() {
                     selectedID = id;
                     const label = this.settings.label;
                     $('#numero-asiento').val(label);
-                    $('#documento-cliente').click( );
-                    $('#documento-cliente').focus( );
+                    $('#ci-cliente').focus( );
                     return 'selected';
                 } else if (this.status() == 'selected') {
                     resetSelected();
