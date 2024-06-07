@@ -1,4 +1,5 @@
 <?php
+
 use App\Models\Client;
 use App\Models\Bus;
 use App\Models\Trip;
@@ -36,28 +37,31 @@ $location = new Location($con, $trip->location_id_dest);
 $driver = new Driver($con, $trip->driver_id);
 // $clients = array();
 
-class MYPDF extends TCPDF {
-    public function Header() {
-      $this->SetFont('helvetica', '', 8);
-      $this->MultiCell(210, 2, "", 0, 'L', 0, 1, 10, 43, true);
-    }
-    public function Footer() {
-    }
+class MYPDF extends TCPDF
+{
+  public function Header()
+  {
+    $this->SetFont('helvetica', '', 8);
+    $this->MultiCell(210, 2, "", 0, 'L', 0, 1, 10, 43, true);
   }
+  public function Footer()
+  {
+  }
+}
 
-  $width = 210;
-  $height = 235;
+$width = 210;
+$height = 5000;
 
-  $tam_fuente = 12;
-  $w = $width - 0;
-  $lineas = count($clients);
-  $aumentar = $lineas > 1 ? ($lineas - 1) * $tam_fuente : 0;
-  $height = $height + $aumentar;
+$tam_fuente = 12;
+$w = $width - 0;
+$lineas = count($clients);
+$aumentar = $lineas > 1 ? ($lineas - 1) * $tam_fuente : 0;
+// $height = $height + $aumentar;
 
-  $pageLayout = array($width, $height);
-  $pdf = new MYPDF('P', 'pt', $pageLayout, true, 'UTF-8', false);
+$pageLayout = array($width, $height);
+$pdf = new MYPDF('P', 'pt', $pageLayout, true, 'UTF-8', false);
 
-  $pdf->SetCreator(PDF_CREATOR);
+$pdf->SetCreator(PDF_CREATOR);
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
 $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
@@ -88,22 +92,24 @@ $tabla = '
 </table>
 <table border="0" cellpadding="0">
 <tr>
-<td colspan="10"><b>Conductor: </b>' . $driver->fullname . '</td>
+<td colspan="10"><b>Cond.: </b>' . $driver->fullname . '</td>
 </tr>
 <tr>
 <td colspan="10"><b>Nro. Licencia: </b>' . $driver->license . '</td>
 </tr>
 <tr>
-<td colspan="6"><b>Bus Marca: </b>' . $bus->brand .'</td>
-<td colspan="4"><b>Color: </b>' . $bus->color .'</td>
+<td colspan="10"><b>Bus Marca: </b>' . $bus->brand . '</td>
 </tr>
 <tr>
-<td colspan="5"><b>Placa: </b>' . $bus->placa .'</td>
-<td colspan="5"><b>Destino: </b>' . $location->location . '</td>
+<td colspan="10"><b>Color: </b>' . $bus->color . '</td>
 </tr>
 <tr>
-<td colspan="5"><b>Hora Salida: </b>' . $horaTripFormato .'</td>
-<td colspan="5"><b>Fecha: </b>' . $fechaTripFormato . '</td>
+<td colspan="4"><b>Placa: </b>' . $bus->placa . '</td>
+<td colspan="6"><b>Destino: </b>' . $location->location . '</td>
+</tr>
+<tr>
+<td colspan="4"><b>H. Sal.: </b>' . $horaTripFormato . '</td>
+<td colspan="6"><b>Fecha: </b>' . $fechaTripFormato . '</td>
 </tr>
 </table>
 <table border="0" cellpadding="3">
@@ -119,19 +125,19 @@ $tabla = '
 </tr>';
 $nro  = 1;
 foreach ($clients as $key => $value) {
-    $nombre = ucfirst($value['name']) . ' ' . ucfirst($value['lastname']) . ' ' . ucfirst($value['mother_lastname']);
-    if($value['ci'] == '') {
-        $cinit = $value['nit'];
-    } else {
-        $cinit = $value['ci'];
-    }
-    $tabla .= '
+  $nombre = ucfirst($value['name']) . ' ' . ucfirst($value['lastname']) . ' ' . ucfirst($value['mother_lastname']);
+  if ($value['ci'] == '') {
+    $cinit = $value['nit'];
+  } else {
+    $cinit = $value['ci'];
+  }
+  $tabla .= '
     <tr>
     <td colspan="1" align="center">' . $nro . '</td>
     <td colspan="9" align="left">' . $nombre . '</td>
     <td colspan="5" align="left">' . $cinit . '</td>
     </tr>';
-    $nro++;
+  $nro++;
 }
 
 $tabla .= '
