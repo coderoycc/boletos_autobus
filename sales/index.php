@@ -36,7 +36,7 @@
           </div>
           <div class="row align-items-center">
             <div class="col-md mb-3" style="max-width: 320px;">
-              <button type="button" class="btn btn-outline-primary w-100 mb-3" id="button-update-seats"><i class="fas fa-refresh me-2"></i>Actualizar Asientos</button>
+              <button type="button" class="btn btn-warning w-100 mb-3" id="button-update-seats"><i class="fas fa-refresh me-2"></i>Actualizar Asientos</button>
               <div class="btn-group w-100 mb-3" role="group">
                 <input type="radio" class="btn-check" name="options-floor" id="upper-floor" autocomplete="off" value="upper" checked>
                 <label class="btn btn-outline-secondary" for="upper-floor"><i class="fas fa-chevron-circle-up me-2"></i>Piso Superior</label>
