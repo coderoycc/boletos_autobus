@@ -4,8 +4,6 @@ var typeSeat = 'upper';
 		
 $(document).ready(async function() {
 
-    loadLocations();
-    
     const tripId = getParam(window.location, 'trip_id');
     $('#trip-id').val(tripId);
     
@@ -15,7 +13,7 @@ $(document).ready(async function() {
         console.log(requestDataDistributions.message);
         return;
     }
-
+    loadLocations(requestDataDistributions.data.trip.location_id_dest);
     $('#precio-asiento').prop('min', requestDataDistributions.data.trip.min_price);
 
     const floor1 = requestDataDistributions.data.floor1;

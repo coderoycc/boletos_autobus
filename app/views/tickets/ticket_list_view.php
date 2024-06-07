@@ -26,7 +26,7 @@
                     <td class="text-center fw-bold"><?=($key + 1)?></td>
                     <td><?=$record['bus_description']?></td>
                     <td><?=strtoupper($record['origin'])?></td>
-                    <td><?=strtoupper($record['destination'])?></td>
+                    <td><?=strtoupper($record['intermediate']) . ' (' . strtoupper($record['intermediate']) . ')'?></td>
                     <td align="center"><?=(new DateTime($record['departure_date']))->format('d/m/Y')." ".(new DateTime($record['departure_time']))->format('H:i')?></td>
                     <td class="fw-bold text-success text-center"><?=number_format($record['sold_price'], 2) . " Bs"?></td>
                     <td class="text-center fw-bold text-primary"><?=strtoupper($record['seat_number'])?></td>

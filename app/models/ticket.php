@@ -176,11 +176,13 @@ class Ticket {
                       b.description as bus_description, b.placa,
                       tr.*, o.location as origin, d.location as destination, 
                       e.ci, e.nit, CONCAT(e.name, ' ', e.lastname, ' ', e.mothers_lastname) AS client,
+                      i.location AS intermediate,
                       u.username
               FROM tickets t
               LEFT JOIN trips tr ON t.trip_id = tr.id
               LEFT JOIN locations o ON tr.location_id_origin = o.id 
               LEFT JOIN locations d ON tr.location_id_dest = d.id
+              LEFT JOIN locations i ON t.intermediate_id = i.id
               LEFT JOIN clients e ON t.client_id = e.id
               LEFT JOIN buses b ON b.id = tr.bus_id
               LEFT JOIN users u ON u.id = t.sold_by

@@ -50,19 +50,22 @@ $('#btn-create-sale').on('click', async (e) => {
     console.log(ACTION, requestSale.message);
 });
 
-const loadLocations = async ( ) => {
+const loadLocations = async (locationId) => {
+    console.log(locationId);
     const request = await getAllLocations();
     console.log(request);
     if (request.success) {
       locations = request.data;
-      $("#locations").html(htmlLocations());
+      $("#locations").html(htmlLocations(locationId));
     }
 };
 
-const htmlLocations = ( ) => {
+const htmlLocations = (locationId) => {
     let opt_html = '<option value="0" selected> - Ninguno - </option>';
     locations.forEach(item => {
-        opt_html += `<option value="${item.id}">${item.location.toUpperCase()}</option>`
+        if(item.id != locationId){
+            opt_html += `<option value="${item.id}">${item.location.toUpperCase()}</option>`
+        }
     });
     return opt_html;
 };
