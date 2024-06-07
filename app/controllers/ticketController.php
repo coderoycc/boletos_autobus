@@ -19,18 +19,32 @@ class TicketController {
     public function create($data){
         $con = DBWebProvider::getSessionDataDB();
         if($con){
-            $ticket = new Ticket($con);
-            $ticket->seat_number = $data['seat_number'];
-            $ticket->trip_id = $data['trip_id'];
-            $ticket->client_id = $data['client_id'];
-            $ticket->created_at = date('Y-m-d H:i:s');
-            $ticket->sold_by = json_decode($_SESSION['user'])->id;
-            $ticket->price = $data['price'];
-            $res = $ticket->save();
+            $client = new Client($con);
+            $client->name = $data['name'];
+            $client->lastname = $data['lastname'];
+            $client->ci = $data['ci'];
+            $client->nit = $data['nit'];
+            $client->is_minor = isset($data['is_minor']) ? 1 : 0;
+            $client->user_id = json_decode($_SESSION['user'])->id;
+            $client->created_at = date('Y-m-d H:i:s');
+            $res = $client->save();
             if($res){
-                Response::success_json('Venta registrada correctamente.', ['ticket' => $ticket]);
+                $ticket = new Ticket($con);
+                $ticket->seat_number = $data['seat_number'];
+                $ticket->trip_id = $data['trip_id'];
+                $ticket->client_id = $client->id;
+                $ticket->created_at = date('Y-m-d H:i:s');
+                $ticket->sold_by = json_decode($_SESSION['user'])->id;
+                $ticket->price = $data['price'];
+                $ticket->intermediate_id = $data['intermediate_id'];
+                $res = $ticket->save();
+                if($res){
+                    Response::success_json('Venta registrada correctamente.', ['ticket' => $ticket]);
+                }else{
+                    Response::error_json(['message' => 'No se pudo registrar la venta.'], 200);    
+                }
             }else{
-                Response::error_json(['message' => 'No se pudo registrar la venta.'], 200);
+                Response::error_json(['message' => 'No se pudo registrar el cliente.'], 200);
             }
         }else{
             Response::error_json(['message' => 'Error conexion instancia'], 200);

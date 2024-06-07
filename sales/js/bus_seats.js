@@ -13,7 +13,7 @@ $(document).ready(async function() {
         console.log(requestDataDistributions.message);
         return;
     }
-
+    loadLocations(requestDataDistributions.data.trip.location_id_dest);
     $('#precio-asiento').prop('min', requestDataDistributions.data.trip.min_price);
 
     const floor1 = requestDataDistributions.data.floor1;
@@ -59,8 +59,7 @@ $(document).ready(async function() {
                 selectedID = id;
                 const label = this.settings.label;
                 $('#numero-asiento').val(label);
-                $('#documento-cliente').click( );
-                $('#documento-cliente').focus( );
+                $('#ci-cliente').focus( );
                 return 'selected';
             } else if (this.status() == 'selected') {
                 resetSelected();
@@ -124,8 +123,7 @@ $(document).ready(async function() {
                     selectedID = id;
                     const label = this.settings.label;
                     $('#numero-asiento').val(label);
-                    $('#documento-cliente').click( );
-                    $('#documento-cliente').focus( );
+                    $('#ci-cliente').focus( );
                     return 'selected';
                 } else if (this.status() == 'selected') {
                     resetSelected();
