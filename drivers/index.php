@@ -1,5 +1,5 @@
 <?php
-require_once("../helpers/middlewares/web_auth.php");
+  require_once("../helpers/middlewares/web_auth.php");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,71 +26,20 @@ require_once("../helpers/middlewares/web_auth.php");
     <div id="layoutSidenav_content">
       <main>
         <div class="container-fluid px-4">
-          <div class="d-flex justify-content-between mt-4 flex-wrap">
+          <div class="d-flex justify-content-between mt-4 flex-wrap mb-3">
             <h3>Choferes</h3>
-            <button class="btn btn-primary" onclick="add_new()"><i class="fa-lg fa-solid fa-map-location-dot"></i> Agregar nuevo chofer</button>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#driver-data-modal" data-action="add"><i class="fa-lg fa-solid fa-user-plus"></i> Nuevo Chofer</button>
           </div>
           <div class="row" id="data_buses"></div>
         </div>
       </main>
     </div>
-  </div><!-- fin contenedor -->
-
-
-
-
-
-  <!-- MODAL ELIMINAR -->
-  <div class="modal fade" id="driver_delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-danger">
-          <h1 class="modal-title text-white fs-5">¿DAR DE BAJA AL CHOFER?</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <input type="hidden" id="driver_id_delete">
-        <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger text-white" data-bs-dismiss="modal" onclick="down_driver()">DAR DE BAJA</button>
-        </div>
-      </div>
-    </div>
   </div>
-
-
-  <!-- MODAL EDITAR -->
-  <div class="modal fade" id="bus_edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-primary">
-          <h1 class="modal-title text-white fs-5">NUEVO BUS</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modal_content_edit">
-          <form id="form_edit_bus" onsubmit="return false;">
-            <div class="row">
-              <div class="col-md-6 mb-2">
-                <div class="form-floating">
-                  <input type="text" class="form-control" name="placa" placeholder="Nro departamento">
-                  <label for="placa">Placa</label>
-                </div>
-              </div>
-              <div class="col-md-6 mb-2">
-                <div class="form-floating">
-                  <input type="number" class="form-control" id="add_dep_bedrooms" name="bedrooms" placeholder="Habitaciones">
-                  <label for="add_dep_bedrooms">Nro. de habitaciones</label>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-info text-white" data-bs-dismiss="modal" onclick="update_department()">Actualizar</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  
+  <?php
+    include("components/driver_data_modal.php");
+    include("components/driver_delete_modal.php");
+  ?>
 
   <script src="../js/options.js"></script>
   <script src="../js/functions.js"></script>

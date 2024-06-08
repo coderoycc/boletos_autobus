@@ -23,18 +23,41 @@ async function list() {
   })
   $("#data_buses").html(res)
 }
-async function add_new() {
-  const res = await $.ajax({
+
+const loadFormCreateDriver = async () => {
+  const response = await $.ajax({
     url: '../app/driver/card_add_new',
     type: 'GET',
     dataType: 'html'
   });
-  $("#data_buses").html(`
-    <div class="col-md-5" id="col__data"></div>
-    <div class="col-md-7" id="col__details"></div>`
-  );
-  $("#col__data").html(res)
-}
+  $("#driver-data").html(response);
+};
+
+const loadFormUpdateDriver = async (driverId) => {
+  const response = await $.ajax({
+    url: '../app/driver/card_update',
+    type: 'POST',
+    data: { driver_id: driverId },
+    dataType: 'html'
+  });
+  $("#driver-data").html(response);
+};
+
+$('#driver-data-modal').on('show.bs.modal', (e) => {
+  const action = e.relatedTarget.dataset.action;
+  if(action == 'add'){
+    loadFormCreateDriver();
+  }else if(action == 'update'){
+    loadFormUpdateDriver(
+      e.relatedTarget.dataset.id
+    );
+  }
+});
+
+$('#driver-data-modal').on('hide.bs.modal', (e) => {
+  $("#driver-data").html('');
+});
+
 async function show_distro_card(e) {
   const id = e.target.value;
   if (id == '') return;
@@ -54,10 +77,11 @@ const createNewDriver = async () => {
   const form = document.getElementById('data-driver-form');
   if (!isFormValidity(form)) { return; }
 
-  const ACTION = 'CREAR NUEVO Driver';
+  const ACTION = 'CREAR NUEVO CONDUCTOR';
   const request = await createDriver([form]);
   if (request.success) {
     list();
+    $('#driver-data-modal').modal('hide');
   }
   $.toast({
     heading: ACTION,
@@ -69,22 +93,6 @@ const createNewDriver = async () => {
   console.log(ACTION, request.message);
 };
 
-const updateView = async (driver_id) => {
-  const response = await $.ajax({
-    url: '../app/driver/card_update',
-    type: 'POST',
-    data: {
-      driver_id,
-    },
-    dataType: 'html'
-  });
-  $("#data_buses").html(`
-    <div class="col-md-5" id="col__data"></div>
-    <div class="col-md-7" id="col__details"></div>`
-  );
-  $("#col__data").html(response);
-}
-
 const updateDataDriver = async () => {
   const form = document.getElementById('data-driver-update-form');
   if (!isFormValidity(form)) { return; }
@@ -93,6 +101,7 @@ const updateDataDriver = async () => {
   const request = await updateDriver([form]);
   if (request.success) {
     list();
+    $('#driver-data-modal').modal('hide');
   }
   $.toast({
     heading: ACTION,

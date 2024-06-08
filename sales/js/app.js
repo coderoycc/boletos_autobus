@@ -20,7 +20,7 @@ $('#btn-create-sale').on('click', async (e) => {
     }
     const requestSale = await createSale([formClient, formSale]);
     if(requestSale.success){
-        Swal.fire({
+        /*Swal.fire({
             title: ACTION,
             icon: 'success',
             text: requestSale.message,
@@ -29,14 +29,17 @@ $('#btn-create-sale').on('click', async (e) => {
             confirmButtonText: `<i class="fa fa-print"></i> Imprimir`,
             cancelButtonText: `<i class="fa fa-check"></i> Cerrar`,
           }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                executeBluetoothPrinter(requestSale.data.ticket);
+                
             } else if (result.isCancel) {
                 
             };
             location.reload();
-        });
+        });*/
+        executeBluetoothPrinter(requestSale.data.ticket);
+        setTimeout(() => {
+            location.reload(true);
+        }, 200);
     }else{
         $(`#btn-create-sale`).prop('disabled', false);
     }
