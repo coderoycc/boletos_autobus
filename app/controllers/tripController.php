@@ -101,4 +101,12 @@ class TripController {
       Response::error_json(['message' => 'El id de viaje es incorrecto.'], 200);
     }
   }
+  public function get_all($query) {
+    $con = DBWebProvider::getSessionDataDB();
+    $date = $query['date'] ?? date('Y-m-d', strtotime('-1 day', strtotime(date('Y-m-d'))));
+    $time = '00:00:00';
+    $filters = ['date' => $date, 'time' => $time];
+    $trips = Trip::all($con, $filters);
+    Response::success_json('Consulta realizada correctamente', $trips, 200);
+  }
 }

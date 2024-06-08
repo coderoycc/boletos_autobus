@@ -168,10 +168,8 @@ class Ticket {
   public static function index($con, $data) {
     try {
       $client = $data['client'];
-      $destination = $data['destination'];
-      $initial = $data['initial_date'];
-      $final = $data['final_date'];
-      $filterByDestination = intval($destination) > 0 ? "AND tr.location_id_dest = $destination " : "";
+      $trip_id = $data['trip_id'] ?? 0;
+      $filterByDestination = intval($trip_id) > 0 ? "AND t.trip_id = $trip_id" : "";
       $sql = "SELECT t.id as ticket, t.price as sold_price, t.seat_number, t.created_at as sold_datetime,
                       b.description as bus_description, b.placa,
                       tr.*, o.location as origin, d.location as destination, 
@@ -186,8 +184,7 @@ class Ticket {
               LEFT JOIN clients e ON t.client_id = e.id
               LEFT JOIN buses b ON b.id = tr.bus_id
               LEFT JOIN users u ON u.id = t.sold_by
-              WHERE (tr.departure_date BETWEEN '$initial' AND '$final')
-                    AND CONCAT(e.name, ' ', e.lastname, ' ', e.mothers_lastname) LIKE '%$client%'
+              WHERE CONCAT(e.name, ' ', e.lastname, ' ', e.mothers_lastname) LIKE '%$client%'
                     $filterByDestination
               ORDER BY t.id DESC;";
       $stmt = $con->prepare($sql);
@@ -207,8 +204,7 @@ class Ticket {
       $stmt->execute();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
       return $rows;
-    } catch (\Throwable $th){
-
+    } catch (\Throwable $th) {
     }
   }
 }

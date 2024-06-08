@@ -1,13 +1,21 @@
+var trips = [];
 $(document).ready(async () => {
-  await loadLocations();
   await listAllTickets();
+  setTimeout(() => {
+    loadTrips();
+  }, 1000);
 });
 
-const listAllTickets = async ( ) => {
+const listAllTickets = async () => {
+  console.log('adsfasdfsd')
   const form = document.getElementById('data-filter-form');
-  if(!isFormValidity(form)){ return; }
+  console.log(form)
+  // if (!isFormValidity(form)) { return; }
 
-  $("#list_tickets").html('');
+  $("#list_tickets").html(`<div class="w-100 d-flex justify-content-center"><div class="spinner-border text-primary" role="status">
+    <span class= "visually-hidden" > Cargando...</span >
+  </div></div>`);
+
   const request = await getAllTicketsView([form]);
   $("#list_tickets").html(request);
   $("#tickets-table").DataTable({
@@ -18,18 +26,28 @@ const listAllTickets = async ( ) => {
   $('.dataTables_filter').hide();
 };
 
-const loadLocations = async ( ) => {
-  const request = await getAllLocations();
+const loadTrips = async () => {
+  const request = await getTrips();
   if (request.success) {
-    locations = request.data;
-    $("#destination").html(htmlLocations());
+    trips = request.data;
+    $("#trip_id").html(htmlTrips());
   }
 };
-
-const htmlLocations = ( ) => {
-  let opt_html = '<option value="0" selected> - Seleccionar Todo - </option>';
-  locations.forEach(item => {
-    opt_html += `<option value="${item.id}">${item.location.toUpperCase()}</option>`
+$(document).on('change', '#trip_id', (e) => {
+  const driver = e.target.selectedOptions[0].dataset.driver || '';
+  const placa = e.target.selectedOptions[0].dataset.placa || '';
+  console.log(driver, placa);
+  $("#driver_detail").val(driver + ' - ' + placa);
+  listAllTickets();
+})
+const htmlTrips = () => {
+  const sel_trip = $("#current_trip_id").val() || '0'
+  let opt_html = '';
+  // let opt_html = '<option value="0" selected> - Seleccionar Todo - </option>';
+  trips.forEach(item => {
+    let date = item.departure_date.split('-');
+    let time = item.departure_time.split(':');
+    opt_html += `<option data-driver="${item.conductor}" data-placa="${item.placa}" value="${item.id}" ${sel_trip == item.id ? 'selected' : ''}>${date[2] + '/' + date[1]} ${time[0] + ':' + time[1]} | ${item.destino}</option>`
   });
   return opt_html;
 };
@@ -58,15 +76,15 @@ $('#ticket-delete-modal').on('hide.bs.modal', async (e) => {
   $('#ticket-id-delete').val('');
 });
 
-$('#btn-delete-ticket').on('click', async ( ) => {
+$('#btn-delete-ticket').on('click', async () => {
   const ACTION = 'ELIMINAR BOLETO';
   const form = document.getElementById('delete-ticket-form');
   const btnDelete = document.getElementById('btn-delete-ticket');
   btnDelete.disabled = true;
-  if(isFormValidity(form)){
+  if (isFormValidity(form)) {
     const request = await deleteSoldTicket([form]);
     console.log(request);
-    if(request.success){
+    if (request.success) {
       location.reload();
     }
     toast(ACTION, request.message, request.success ? 'success' : 'error');

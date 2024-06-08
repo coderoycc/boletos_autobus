@@ -1,6 +1,6 @@
 <?php
-  require_once("../helpers/middlewares/web_auth.php");
-  date_default_timezone_set('America/La_Paz');
+require_once("../helpers/middlewares/web_auth.php");
+date_default_timezone_set('America/La_Paz');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -21,10 +21,10 @@
 </head>
 
 <body class="sb-nav-fixed">
-  <?php 
-    include("components/ticket_detail_modal.php"); 
-    include("components/ticket_delete_modal.php"); 
-    include("../partials/header.php"); 
+  <?php
+  include("components/ticket_detail_modal.php");
+  include("components/ticket_delete_modal.php");
+  include("../partials/header.php");
   ?>
   <div id="layoutSidenav">
     <?php include("../partials/sidebar.php"); ?>
@@ -47,16 +47,12 @@
                       </div>
                     </div>
                     <div class="col-md-3 mb-3">
-                      <label for="destination" class="form-label fw-semibold">Destino</label>
-                      <select class="form-select" id="destination" name="destination" required></select>
+                      <label for="trip_id" class="form-label fw-semibold">Viaje a</label>
+                      <select class="form-select" id="trip_id" name="trip_id" required></select>
                     </div>
-                    <div class="col-md-2 mb-3">
-                      <label for="initial-date" class="form-label fw-semibold">Fecha Inicio Salida</label>
-                      <input class="form-control" id="initial-date" type="date" min="2024-05-31" name="initial_date" value="<?=(new DateTime())->modify('-1 day')->format('Y-m-d')?>" required>
-                    </div>
-                    <div class="col-md-2 mb-3">
-                      <label for="final-date" class="form-label fw-semibold">Fecha Fin Salida</label>
-                      <input class="form-control" id="final-date" type="date" min="2024-06-01" name="final_date" value="<?=(new DateTime())->format('Y-m-d')?>" required>
+                    <div class="col-md-4 mb-3">
+                      <label for="final-date" class="form-label fw-semibold">Chofer - Placa BUS</label>
+                      <input type="text" id="driver_detail" class="form-control" value="" disabled readonly>
                     </div>
                     <div class="col-md-2 mb-3 align-self-end">
                       <button class="btn btn-outline-primary w-100" type="button" id="btn-search-filter"><i class="fas fa-filter me-2"></i>Filtrar</button>
@@ -78,7 +74,7 @@
   <script src="../js/functions.js"></script>
   <script src="../js/forms.js"></script>
   <script src="../js/services/tickets.js"></script>
-  <script src="../js/services/locations.js"></script>
+  <script src="../js/services/trips.js"></script>
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>

@@ -5,7 +5,7 @@ namespace App\Models;
 use PDO;
 
 class Trip {
-  
+
   private $con;
   public int $id;
   public string $departure_time;
@@ -79,11 +79,14 @@ class Trip {
   }
   public static function all($con, $filters) {
     try {
+      $exact = $filters['exact'] ?? false;
+
       $date = $filters['date'] ?? date('Y-m-d');
-      $time = date('H:i:s');
-      $filter = isset($filters['date']) 
-                  ? "a.departure_date = '$date'" 
-                  : "CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24)) >= '$date $time'";
+      $time = $filters['time'] ?? date('H:i:s');
+
+      $filter = $exact
+        ? "a.departure_date = '$date'"
+        : "CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24)) >= '$date $time'";
 
       $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa, e.fullname as conductor ,
                 CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24))
@@ -101,5 +104,20 @@ class Trip {
       //print_r($th);
     }
     return [];
+  }
+  public static function get_first_trip_today($con): Trip {
+    $trip = new Trip($con);
+    try {
+      $date = date('Y-m-d');
+      $time = date('H:i:s');
+      $sql = "SELECT TOP 1 * FROM trips WHERE departure_date >= '$date' AND departure_time >= '$time';";
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($row) $trip->load($row);
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+    return $trip;
   }
 }
