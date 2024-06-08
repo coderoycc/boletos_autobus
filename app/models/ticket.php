@@ -199,4 +199,16 @@ class Ticket {
     }
     return [];
   }
+
+  public static function countSumTicket($con, $trip_id) {
+    try {
+      $sql = "SELECT price, COUNT(price) as countTickets, SUM(price) as sumTickets  FROM tickets WHERE trip_id = '$trip_id' GROUP BY price;";
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      return $rows;
+    } catch (\Throwable $th){
+
+    }
+  }
 }

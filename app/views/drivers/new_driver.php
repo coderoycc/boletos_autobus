@@ -12,7 +12,7 @@
         <input type="number" class="form-control" id="license" placeholder="Numero de Licencia" name="license" required>
         <label for="license">Número de Licencia</label>
       </div>
-      <div class="form-floating">
+      <div class="form-floating mb-3">
         <select class="form-select" id="category" placeholder="Tipo de categoría" name="category" required>
           <option value="">--- seleccione ---</option>
           <option value="A">A</option>
@@ -21,9 +21,17 @@
         </select>
         <label for="category">Categoría</label>
       </div>
+      <div class="form-floating mb-3">
+        <input type="number" class="form-control" id="number" placeholder="Numero de Bus" name="number" required>
+        <label for="number">Número</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="number" class="form-control" id="percentage" placeholder="Porcentaje" name="percentage" required>
+        <label for="percentage">Porcetaje</label>
+      </div>
     </form>
   </div>
-  <div class="card-footer d-flex justify-content-center">
+  <div class="card-footer d-flex justify-content-end">
     <button type="button" class="btn btn-success" onclick="createNewDriver()"><i class="fas fa-save me-2"></i>Guardar</button>
   </div>
 </div>

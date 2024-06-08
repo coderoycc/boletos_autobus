@@ -80,18 +80,25 @@ class Trip {
   public static function all($con, $filters) {
     try {
       $date = $filters['date'] ?? date('Y-m-d');
-      $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa, e.fullname as conductor FROM trips a 
-        INNER JOIN locations b ON a.location_id_origin = b.id
-        INNER JOIN locations c ON a.location_id_dest = c.id
-        INNER JOIN buses d ON a.bus_id = d.id
-        INNER JOIN drivers e ON a.driver_id = e.id
-        WHERE a.departure_date = '$date';";
+      $time = date('H:i:s');
+      $filter = isset($filters['date']) 
+                  ? "a.departure_date = '$date'" 
+                  : "CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24)) >= '$date $time'";
+
+      $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa, e.fullname as conductor ,
+                CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24))
+              FROM trips a 
+              INNER JOIN locations b ON a.location_id_origin = b.id
+              INNER JOIN locations c ON a.location_id_dest = c.id
+              INNER JOIN buses d ON a.bus_id = d.id
+              INNER JOIN drivers e ON a.driver_id = e.id
+              WHERE $filter;";
       $stmt = $con->prepare($sql);
       $stmt->execute();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
       return $rows;
     } catch (\Throwable $th) {
-      var_dump($th);
+      //print_r($th);
     }
     return [];
   }

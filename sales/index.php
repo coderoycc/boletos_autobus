@@ -65,12 +65,12 @@
                 <div class="col-md-12 mb-3" id="trip-data">
                   
                 </div>
-                <div class="col-md-8 mb-3">
+                <div class="col-md-6 mb-3">
                   <?php
                     include('components/client_data_form.php');
                   ?>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-6 mb-3">
                   <?php
                     include('components/sale_data_form.php');
                   ?>

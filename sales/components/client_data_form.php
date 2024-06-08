@@ -1,6 +1,6 @@
 <div class="card">
-    <div class="card-header">
-        <div class="card-title fw-semibold text-secondary m-0"><i class="fas fa-bus me-2"></i>Datos del cliente</div>
+    <div class="card-header text-bg-primary">
+        <div class="card-title fw-semibold m-0"><i class="fas fa-bus me-2"></i>Datos del cliente</div>
     </div>
     <div class="card-body">
         <form id="client-data-form">
