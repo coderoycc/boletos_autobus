@@ -19,6 +19,17 @@
                     <label for="precio-asiento" class="form-label text-secondary fw-semibold">Precio:</label>
                     <input type="number" class="form-control" id="precio-asiento" name="price" placeholder="Total a Pagar" autocomplete="off" required>
                 </div>
+                <div class="col-md-12">
+                    <label class="form-label text-secondary fw-semibold">Tipo de Venta:</label>
+                </div>
+                <div class="col-md-12">
+                    <div class="input-group justify-content-center">
+                        <input type="radio" class="btn-check" name="status" id="radio-sale" autocomplete="off" value="VENDIDO" checked>
+                        <label class="btn btn-outline-secondary" for="radio-sale">VENTA DIRECTA</label><br>
+                        <input type="radio" class="btn-check" name="status" id="radio-reservation" autocomplete="off" value="RESERVA">
+                        <label class="btn btn-outline-secondary" for="radio-reservation">RESERVAR BOLETO</label><br>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

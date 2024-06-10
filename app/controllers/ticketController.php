@@ -37,6 +37,7 @@ class TicketController {
         $ticket->sold_by = json_decode($_SESSION['user'])->id;
         $ticket->price = $data['price'];
         $ticket->intermediate_id = $data['intermediate_id'];
+        $ticket->status = $data['status'];
         $res = $ticket->save();
         if ($res) {
           Response::success_json('Venta registrada correctamente.', ['ticket' => $ticket]);
@@ -144,6 +145,35 @@ class TicketController {
       }
     } else {
       Response::error_json(['message' => 'Contraseña ingresada incorrecta.'], 200);
+    }
+  }
+
+  public function consolidateSale($data){
+    if (!Request::required(['price', 'ticket_id'], $data))
+      Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
+
+    $con = DBWebProvider::getSessionDataDB();
+    if ($con) {
+      $ticket_id = $data['ticket_id'];
+      $price = floatval($data['price']);
+      $ticket = new Ticket($con, $ticket_id);
+      if($ticket->id > 0){
+        $ticket->price += $price;
+        $ticket->status = "VENDIDO";
+        $ticket->created_at = date('Y-m-d H:i:s');
+        $response = $ticket->update();
+        if($response){
+          Response::success_json('Venta consolidada correctamente.', [
+            'ticket' => $ticket,
+          ]);
+        }else{
+          Response::error_json(['message' => 'No se pudo consolidar la venta.'], 200);  
+        }
+      }else{
+        Response::error_json(['message' => 'No se encontro el boleto.'], 200);
+      }
+    }else{
+      Response::error_json(['message' => 'No se pudo conectar a la BD.'], 200);
     }
   }
 }

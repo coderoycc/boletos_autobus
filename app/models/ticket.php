@@ -16,6 +16,7 @@ class Ticket {
   public int $sold_by;
   public float $price;
   public int $intermediate_id;
+  public String $status;
 
   public function __construct($db = null, $id = null) {
     $this->objectNull();
@@ -43,6 +44,7 @@ class Ticket {
     $this->sold_by = $row['sold_by'];
     $this->price = $row['price'];
     $this->intermediate_id = $row['intermediate_id'] ?? 0;
+    $this->status = $row['status'] ?? '';
   }
 
   public function objectNull() {
@@ -54,6 +56,7 @@ class Ticket {
     $this->sold_by = 0;
     $this->price = 0.0;
     $this->intermediate_id = 0;
+    $this->status = '';
   }
 
   public static function reservedSeats($con, $trip_id) {
@@ -85,19 +88,55 @@ class Ticket {
       $resp = 0;
       $this->con->beginTransaction();
       $sql = "INSERT 
-                    INTO tickets (seat_number, trip_id, client_id, created_at, sold_by, price, intermediate_id)
-                    VALUES (:seat_number, :trip_id, :client_id, :created_at, :sold_by, :price, :intermediate_id);";
+                    INTO tickets (seat_number, trip_id, client_id, created_at, sold_by, price, intermediate_id, status)
+                    VALUES (:seat_number, :trip_id, :client_id, :created_at, :sold_by, :price, :intermediate_id, :status);";
       $params = [
         'seat_number' => $this->seat_number, 'trip_id' => $this->trip_id,
         'client_id' => $this->client_id, 'created_at' => $this->created_at,
         'sold_by' => $this->sold_by, 'price' => $this->price,
-        'intermediate_id' => $this->intermediate_id,
+        'intermediate_id' => $this->intermediate_id, 'status' => $this->status
       ];
       $stmt = $this->con->prepare($sql);
       $res = $stmt->execute($params);
       if ($res) {
         $this->con->commit();
         $this->id = $this->con->lastInsertId();
+        $resp = $this->id;
+      } else {
+        $resp = -1;
+        $this->con->rollBack();
+      }
+      return $resp;
+    } catch (\Throwable $th) {
+      //print_r($th);
+      $this->con->rollBack();
+      return -1;
+    }
+  }
+
+  public function update() {
+    if ($this->con == null) {
+      return -1;
+    }
+    try {
+      $resp = 0;
+      $this->con->beginTransaction();
+      $sql = "UPDATE tickets
+              SET seat_number = :seat_number, trip_id = :trip_id, client_id = :client_id, 
+                  created_at = :created_at, sold_by = :sold_by, price = :price, 
+                  intermediate_id = :intermediate_id, status = :status
+              WHERE id = :id;";
+      $params = [
+        'seat_number' => $this->seat_number, 'trip_id' => $this->trip_id,
+        'client_id' => $this->client_id, 'created_at' => $this->created_at,
+        'sold_by' => $this->sold_by, 'price' => $this->price,
+        'intermediate_id' => $this->intermediate_id, 'status' => $this->status,
+        'id' => $this->id,
+      ];
+      $stmt = $this->con->prepare($sql);
+      $res = $stmt->execute($params);
+      if ($res) {
+        $this->con->commit();
         $resp = $this->id;
       } else {
         $resp = -1;
@@ -175,7 +214,7 @@ class Ticket {
                       tr.*, o.location as origin, d.location as destination, 
                       e.ci, e.nit, CONCAT(e.name, ' ', e.lastname, ' ', e.mothers_lastname) AS client,
                       i.location AS intermediate,
-                      u.username
+                      u.username, t.status, tr.price, tr.min_price
               FROM tickets t
               LEFT JOIN trips tr ON t.trip_id = tr.id
               LEFT JOIN locations o ON tr.location_id_origin = o.id 

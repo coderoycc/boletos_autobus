@@ -168,6 +168,21 @@ $(document).ready(async function() {
     const cardRequest = await getCardTripData(tripId);
     $('#trip-data').html(cardRequest);
     $('#precio-asiento').val(parseFloat(requestDataDistributions.data.trip.price));
+    /**
+     * CONFIGURACION DE DATOS DEL VIAJE
+     */
+    $('input[type=radio][name="status"]').change((e) => {   
+        const value = e.target.value;
+        if(value == 'VENDIDO'){
+            $('#precio-asiento').prop('min', requestDataDistributions.data.trip.min_price);
+            $('#precio-asiento').prop('required', true);
+            $('#precio-asiento').val(parseFloat(requestDataDistributions.data.trip.price));
+        }else if(value == 'RESERVA'){
+            $('#precio-asiento').prop('min', 0);
+            $('#precio-asiento').prop('required', false);
+            $('#precio-asiento').val(0);
+        }
+    });
 });
 
 function recalculateTotal(sc) {

@@ -20,13 +20,6 @@
       </select>
       <label for="category">Categoría</label>
     </div>
-    <div class="input-group">
-      <div class="form-floating">
-        <input type="number" class="form-control" id="discount-rate" placeholder="Porcentaje de Descuento" name="discount_rate" required>
-        <label for="discount-rate">Porcetaje de Descuento</label>
-      </div>
-      <span class="input-group-text"><b class="ms-2 me-2">%</b></span>
-    </div>
   </form>
 </div>
 <div class="modal-footer">

@@ -9,25 +9,32 @@
       <div class="modal-body">
         <form id="liquidation_form" onsubmit="return false;">
           <input type="hidden" name="trip_id" id="trip_id_modal">
+          <div class="mb-3">
+            <label class="form-label text-secondary fw-semibold">Correspondencia y Enconmiendas </label>
+            <input type="number" type="any" class="form-control" name="correspondence" placeholder="0.0">
+          </div>
+          <div class="d-flex">
+            
+          </div>
           <div class="row">
-            <div class="col-md-6 align-self-center fs-5 text-center text-md-end">
-              Otros descuentos
-            </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-12">
+              <label class="form-label text-secondary fw-semibold">Otros Descuentos</label>
               <input type="number" class="form-control" step="any" name="other_amount" value="20">
             </div>
-            <hr>
+          </div>
+          <hr>
+          <div class="d-flex">
+            <label class="form-label text-secondary fw-semibold">Descuentos Adicionales</label>
+          </div>
+          <div class="row">
             <div class="col-md-6 mb-3 align-self-center">
-              <input type="text" class="form-control" name="other_concept" placeholder="Concepto otro descuento">
+              <input type="text" class="form-control" name="other_concept" placeholder="Concepto descuento">
             </div>
             <div class="col-md-6 mb-3">
               <input type="number" class="form-control" step="any" name="other_concept_amount" value="" placeholder="0.0">
             </div>
           </div>
-          <div class="my-3">
-            <label class="form-label">Correspondencia y enconmiendas </label>
-            <input type="number" type="any" class="form-control" name="correspondence" placeholder="0.0">
-          </div>
+          
         </form>
       </div>
       <div class="modal-footer">

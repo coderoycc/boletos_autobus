@@ -20,26 +20,27 @@ $('#btn-create-sale').on('click', async (e) => {
     }
     const requestSale = await createSale([formClient, formSale]);
     if(requestSale.success){
-        /*Swal.fire({
-            title: ACTION,
-            icon: 'success',
-            text: requestSale.message,
-            showCancelButton: true,
-            allowOutsideClick: false,
-            confirmButtonText: `<i class="fa fa-print"></i> Imprimir`,
-            cancelButtonText: `<i class="fa fa-check"></i> Cerrar`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-                
-            } else if (result.isCancel) {
-                
-            };
-            location.reload();
-        });*/
-        executeBluetoothPrinter(requestSale.data.ticket);
-        setTimeout(() => {
-            location.reload();
-        }, 200);
+
+        const type = $('input[type=radio][name="status"]:checked').val();
+        if(type == 'RESERVA'){
+            setTimeout(() => location.reload(), 2000);
+            Swal.fire({
+                title: 'RESERVA DE VENTA',
+                icon: 'success',
+                text: requestSale.message,
+                allowOutsideClick: false,
+                confirmButtonText: `<i class="fa fa-check"></i> Aceptar`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        }else if(type == 'VENDIDO'){
+            executeBluetoothPrinter(requestSale.data.ticket);
+            setTimeout(() => {
+                location.reload();
+            }, 200);
+        }
     }else{
         $(`#btn-create-sale`).prop('disabled', false);
     }
@@ -54,9 +55,7 @@ $('#btn-create-sale').on('click', async (e) => {
 });
 
 const loadLocations = async (locationId) => {
-    console.log(locationId);
     const request = await getAllLocations();
-    console.log(request);
     if (request.success) {
       locations = request.data;
       $("#locations").html(htmlLocations(locationId));

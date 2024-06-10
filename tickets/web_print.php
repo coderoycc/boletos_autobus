@@ -205,7 +205,7 @@ $js = <<<EOD
 app.alert('qweqweqwe');
 EOD;
 
-$pdf->IncludeJS($js);
+//$pdf->IncludeJS($js);
 // Add Javascript code
 $pdf->output('Venta-Boleto-'.$ticket->id.'.pdf', 'I');
 

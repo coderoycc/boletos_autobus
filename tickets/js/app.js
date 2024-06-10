@@ -7,10 +7,7 @@ $(document).ready(async () => {
 });
 
 const listAllTickets = async () => {
-  console.log('adsfasdfsd')
   const form = document.getElementById('data-filter-form');
-  console.log(form)
-  // if (!isFormValidity(form)) { return; }
 
   $("#list_tickets").html(`<div class="w-100 d-flex justify-content-center"><div class="spinner-border text-primary" role="status">
     <span class= "visually-hidden" > Cargando...</span >
@@ -62,6 +59,24 @@ $('#ticket-detail-modal').on('hidden.bs.modal', (e) => {
   $('#ticket-detail').html('');
 });
 
+$('#ticket-consolidate-modal').on('show.bs.modal', async (e) => {
+  const data = e.relatedTarget.dataset;
+  $('#txt-client').text(data.client);
+  $('#txt-advance').text(data.soldPrice);
+  $('#txt-seat').text(data.seat);
+  $('#ticket-id').val(data.id);
+  $('#ticket-consolidate-price').val(data.price - data.soldPrice);
+  $('#ticket-consolidate-price').prop('min', data.minPrice);
+});
+
+$('#ticket-consolidate-modal').on('hidden.bs.modal', (e) => {
+  $('#txt-client').text('');
+  $('#txt-advance').text('');
+  $('#txt-seat').text('');
+  $('#ticket-id').val('');
+  $('#ticket-consolidate-price').prop('min', 0);
+});
+
 $('#btn-search-filter').on('click', (e) => {
   listAllTickets();
 });
@@ -83,7 +98,6 @@ $('#btn-delete-ticket').on('click', async () => {
   btnDelete.disabled = true;
   if (isFormValidity(form)) {
     const request = await deleteSoldTicket([form]);
-    console.log(request);
     if (request.success) {
       location.reload();
     }
@@ -91,4 +105,24 @@ $('#btn-delete-ticket').on('click', async () => {
     console.log(ACTION, request.message);
   }
   btnDelete.disabled = false;
+});
+
+$('#btn-consolidate-ticket').on('click', async (e) => {
+  const ACTION = 'CONSOLIDAR VENTA';
+  const btnConsolidate = document.getElementById('btn-consolidate-ticket');
+  const form = document.getElementById('consolidate-ticket-form');
+  btnConsolidate.disabled = true;
+  if(isFormValidity(form)){
+    const request = await consolidateSale([form]);
+    if (request.success) {
+      executeBluetoothPrinter(request.data.ticket);
+      setTimeout(() => {
+          location.reload();
+      }, 200);
+      setTimeout(() => location.reload(), 1000);
+    }
+    toast(ACTION, request.message, request.success ? 'success' : 'error');
+    console.log(ACTION, request.message);
+  }
+  btnConsolidate.disabled = false;
 });

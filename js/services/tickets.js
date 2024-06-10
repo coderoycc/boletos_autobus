@@ -41,3 +41,12 @@ const deleteSoldTicket = async (form) => {
     const request = await fetch(URL, requestOptionsPost(params));
     return (await validateResponse(request));
 };
+/**
+ * Consolidar venta de boleto reservado
+ */
+const consolidateSale = async (form) => {
+    const URL = `../app/ticket/consolidateSale`;
+    const params = convertFormToURLSearchParams(form);
+    const request = await fetch(URL, requestOptionsPost(params));
+    return (await validateResponse(request));
+};
