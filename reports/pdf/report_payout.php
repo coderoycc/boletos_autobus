@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Driver;
+use App\Models\Liquidation;
 use App\Models\Location;
 use App\Models\Ticket;
 use App\Models\Trip;
@@ -16,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     require_once(__DIR__ . '/../../app/models/driver.php');
     require_once(__DIR__ . '/../../app/models/location.php');
     require_once(__DIR__ . '/../../app/models/ticket.php');
+    require_once(__DIR__ . '/../../app/models/liquidation.php');
 
     ob_start();
     error_reporting(E_ALL & ~E_NOTICE);
@@ -31,7 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $locationOrigen = new Location($con, $trip->location_id_origin);
     $locationDestino = new Location($con, $trip->location_id_dest);
     $listaCountSum = Ticket::countSumTicket($con, $trip_id);
-    // print_r($listaCountSum);
+    $liquidation = new Liquidation($con, $trip_id);
+    // print_r($liquidation);
 
     class MYPDF extends TCPDF
     {
@@ -56,11 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $pdf->SetFont('times', '', 10);
     $pdf->addPage();
 
-    $correspEncom = 0;
+    $correspEncom = $liquidation->correspondence;
     $totalIngresos = 0;
     $ordenSalida = 0;
-    $otrosDescuentos = 0;
-    $totalEgresos = $ordenSalida + $otrosDescuentos;
+    $otrosDescuentos = $liquidation->discount;
     $tabla = '
     <table border="0" cellpadding="0.5">
     <tr>
@@ -108,7 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         </tr>';
     }
     $totalIngresos = $totalPorPasajeros + $correspEncom;
-    $totalLiquidacion = $totalIngresos - $totalEgresos;
+    $ordenSalida = 0.08 * $totalIngresos;
+    $totalEgresos = $ordenSalida + $otrosDescuentos;
     $tabla .= '
     <tr>
     <td colspan="20" style="font-size: 2px;"></td>
@@ -137,7 +140,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <tr>
     <td colspan="14" align="right"><b>Otros descuentos Bs.</b></td>
     <td colspan="6" align="right">' . number_format($otrosDescuentos, 2) . '</td>
-    </tr>
+    </tr>';
+    if (trim($liquidation->observation) != "") {
+        $observationDiscount = $liquidation->observation_discount;
+        $tabla .= '
+    <tr>
+    <td colspan="14" align="right"><b>' . $liquidation->observation . ' Bs.</b></td>
+    <td colspan="6" align="right"> ' . number_format($observationDiscount, 2) . '</td>
+    </tr>';
+    $totalEgresos += $observationDiscount;
+    }
+    $totalLiquidacion = $totalIngresos - $totalEgresos;
+    $tabla .= '
     <tr>
     <td colspan="14" align="right"><b>TOTAL EGRESOS Bs.</b></td>
     <td colspan="6" align="right" style="border-top: 0.3px solid black;">' . number_format($totalEgresos, 2) . '</td>
