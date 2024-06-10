@@ -23,6 +23,12 @@ if (!isset($_GET['tid'])) {
   echo '<h1 align="center">Parametro id necesario</h1>';
   die();
 } else {
+
+  /*ob_start();
+  error_reporting(E_ALL & ~E_NOTICE);
+  ini_set('display_errors', 0);
+  ini_set('log_errors', 1);*/
+
   $datos_emp = Accesos::enterprice_data();
   $con = DBWebProvider::getSessionDataDB();
   // print_r($datos_emp);
@@ -170,7 +176,7 @@ if (!isset($_GET['tid'])) {
       <td align="right" colspan="90" class="border-bottom">' . number_format($costo, 2) . '</td>
     </tr>
     <tr>
-      <td colspan="500"><b>TOTAL</b></td>
+      <td colspan="500" onclick="Print()"><b>TOTAL</b></td>
     </tr>
     <tr>
       <td colspan="50"></td><td colspan="450">' . $costo_literal . '</td>
@@ -193,7 +199,16 @@ if (!isset($_GET['tid'])) {
   // $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: center;">' . $subdominio . '</td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: center;">Firma remitente</td></tr>';
   // $tabla .= '</table>';
   $pdf->WriteHTMLCell(0, 0, 0, 0, $tabla, 0, 0);
-  $pdf->output('dombre.pdf', 'I');
+  
+  // Form validation functions
+$js = <<<EOD
+app.alert('qweqweqwe');
+EOD;
+
+$pdf->IncludeJS($js);
+// Add Javascript code
+$pdf->output('Venta-Boleto-'.$ticket->id.'.pdf', 'I');
+
 }
 
 function contarLineas($cadena, $anchoPagina, $tamanoFuente) {

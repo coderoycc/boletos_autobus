@@ -38,7 +38,7 @@ $('#btn-create-sale').on('click', async (e) => {
         });*/
         executeBluetoothPrinter(requestSale.data.ticket);
         setTimeout(() => {
-            location.reload(true);
+            location.reload();
         }, 200);
     }else{
         $(`#btn-create-sale`).prop('disabled', false);

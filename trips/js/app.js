@@ -161,5 +161,5 @@ const htmlDrivers = (drivers) => {
 }
 function list__from_filters(e) {
   const date = $("#trip_date").val();
-  list_data({ date })
+  list_data({ date: date, exact: true });
 }
