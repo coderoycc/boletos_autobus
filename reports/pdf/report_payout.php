@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $tabla = '
     <table border="0" cellpadding="0.5">
     <tr>
-    <td align="center"><b>TRANS 25 DE DICIEMBRE</b></td>
+    <td align="center" style="font-size: 12px;"><b>TRANS 25 DE DICIEMBRE</b></td>
     </tr>
     <tr>
     <td align="center" style="font-size: 9px;">Uyuni-Oruro-Potosí-La Paz-Cochabamba</td>
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <td colspan="20"><b>Prop.: </b>' . $driver->fullname . '</td>
     </tr>
     <tr>
-    <td colspan="20"><b>Bus: </b></td>
+    <td colspan="20"><b>Nro. Viaje: </b>' . $trip->id . '</td>
     </tr>
     <tr>
     <td colspan="20"><b>Salida de: </b>' . $locationOrigen->location . '<b> a </b>' . $locationDestino->location . '</td>
