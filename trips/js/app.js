@@ -7,10 +7,12 @@ $(document).ready(() => {
 });
 
 $(document).on('show.bs.modal', "#trip_edit", open_modal_edit)
+$(document).on('show.bs.modal', '#liquidation_data', open_modal_liquidation)
 $(document).on('show.bs.modal', '#depa_delete', open_modal_delete)
 $(document).on('change', '#add_trip_origen', destination_values)
 $(document).on('change', '#edit_trip_origen', destination_values_edit)
 $(document).on('click', "#list_search", list__from_filters)
+$(document).on('click', '#liquidation_btn_modal', send_form_liquidation)
 
 async function list_data(data = {}) {
   const res = await $.ajax({
@@ -32,6 +34,10 @@ async function list_data(data = {}) {
 function open_modal_delete(e) {
   const id = e.relatedTarget.dataset.id
   $("#id_depa_delete").val(id)
+}
+function open_modal_liquidation(e) {
+  const id = e.relatedTarget.dataset.tripid
+  $("#trip_id_modal").val(id)
 }
 async function delete_department() {
   const id = $("#id_depa_delete").val()
@@ -141,7 +147,7 @@ async function load_buses() {
     $("#buses_selected").html(html_buses(res.data));
   }
 }
-const loadDrivers = async ( ) => {
+const loadDrivers = async () => {
   const res = await $.ajax({
     url: '../app/driver/list_all',
     type: 'GET',
@@ -162,4 +168,37 @@ const htmlDrivers = (drivers) => {
 function list__from_filters(e) {
   const date = $("#trip_date").val();
   list_data({ date: date, exact: true });
+}
+async function send_form_liquidation() {
+  buttonDisabledById('liquidation_btn_modal');
+  const data = $("#liquidation_form").serializeArray();
+  const trip_id = $("#trip_id_modal").val();
+  const res = await $.ajax({
+    url: '../app/liquidation/create',
+    type: 'POST',
+    data,
+    dataType: 'json',
+  });
+  if (res.success) {
+    toast('Operación exitosa', 'Liquidación creada', 'success', 2000)
+    cleanModalLiquidation()
+    window.open('../reports/pdf/report_payout.php?trip_id=' + trip_id, '_blank');
+  } else {
+    toast('Ocurrió un error', res.message, 'error', 3000)
+    buttonEnabledById('liquidation_btn_modal');
+  }
+}
+function buttonDisabledById(id, text = 'ENVIANDO') {
+  $("#" + id).html(`<div style="--bs-spinner-width:1rem;--bs-spinner-height:1rem;" class="spinner-border" role="status">
+    <span class="visually-hidden">${text}...</span>
+  </div> ${text}`).attr('disabled', true);
+}
+function buttonEnabledById(id, text = 'ENVIAR') {
+  $("#" + id).html(text).attr('disabled', false);
+}
+function cleanModalLiquidation() {
+  $("#liquidation_data").modal('hide');
+  $("#liquidation_form")[0].reset();
+  $('input[name="other_amount"]').val(20)
+  buttonEnabledById('liquidation_btn_modal');
 }

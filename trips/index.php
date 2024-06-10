@@ -55,8 +55,9 @@ date_default_timezone_set('America/La_Paz');
   </div>
 
   <?php
-    include('components/update_trip_modal.php');
-    include('components/add_trip_modal.php');
+  include('components/update_trip_modal.php');
+  include('components/add_trip_modal.php');
+  include('components/liquidation_modal.php');
   ?>
 
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>

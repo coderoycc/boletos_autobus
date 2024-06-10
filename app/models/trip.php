@@ -88,13 +88,14 @@ class Trip {
         ? "a.departure_date = '$date'"
         : "CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24)) >= '$date $time'";
 
-      $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa, e.fullname as conductor ,
-                CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24))
+      $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa, e.fullname as conductor,
+                CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24)), f.id as liq_id
               FROM trips a 
               INNER JOIN locations b ON a.location_id_origin = b.id
               INNER JOIN locations c ON a.location_id_dest = c.id
               INNER JOIN buses d ON a.bus_id = d.id
               INNER JOIN drivers e ON a.driver_id = e.id
+              LEFT JOIN liquidations f ON a.id = f.trip_id
               WHERE $filter;";
       $stmt = $con->prepare($sql);
       $stmt->execute();
