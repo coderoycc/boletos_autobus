@@ -4,8 +4,9 @@ namespace App\Models;
 
 use PDO;
 
-class Bus {
-  
+class Bus
+{
+
   private $con;
   public int $id;
   public string $placa;
@@ -14,8 +15,10 @@ class Bus {
   public string $created_at;
   public string $color;
   public string $brand;
+  public string $percentage;
 
-  public function __construct($con = null, $id = null) {
+  public function __construct($con = null, $id = null)
+  {
     $this->objectNull();
     if ($con != null) {
       $this->con = $con;
@@ -29,7 +32,8 @@ class Bus {
       }
     }
   }
-  public function objectNull() {
+  public function objectNull()
+  {
     $this->id = 0;
     $this->placa = "";
     $this->description = "";
@@ -37,8 +41,10 @@ class Bus {
     $this->created_at = "";
     $this->color = "";
     $this->brand = "";
+    $this->percentage = 0;
   }
-  public function load($row) {
+  public function load($row)
+  {
     $this->id = $row['id'];
     $this->placa = $row['placa'];
     $this->description = $row['description'];
@@ -46,8 +52,10 @@ class Bus {
     $this->created_at = $row['created_at'];
     $this->color = $row['color'];
     $this->brand = $row['brand'];
+    $this->percentage = $row['percentage'];
   }
-  public static function all($con) {
+  public static function all($con)
+  {
     try {
       $sql = "SELECT * FROM buses;";
       $stmt = $con->prepare($sql);
@@ -60,74 +68,81 @@ class Bus {
     return [];
   }
 
-  public function save(){
-    if ($this->con == null){ return -1; }
-    try{
-        $resp = 0;
-        $this->con->beginTransaction();
-        $sql = "INSERT 
-                INTO buses (placa, description, distribution_id, created_at, color, brand) 
-                VALUES (:plate, :description, :distribution_id, :created_at, :color, :brand);";
-        $params = [
-            'plate' => $this->placa,
-            'description' => $this->description,
-            'distribution_id' => $this->distribution_id,
-            'created_at' => $this->created_at,
-            'color' => $this->color,
-            'brand' => $this->brand,
-        ];
-        $stmt = $this->con->prepare($sql);
-        $res = $stmt->execute($params);
-        if ($res) {
-            $this->con->commit();
-            $this->id = $this->con->lastInsertId();
-            $resp = $this->id;
-        } else {
-            $resp = -1;
-            $this->con->rollBack();
-        }
-        return $resp;
-    }catch(\Throwable $th){
-        //print_r($th);
-        $this->con->rollBack();
-        return -1;
+  public function save()
+  {
+    if ($this->con == null) {
+      return -1;
     }
-}
-
-public function update(){
-  if ($this->con == null){ return -1; }
-
-  $this->con->beginTransaction();
-  try{
+    try {
       $resp = 0;
-      $sql = "UPDATE buses 
-              SET placa = :plate, description = :description, distribution_id = :distribution_id,
-                  created_at = :created_at, color = :color, brand = :brand
-              WHERE id = :id;";
+      $this->con->beginTransaction();
+      $sql = "INSERT 
+                INTO buses (placa, description, distribution_id, created_at, color, brand, percentage) 
+                VALUES (:plate, :description, :distribution_id, :created_at, :color, :brand, :percentage);";
       $params = [
-          'plate' => $this->placa,
-          'description' => $this->description,
-          'distribution_id' => $this->distribution_id,
-          'created_at' => $this->created_at,
-          'color' => $this->color,
-          'brand' => $this->brand,
-          'id' => $this->id,
+        'plate' => $this->placa,
+        'description' => $this->description,
+        'distribution_id' => $this->distribution_id,
+        'created_at' => $this->created_at,
+        'color' => $this->color,
+        'brand' => $this->brand,
+        'percentage' => $this->percentage,
       ];
       $stmt = $this->con->prepare($sql);
       $res = $stmt->execute($params);
       if ($res) {
-          $this->con->commit();
-          $resp = $this->id;
+        $this->con->commit();
+        $this->id = $this->con->lastInsertId();
+        $resp = $this->id;
       } else {
-          $resp = -1;
-          $this->con->rollBack();
+        $resp = -1;
+        $this->con->rollBack();
       }
       return $resp;
-  }catch(\Throwable $th){
+    } catch (\Throwable $th) {
       //print_r($th);
       $this->con->rollBack();
       return -1;
+    }
   }
-}
 
+  public function update()
+  {
+    if ($this->con == null) {
+      return -1;
+    }
+
+    $this->con->beginTransaction();
+    try {
+      $resp = 0;
+      $sql = "UPDATE buses 
+              SET placa = :plate, description = :description, distribution_id = :distribution_id,
+                  created_at = :created_at, color = :color, brand = :brand, percentage = :percentage 
+              WHERE id = :id;";
+      $params = [
+        'plate' => $this->placa,
+        'description' => $this->description,
+        'distribution_id' => $this->distribution_id,
+        'created_at' => $this->created_at,
+        'color' => $this->color,
+        'brand' => $this->brand,
+        'id' => $this->id,
+        'percentage' => $this->percentage
+      ];
+      $stmt = $this->con->prepare($sql);
+      $res = $stmt->execute($params);
+      if ($res) {
+        $this->con->commit();
+        $resp = $this->id;
+      } else {
+        $resp = -1;
+        $this->con->rollBack();
+      }
+      return $resp;
+    } catch (\Throwable $th) {
+      //print_r($th);
+      $this->con->rollBack();
+      return -1;
+    }
+  }
 }

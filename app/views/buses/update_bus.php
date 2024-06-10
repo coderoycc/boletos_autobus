@@ -21,7 +21,7 @@
       <input type="text" class="form-control" id="brand" placeholder="Marca" name="brand" required value="<?=$bus->brand?>">
       <label for="brand">Marca</label>
     </div>
-    <div class="form-floating">
+    <div class="form-floating mb-3">
       <select class="form-select" id="distro_type" placeholder="Tipo de distribucion de asientos" name="distribution_id" required>
         <option value="">--- seleccione ---</option>
         <?php foreach($distros as $distro): ?>
@@ -30,6 +30,10 @@
       </select>
       <label for="distro_type">Distribución de asientos</label>
     </div>
+    <div class="form-floating">
+        <input type="number" class="form-control" id="percentage" placeholder="Porcentaje" name="percentage" min="0" max="100" step="0.01" value="<?=number_format($bus->percentage, 2)?>" required>
+        <label for="brand">Porcentaje de descuento(%)</label>
+      </div>
     </form>
   </div>
   <div class="card-footer d-flex justify-content-center">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Bus;
 use App\Models\Driver;
 use App\Models\Liquidation;
 use App\Models\Location;
@@ -18,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     require_once(__DIR__ . '/../../app/models/location.php');
     require_once(__DIR__ . '/../../app/models/ticket.php');
     require_once(__DIR__ . '/../../app/models/liquidation.php');
+    require_once(__DIR__ . '/../../app/models/bus.php');
 
     ob_start();
     error_reporting(E_ALL & ~E_NOTICE);
@@ -34,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $locationDestino = new Location($con, $trip->location_id_dest);
     $listaCountSum = Ticket::countSumTicket($con, $trip_id);
     $liquidation = new Liquidation($con, $trip_id);
+    $bus = new Bus($con, $trip->bus_id);
     // print_r($liquidation);
 
     class MYPDF extends TCPDF
@@ -63,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $totalIngresos = 0;
     $ordenSalida = 0;
     $otrosDescuentos = $liquidation->discount;
+    $porcentajeDescuento = $bus->percentage;
     $tabla = '
     <table border="0" cellpadding="0.5">
     <tr>
@@ -110,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         </tr>';
     }
     $totalIngresos = $totalPorPasajeros + $correspEncom;
-    $ordenSalida = 0.08 * $totalIngresos;
+    $ordenSalida = ($porcentajeDescuento / 100) * $totalIngresos;
     $totalEgresos = $ordenSalida + $otrosDescuentos;
     $tabla .= '
     <tr>
@@ -148,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <td colspan="14" align="right"><b>' . $liquidation->observation . ' Bs.</b></td>
     <td colspan="6" align="right"> ' . number_format($observationDiscount, 2) . '</td>
     </tr>';
-    $totalEgresos += $observationDiscount;
+        $totalEgresos += $observationDiscount;
     }
     $totalLiquidacion = $totalIngresos - $totalEgresos;
     $tabla .= '

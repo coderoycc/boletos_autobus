@@ -4,31 +4,35 @@
   </div>
   <div class="card-body">
     <form id="data-bus-form">
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="placa" placeholder="Placa" name="plate" required>
-      <label for="placa">Placa</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="description" placeholder="Descripcion" name="description" required>
-      <label for="description">Descripción</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="color" placeholder="Color" name="color" required>
-      <label for="color">Color</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="brand" placeholder="Marca" name="brand" required>
-      <label for="brand">Marca</label>
-    </div>
-    <div class="form-floating">
-      <select class="form-select" id="distro_type" placeholder="Tipo de distribucion de asientos" name="distribution_id" required>
-        <option value="">--- seleccione ---</option>
-        <?php foreach($distros as $distro): ?>
-          <option value="<?= $distro['id'] ?>"><?= $distro['description'] ?></option>
-        <?php endforeach; ?>
-      </select>
-      <label for="distro_type">Distribución de asientos</label>
-    </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="placa" placeholder="Placa" name="plate" required>
+        <label for="placa">Placa</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="description" placeholder="Descripcion" name="description" required>
+        <label for="description">Descripción</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="color" placeholder="Color" name="color" required>
+        <label for="color">Color</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="brand" placeholder="Marca" name="brand" required>
+        <label for="brand">Marca</label>
+      </div>
+      <div class="form-floating mb-3">
+        <select class="form-select" id="distro_type" placeholder="Tipo de distribucion de asientos" name="distribution_id" required>
+          <option value="">--- seleccione ---</option>
+          <?php foreach ($distros as $distro) : ?>
+            <option value="<?= $distro['id'] ?>"><?= $distro['description'] ?></option>
+          <?php endforeach; ?>
+        </select>
+        <label for="distro_type">Distribución de asientos</label>
+      </div>
+      <div class="form-floating">
+        <input type="number" class="form-control" id="percentage" placeholder="Porcentaje" name="percentage" min="0" max="100" step="0.01" value="0.00" required>
+        <label for="brand">Porcentaje de descuento(%)</label>
+      </div>
     </form>
   </div>
   <div class="card-footer d-flex justify-content-center">
