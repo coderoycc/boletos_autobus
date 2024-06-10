@@ -56,6 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $pdf->SetFont('times', '', 10);
     $pdf->addPage();
 
+    $correspEncom = 0;
+    $totalIngresos = 0;
+    $ordenSalida = 0;
+    $otrosDescuentos = 0;
+    $totalEgresos = $ordenSalida + $otrosDescuentos;
     $tabla = '
     <table border="0" cellpadding="0.5">
     <tr>
@@ -102,14 +107,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         <td colspan="6" align="right">' . number_format($value['sumTickets'], 2) . '</td>
         </tr>';
     }
+    $totalIngresos = $totalPorPasajeros + $correspEncom;
+    $totalLiquidacion = $totalIngresos - $totalEgresos;
     $tabla .= '
     <tr>
-    <td colspan="14" align="right"><b>Total por pasajeros Bs.</b></td>
-    <td colspan="6" align="right">' . number_format($totalPorPasajeros, 2) . '</td>
+    <td colspan="20" style="font-size: 2px;"></td>
     </tr>
     <tr>
-    <td colspan="14" align="right"><b>Cdad. y Encom. Bs.</b></td>
-    <td colspan="6" align="right">0.00</td>
+    <td colspan="14" align="right"><b>Total por pasajeros Bs.</b></td>
+    <td colspan="6" align="right" style="border-top: 0.3px dashed black;">' . number_format($totalPorPasajeros, 2) . '</td>
+    </tr>
+    <tr>
+    <td colspan="14" align="right"><b>Corresp. y Encom. Bs.</b></td>
+    <td colspan="6" align="right">' . number_format($correspEncom, 2) . '</td>
+    </tr>
+    <tr>
+    <td colspan="14" align="right"><b>TOTAL INGRESOS Bs.</b></td>
+    <td colspan="6" align="right" style="border-top: 0.3px solid black;">' . number_format($totalIngresos, 2) . '</td>
+    </tr>
+    </table>
+    <table border="0" cellpadding="0.5">
+    <tr>
+    <td colspan="20" align="left"><b>Descuentos:</b></td>
+    </tr>
+    <tr>
+    <td colspan="14" align="right"><b>Orden de salida Bs.</b></td>
+    <td colspan="6" align="right">' . number_format($ordenSalida, 2) . '</td>
+    </tr>
+    <tr>
+    <td colspan="14" align="right"><b>Otros descuentos Bs.</b></td>
+    <td colspan="6" align="right">' . number_format($otrosDescuentos, 2) . '</td>
+    </tr>
+    <tr>
+    <td colspan="14" align="right"><b>TOTAL EGRESOS Bs.</b></td>
+    <td colspan="6" align="right" style="border-top: 0.3px solid black;">' . number_format($totalEgresos, 2) . '</td>
+    </tr>
+    </table>
+    <table border="0" cellpadding="0.5">
+    <tr>
+    <td colspan="20" align="left"><b>Resúmen:</b></td>
+    </tr>
+    <tr>
+    <td colspan="14" align="right"><b>Total Ingresos Bs.</b></td>
+    <td colspan="6" align="right">' . number_format($totalIngresos, 2) . '</td>
+    </tr>
+    <tr>
+    <td colspan="14" align="right"><b>Total Egresos Bs.</b></td>
+    <td colspan="6" align="right">' . number_format($totalEgresos, 2) . '</td>
+    </tr>
+    <tr>
+    <td colspan="14" align="right"><b>TOTAL LIQUIDACION Bs.</b></td>
+    <td colspan="6" align="right" style="border-top: 0.3px solid black;"><b>' . number_format($totalLiquidacion, 2) . '</b></td>
+    </tr>
+    </table>
+    <table border="0">
+    <tr>
+    <td colspan="10" style="font-size: 40px;"></td>
+    </tr>
+    <tr>
+    <td colspan="1"></td>
+    <td colspan="8" align="center" style="border-top: 0.3px solid black;">Recibí conforme</td>
+    <td colspan="1"></td>
+    </tr>
+    <tr>
+    <td colspan="10" style="font-size: 35px;"></td>
+    </tr>
+    <tr>
+    <td colspan="1"></td>
+    <td colspan="8" align="center" style="border-top: 0.3px solid black;">Entregué conforme</td>
+    <td colspan="1"></td>
     </tr>
     </table>';
 
