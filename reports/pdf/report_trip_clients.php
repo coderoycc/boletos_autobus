@@ -75,19 +75,19 @@ $pdf->SetTitle($title1);
 $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(false);
 $pdf->SetMargins(5, 7, 5, false);
-$pdf->SetFont('times', '', 10);
+$pdf->SetFont('helvetica', '', 10);
 $pdf->addPage();
 
 $tabla = '
 <table border="0" cellpadding="0.5">
 <tr>
-<td align="center"><b>TRANS 25 DE DICIEMBRE</b></td>
+<td align="center" style="font-size: 12px;"><b>TRANS 25 DE DICIEMBRE</b></td>
 </tr>
 <tr>
 <td align="center" style="font-size: 9px;">Uyuni-Oruro-Potosí-La Paz-Cochabamba</td>
 </tr>
 <tr>
-<td align="center" style="font-size: 9px; border-bottom: 0.5px solid black;"><b>Celular: 67258945</b></td>
+<td align="center" style="border-bottom: 0.5px solid black;"><b>Celular: 67258945</b></td>
 </tr>
 </table>
 <table border="0" cellpadding="0">

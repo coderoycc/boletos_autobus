@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $pdf->setPrintHeader(false);
     $pdf->setPrintFooter(false);
     $pdf->SetMargins(5, 7, 5, false);
-    $pdf->SetFont('times', '', 10);
+    $pdf->SetFont('helvetica', '', 10);
     $pdf->addPage();
 
     $correspEncom = $liquidation->correspondence;
@@ -114,7 +114,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         </tr>';
     }
     $totalIngresos = $totalPorPasajeros + $correspEncom;
-    $ordenSalida = ($porcentajeDescuento / 100) * $totalIngresos;
+    if ($totalIngresos > 450) {
+        $ordenSalida = ($porcentajeDescuento / 100) * $totalIngresos;
+        // para el redondeo
+        $ordenSalidaDecimal = $ordenSalida - floor($ordenSalida);
+        if ($ordenSalidaDecimal >= 0.5) {
+            $ordenSalida = ceil($ordenSalida);
+        } else {
+            $ordenSalida = floor($ordenSalida);
+        }
+    } else {
+        $ordenSalida = 0;
+    }
     $totalEgresos = $ordenSalida + $otrosDescuentos;
     $tabla .= '
     <tr>
