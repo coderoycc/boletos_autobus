@@ -43,6 +43,20 @@ class Liquidation {
     }
     return -1;
   }
+  public function update() {
+    if ($this->con == null)
+      return -1;
+    try {
+      $sql = "UPDATE liquidations SET discount = ?, observation = ?, observation_discount = ?, correspondence = ? WHERE id = ?;";
+      $stmt = $this->con->prepare($sql);
+      $res = $stmt->execute([$this->discount, $this->observation, $this->observation_discount, $this->correspondence, $this->id]);
+      if ($res) {
+        return $this->id;
+      }
+    } catch (\Throwable $th) {
+      var_dump($th);
+    }
+  }
   public function objectNull() {
     $this->id = 0;
     $this->trip_id = 0;

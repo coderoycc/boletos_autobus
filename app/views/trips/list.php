@@ -45,11 +45,11 @@
                   <a href="../sales/?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-outline-success"><i class="fa-lg fa-solid fa-hand-holding-dollar"></i> Vender</a>
                   <button type="button" class="btn btn-outline-primary" data-bs-target="#trip_edit" data-bs-toggle="modal" data-id="<?= $trip['id'] ?>"><i class="fa fa-solid fa-pen"></i> Editar</button>
                   <a href="../reports/pdf/report_trip_clients.php?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-danger" target="_blank"><i class="fa-lg fa-solid fa-file-pdf"></i> Pasajeros</a>
-                  <?php if ($trip['liq_id'] != null) : ?>
-                    <a href="../reports/pdf/report_payout.php?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-warning" target="_blank"><i class="fa-lg fa-solid fa-file-pdf"></i> Boleta</a>
-                  <?php else : ?>
+                  <?php // if ($trip['liq_id'] != null) : ?>
+                    <!-- <a href="../reports/pdf/report_payout.php?trip_id=<?= $trip['id'] ?>" type="button" class="btn btn-warning" target="_blank"><i class="fa-lg fa-solid fa-file-pdf"></i> Boleta</a> -->
+                  <?php // else : ?>
                     <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#liquidation_data" data-tripid="<?= $trip['id'] ?>"><i class="fa-lg fa-solid fa-file-pdf"></i> Boleta</button>
-                  <?php endif; ?>
+                  <?php // endif; ?>
                 </div>
               </td>
             </tr>

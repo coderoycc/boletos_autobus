@@ -10,8 +10,10 @@
         <form id="liquidation_form" onsubmit="return false;">
           <input type="hidden" name="trip_id" id="trip_id_modal">
           <div class="mb-3">
+          <input type="hidden" name="liquidation_id" id="liquidation_id_modal" value="0">
+          <div class="mb-3">
             <label class="form-label text-secondary fw-semibold">Correspondencia y Enconmiendas </label>
-            <input type="number" type="any" class="form-control" name="correspondence" placeholder="0.0">
+            <input type="number" type="any" class="form-control" name="correspondence" value="0.0" step="0.1">
           </div>
           <div class="d-flex">
             
@@ -19,7 +21,7 @@
           <div class="row">
             <div class="col-md-12">
               <label class="form-label text-secondary fw-semibold">Otros Descuentos</label>
-              <input type="number" class="form-control" step="any" name="other_amount" value="20">
+              <input type="number" class="form-control" step="any" name="other_amount" value="20" step="0.1">
             </div>
           </div>
           <hr>
@@ -31,7 +33,7 @@
               <input type="text" class="form-control" name="other_concept" placeholder="Concepto descuento">
             </div>
             <div class="col-md-6 mb-3">
-              <input type="number" class="form-control" step="any" name="other_concept_amount" value="" placeholder="0.0">
+              <input type="number" class="form-control" step="any" name="other_concept_amount" value="0.0"  step="0.1">
             </div>
           </div>
           
