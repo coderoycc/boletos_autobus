@@ -1,6 +1,11 @@
 <div class="card mb-3">
-  <div class="card-header">
+  <div class="card-header d-flex justify-content-between">
     <div class="card-title fw-semibold text-secondary m-0"><i class="fas fa-bus me-2"></i>Datos del Viaje</div>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+        <i class="fa-solid fa-minus"></i>
+      </button>
+    </div>
   </div>
   <div class="card-body">
     <div class="table-responsive">
@@ -17,9 +22,9 @@
         <tr>
           <td class="fw-bold" data-bs-toggle="collapse" data-bs-target="#minimum-price" aria-expanded="false">Precio Base:</td>
           <td class="text-center"><?= number_format($trip->price, 2) . " Bs" ?></td>
-          <td class="fw-bold collapse"  id="minimum-price">Mínimo:</td>
+          <td class="fw-bold collapse" id="minimum-price">Mínimo:</td>
           <td class="text-center collapse" id="minimum-price">
-              <?= number_format($trip->min_price, 2) . " Bs" ?>
+            <?= number_format($trip->min_price, 2) . " Bs" ?>
           </td>
         </tr>
         <tr class="bg-info text-light fw-bold">

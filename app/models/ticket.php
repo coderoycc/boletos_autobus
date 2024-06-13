@@ -17,6 +17,8 @@ class Ticket {
   public float $price;
   public int $intermediate_id;
   public String $status;
+  public string $owner_name;
+  public int $is_minor;
 
   public function __construct($db = null, $id = null) {
     $this->objectNull();
@@ -45,6 +47,8 @@ class Ticket {
     $this->price = $row['price'];
     $this->intermediate_id = $row['intermediate_id'] ?? 0;
     $this->status = $row['status'] ?? '';
+    $this->owner_name = $row['owner_name'] ?? '';
+    $this->is_minor = $row['is_minor'] ?? 0;
   }
 
   public function objectNull() {
@@ -57,13 +61,15 @@ class Ticket {
     $this->price = 0.0;
     $this->intermediate_id = 0;
     $this->status = '';
+    $this->owner_name = '';
+    $this->is_minor = 0;
   }
 
-  public static function reservedSeats($con, $trip_id) {
+  public static function reservedSeats($con, $trip_id, $status = 'VENDIDO') {
     try {
       $sql = "SELECT t.seat_number
                     FROM tickets t
-                    WHERE t.trip_id = :trip_id;";
+                    WHERE t.trip_id = :trip_id AND status = '$status';";
       $stmt = $con->prepare($sql);
       $stmt->execute([
         'trip_id' => $trip_id
@@ -88,13 +94,14 @@ class Ticket {
       $resp = 0;
       $this->con->beginTransaction();
       $sql = "INSERT 
-                    INTO tickets (seat_number, trip_id, client_id, created_at, sold_by, price, intermediate_id, status)
-                    VALUES (:seat_number, :trip_id, :client_id, :created_at, :sold_by, :price, :intermediate_id, :status);";
+                    INTO tickets (seat_number, trip_id, client_id, created_at, sold_by, price, intermediate_id, status, owner_name, is_minor)
+                    VALUES (:seat_number, :trip_id, :client_id, :created_at, :sold_by, :price, :intermediate_id, :status, :owner_name, :is_minor);";
       $params = [
         'seat_number' => $this->seat_number, 'trip_id' => $this->trip_id,
         'client_id' => $this->client_id, 'created_at' => $this->created_at,
         'sold_by' => $this->sold_by, 'price' => $this->price,
-        'intermediate_id' => $this->intermediate_id, 'status' => $this->status
+        'intermediate_id' => $this->intermediate_id, 'status' => $this->status,
+        'owner_name' => $this->owner_name, 'is_minor' => $this->is_minor,
       ];
       $stmt = $this->con->prepare($sql);
       $res = $stmt->execute($params);
@@ -124,13 +131,14 @@ class Ticket {
       $sql = "UPDATE tickets
               SET seat_number = :seat_number, trip_id = :trip_id, client_id = :client_id, 
                   created_at = :created_at, sold_by = :sold_by, price = :price, 
-                  intermediate_id = :intermediate_id, status = :status
+                  intermediate_id = :intermediate_id, status = :status, owner_name = :owner_name, is_minor = :is_minor
               WHERE id = :id;";
       $params = [
         'seat_number' => $this->seat_number, 'trip_id' => $this->trip_id,
         'client_id' => $this->client_id, 'created_at' => $this->created_at,
         'sold_by' => $this->sold_by, 'price' => $this->price,
         'intermediate_id' => $this->intermediate_id, 'status' => $this->status,
+        'owner_name' => $this->owner_name, 'is_minor' => $this->is_minor,
         'id' => $this->id,
       ];
       $stmt = $this->con->prepare($sql);
@@ -245,5 +253,59 @@ class Ticket {
       return $rows;
     } catch (\Throwable $th) {
     }
+  }
+  /**
+   * @return array de los numeros de asientos de un mismo viaje que compro un cliente
+   */
+  public static function tickets_by_client($con, $trip_id, $client_id) {
+    try {
+      $sql = "SELECT seat_number FROM tickets WHERE trip_id = ? AND client_id = ?";
+      $stmt = $con->prepare($sql);
+      $stmt->execute([$trip_id, $client_id]);
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $arrSeats = [];
+      foreach ($rows as $row) {
+        $arrSeats[] = $row['seat_number'];
+      }
+      return $arrSeats;
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+    return [];
+  }
+  public static function ticket_by_seat($con, $trip_id, $seat_number): Ticket {
+    $ticket = new Ticket($con);
+    try {
+      $sql = "SELECT a.*, b.lastname FROM tickets a INNER JOIN clients b ON a.client_id = b.id 
+          WHERE a.trip_id = $trip_id AND a.seat_number = '$seat_number';";
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($row) {
+        $ticket->load($row);
+        $ticket->{'client'} = $row['lastname'];
+      }
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+    return $ticket;
+  }
+  public static function are_sold($con, $trip_id, $seats): bool {
+    try {
+      $cad = '';
+      foreach ($seats as $seat) {
+        $cad .= "'$seat',";
+      }
+      $cad = substr($cad, 0, -1);
+      $sql = "SELECT count(*) as cantidad FROM tickets WHERE trip_id = $trip_id AND seat_number IN ($cad);";
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $c = $stmt->fetch(PDO::FETCH_ASSOC)['cantidad'];
+      if ($c > 0)
+        return true;
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+    return false;
   }
 }

@@ -87,11 +87,13 @@ class TripController {
       $bus = new Bus($con, $trip->bus_id);
       if ($bus->id) {
         $distributions = Distribution::getDistributionData($con, $bus->distribution_id);
-        $reserved = Ticket::reservedSeats($con, $trip->id);
+        $reserved = Ticket::reservedSeats($con, $trip->id, 'RESERVA');
+        $sold = Ticket::reservedSeats($con, $trip->id, 'VENDIDO');
         Response::success_json('Consulta realizada correctamente', [
           'floor1' => $distributions['1'],
           'floor2' => $distributions['2'],
           'reserved' => $reserved,
+          'sold' => $sold,
           'trip' => $trip,
         ], 200);
       } else {

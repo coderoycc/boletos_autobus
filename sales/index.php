@@ -1,5 +1,5 @@
 <?php
-  require_once("../helpers/middlewares/web_auth.php");
+require_once("../helpers/middlewares/web_auth.php");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -22,8 +22,8 @@
 </head>
 
 <body class="sb-nav-fixed">
-  <?php 
-    include("../partials/header.php");
+  <?php
+  include("../partials/header.php");
   ?>
   <div id="layoutSidenav"> <!-- contenedor -->
     <?php include("../partials/sidebar.php"); ?>
@@ -31,7 +31,7 @@
       <main>
         <div class="container-fluid px-4">
           <div class="row">
-              <h1 class="mt-4 me-auto">Venta de Boleto</h1>
+            <h1 class="mt-4 me-auto">Venta de Boleto</h1>
           </div>
           <div class="row align-items-center">
             <div class="col-md mb-3" style="max-width: 320px;">
@@ -43,18 +43,18 @@
                 <label class="btn btn-outline-secondary" for="lower-floor"><i class="fas fa-chevron-circle-down me-2"></i>Piso Inferior</label>
               </div>
               <div class="w-100" id="container-upper-floor">
-                <img src="../assets/img/front_bus.png" class="img-fluid" width="300"/>
+                <img src="../assets/img/front_bus.png" class="img-fluid" width="300" />
                 <div id="seat-map-upper">
-                  
+
                 </div>
-                <img src="../assets/img/rear_bus.png" class="img-fluid" width="300"/>
+                <img src="../assets/img/rear_bus.png" class="img-fluid" width="300" />
               </div>
               <div class="w-100" style="display: none;" id="container-lower-floor">
-                <img src="../assets/img/front_bus.png" class="img-fluid" width="300"/>
+                <img src="../assets/img/front_bus.png" class="img-fluid" width="300" />
                 <div id="seat-map-lower">
-                  
+
                 </div>
-                <img src="../assets/img/rear_bus.png" class="img-fluid" width="300"/>
+                <img src="../assets/img/rear_bus.png" class="img-fluid" width="300" />
               </div>
             </div>
             <div class="col-md mb-3">
@@ -62,17 +62,16 @@
                 <div class="col-md-12">
                   <p class="fw-semibold text-secondary">Seleccione un asiento para la venta:</p>
                 </div>
-                <div class="col-md-12 mb-3" id="trip-data">
-                  
-                </div>
+                <div class="col-md-12 mb-3" id="trip-data"></div>
                 <div class="col-md-6 mb-3">
                   <?php
-                    include('components/client_data_form.php');
+                  include('components/client_data_form.php');
+                  include('components/card_passengers.php');
                   ?>
                 </div>
                 <div class="col-md-6 mb-3">
                   <?php
-                    include('components/sale_data_form.php');
+                  include('components/sale_data_form.php');
                   ?>
                 </div>
                 <div class="col-md-12 mb-3 text-end">

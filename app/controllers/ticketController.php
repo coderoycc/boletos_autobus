@@ -19,6 +19,10 @@ class TicketController {
   public function create($data) {
     $con = DBWebProvider::getSessionDataDB();
     if ($con) {
+      $arrTickets = $data['seat_number'];
+      if (Ticket::are_sold($con, $data['trip_id'], $data['seat_number']))
+        Response::error_json(['message' => 'Los asientos ya fueron vendidos'], 200);
+
       $client = new Client($con);
       $client->name = $data['name'];
       $client->lastname = $data['lastname'];
@@ -26,20 +30,30 @@ class TicketController {
       $client->nit = $data['nit'];
       $client->is_minor = isset($data['is_minor']) ? 1 : 0;
       $client->user_id = json_decode($_SESSION['user'])->id;
-      $client->created_at = date('Y-m-d H:i:s');
+      $client->created_at = date('Y-m-d\TH:i:s');
       $res = $client->save();
       if ($res) {
-        $ticket = new Ticket($con);
-        $ticket->seat_number = $data['seat_number'];
-        $ticket->trip_id = $data['trip_id'];
-        $ticket->client_id = $client->id;
-        $ticket->created_at = date('Y-m-d H:i:s');
-        $ticket->sold_by = json_decode($_SESSION['user'])->id;
-        $ticket->price = $data['price'];
-        $ticket->intermediate_id = $data['intermediate_id'];
-        $ticket->status = $data['status'];
-        $res = $ticket->save();
-        if ($res) {
+        $names = $data['name_passenger'];
+        $minor = $data['minor'] ?? [];
+        $n = count($arrTickets);
+        $ok = 0;
+        foreach ($arrTickets as $s_num) {
+          $ticket = new Ticket($con);
+          $ticket->seat_number = $s_num;
+          $ticket->trip_id = $data['trip_id'];
+          $ticket->client_id = $client->id;
+          $ticket->created_at = date('Y-m-d\TH:i:s');
+          $ticket->sold_by = $client->user_id;
+          $ticket->price = $data['price'];
+          $ticket->intermediate_id = $data['intermediate_id'];
+          $ticket->status = $data['status'];
+          $ticket->is_minor = isset($minor[$s_num]) ? 1 : 0;
+          $ticket->owner_name = isset($names[$s_num]) ? $names[$s_num] : '';
+          $res = $ticket->save();
+          if ($res)
+            $ok++;
+        }
+        if ($ok == $n) {
           Response::success_json('Venta registrada correctamente.', ['ticket' => $ticket]);
         } else {
           Response::error_json(['message' => 'No se pudo registrar la venta.'], 200);
@@ -79,7 +93,6 @@ class TicketController {
       Response::success_json('Datos de la venta cargados correctamente.', [
         'document' => ReportPrintApp::ticketSaleDetail($ticket, $client, $trip, $origin, $destination, $bus),
       ]);
-      print_r(ReportPrintApp::ticketSaleDetail([]));
     } else {
       Response::error_json(['message' => 'No se encontro los datos de la venta.'], 200);
     }
@@ -148,7 +161,7 @@ class TicketController {
     }
   }
 
-  public function consolidateSale($data){
+  public function consolidateSale($data) {
     if (!Request::required(['price', 'ticket_id'], $data))
       Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
 
@@ -157,23 +170,32 @@ class TicketController {
       $ticket_id = $data['ticket_id'];
       $price = floatval($data['price']);
       $ticket = new Ticket($con, $ticket_id);
-      if($ticket->id > 0){
+      if ($ticket->id > 0) {
         $ticket->price += $price;
         $ticket->status = "VENDIDO";
         $ticket->created_at = date('Y-m-d H:i:s');
         $response = $ticket->update();
-        if($response){
+        if ($response) {
           Response::success_json('Venta consolidada correctamente.', [
             'ticket' => $ticket,
           ]);
-        }else{
-          Response::error_json(['message' => 'No se pudo consolidar la venta.'], 200);  
+        } else {
+          Response::error_json(['message' => 'No se pudo consolidar la venta.'], 200);
         }
-      }else{
+      } else {
         Response::error_json(['message' => 'No se encontro el boleto.'], 200);
       }
-    }else{
+    } else {
       Response::error_json(['message' => 'No se pudo conectar a la BD.'], 200);
+    }
+  }
+  public function get_data_ticket($query) {
+    $con = DBWebProvider::getSessionDataDB();
+    if ($con) {
+      $ticket = Ticket::ticket_by_seat($con, $query['trip_id'], $query['seat_number']);
+      Response::success_json('Datos de la venta cargados correctamente.', [$ticket], 200);
+    } else {
+      Response::error_json(['message' => 'Error conexion instancia'], 200);
     }
   }
 }

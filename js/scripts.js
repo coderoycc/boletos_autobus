@@ -88,9 +88,28 @@ $(document).on("hide.bs.modal", "#modal_usuario", function (event) {
     $("#btn_cambiar").prop("disabled", false);
   }, 900);
 })
+$(document).on('click', '[data-card-widget="collapse"]', function () {
+  const cardBody = $(this).closest('.card').find('.card-body');
+  const cardFooter = $(this).closest('.card').find('.card-footer');
+  const icon = $(this).find('svg');
 
+  if (icon.hasClass('fa-minus')) {
+    icon.removeClass('fa-minus').addClass('fa-plus');
+    cardBody.hide();
+    if (cardFooter.length) {
+      cardFooter.hide();
+    }
+    $(this).closest('.card').addClass('collapsed-card');
+  } else {
+    icon.removeClass('fa-plus').addClass('fa-minus');
+    cardBody.show();
+    if (cardFooter.length) {
+      cardFooter.show();
+    }
+    $(this).closest('.card').removeClass('collapsed-card');
+  }
+});
 const cambiarPass = async () => {
-  console.log('asdasdfasdfadsfadsfadsfdsadssd')
   if ($("#pass_repeat").val() == $('#n_pass').val() && $("#pass").val() != '') {
     data = {
       idUsuario: $("#id_user").val(),
@@ -216,6 +235,7 @@ async function cambiarColor() {
 }
 
 function toast(title, text, icon = 'success', time = 1500) {
+  $.toast().reset('all');
   $.toast({
     heading: title,
     text,

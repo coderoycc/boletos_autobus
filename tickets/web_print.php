@@ -42,7 +42,10 @@ if (!isset($_GET['tid'])) {
   $laneNumber = "3";
   $footerMessage = "El pasajero debe estar 30 minutos antes de la salida del bus, <b>NO SE ACEPTAN DEVOLUCIONES</b>.";
   $ticket = new Ticket($con, $_GET['tid']);
-  // var_dump($ticket);
+  $ticket_seats = Ticket::tickets_by_client($con, $ticket->trip_id, $ticket->client_id);
+  $cantidad = count($ticket_seats);
+  $cadenaSeats = implode('-', $ticket_seats);
+
   if ($ticket->id == 0) {
     header('Location: ../');
     die();
@@ -92,7 +95,7 @@ if (!isset($_GET['tid'])) {
   );
   // $pdf->write2DBarcode($codeqr, 'QRCODE,Q', 145, 0, 60, 60, $style, 'N'); // 2 en vez de 20
 
-  $costo = $ticket->price;
+  $costo = $cantidad * $ticket->price;
   $nit_ci = ($client->nit == '') ? $client->ci : $client->nit;
   $costo_literal = numtoletras($costo);
   // $porPagar = $envio->pagado ?? 'POR PAGAR';
@@ -146,7 +149,7 @@ if (!isset($_GET['tid'])) {
                 <td colspan="500"><b>Lugar origen: </b> ' . strtoupper($origen->location) . '</td>
               </tr>
               <tr>
-                <td colspan="500"><b>Lugar destino: </b> ' . strtoupper($destino->location) . ' ' . ($intermediate->id == 0 ? '' : '('.strtoupper($intermediate->location).')') . '</td>
+                <td colspan="500"><b>Lugar destino: </b> ' . strtoupper($destino->location) . ' ' . ($intermediate->id == 0 ? '' : '(' . strtoupper($intermediate->location) . ')') . '</td>
               </tr>
               <tr>
                 <td colspan="500"><b>Fecha y hora de salida: </b>' . date('d/m/Y', strtotime($trip->departure_date)) . ' ' . date('H:i', strtotime($trip->departure_time)) . ' </td>
@@ -155,8 +158,8 @@ if (!isset($_GET['tid'])) {
                 <td colspan="500"><b>Usuario: </b>' . strtoupper($user->username) . ' </td>
               </tr>
               <tr>
-                <td colspan="250"><b>ASIENTO: ' . $ticket->seat_number . '</b></td>
-                <td colspan="250"><b>CARRIL: ' . $laneNumber . '</b></td>
+                <td colspan="250"><b>ASIENTO (S): ' . $cadenaSeats . '</b></td>
+                <td colspan="250" style="text-align:right;"><b>CARRIL: ' . $laneNumber . '</b></td>
               </tr>
             </table>';
   $tabla .= $tabla1;
@@ -171,7 +174,7 @@ if (!isset($_GET['tid'])) {
       <td align="center" colspan="90" class="border-bottom"><b>Total</b></td>
     </tr>
     <tr>
-      <td align="center" colspan="70" class="border-bottom">1</td>
+      <td align="center" colspan="70" class="border-bottom">' . $cantidad . '</td>
       <td colspan="340" class="border-bottom">Boleto a ' . strtoupper($destino->location) . '</td>
       <td align="right" colspan="90" class="border-bottom">' . number_format($costo, 2) . '</td>
     </tr>
@@ -181,11 +184,11 @@ if (!isset($_GET['tid'])) {
     <tr>
       <td colspan="50"></td><td colspan="450">' . $costo_literal . '</td>
     </tr>';
-  $tabla .= $tabla2.'<tr>
-      <td colspan="500">' . $footerMessage. '</td>
+  $tabla .= $tabla2 . '<tr>
+      <td colspan="500">' . $footerMessage . '</td>
     </tr>
   </table>';
-  $dataCenter .= $tabla2.'</table>';
+  $dataCenter .= $tabla2 . '</table>';
 
   $tabla .= '<table border="0" cellpadding="2">
               <tr><td colspan="500" style="font-size:40%;"></td></tr>
@@ -199,16 +202,15 @@ if (!isset($_GET['tid'])) {
   // $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: center;">' . $subdominio . '</td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: center;">Firma remitente</td></tr>';
   // $tabla .= '</table>';
   $pdf->WriteHTMLCell(0, 0, 0, 0, $tabla, 0, 0);
-  
+
   // Form validation functions
-$js = <<<EOD
+  $js = <<<EOD
 app.alert('qweqweqwe');
 EOD;
 
-//$pdf->IncludeJS($js);
-// Add Javascript code
-$pdf->output('Venta-Boleto-'.$ticket->id.'.pdf', 'I');
-
+  //$pdf->IncludeJS($js);
+  // Add Javascript code
+  $pdf->output('Venta-Boleto-' . $ticket->id . '.pdf', 'I');
 }
 
 function contarLineas($cadena, $anchoPagina, $tamanoFuente) {
