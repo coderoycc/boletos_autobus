@@ -125,7 +125,7 @@ $tabla = '
 </tr>';
 $nro  = 1;
 foreach ($clients as $key => $value) {
-  $nombre = ucfirst($value['owner_name']);
+  $nombre = ucwords($value['owner_name']);
   if ($nombre == '' || $nombre == null) {
     $nombre = ucfirst($value['name']) . ' ' . ucfirst($value['lastname']) . ' ' . ucfirst($value['mother_lastname']);
   }

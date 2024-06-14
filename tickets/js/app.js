@@ -16,6 +16,7 @@ const listAllTickets = async () => {
   const request = await getAllTicketsView([form]);
   $("#list_tickets").html(request);
   $("#tickets-table").DataTable({
+    order: [[1, 'desc']],
     language: lenguaje,
     info: false,
     scrollX: true,
