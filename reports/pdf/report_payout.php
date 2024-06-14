@@ -120,12 +120,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($totalIngresos > 450) {
         $ordenSalida = ($porcentajeDescuento / 100) * $totalIngresos;
         // para el redondeo
-        $ordenSalidaDecimal = $ordenSalida - floor($ordenSalida);
+        $ordenSalidaDecena = $ordenSalida / 10;
+        $ordenSalidaDecimal = $ordenSalidaDecena - floor($ordenSalidaDecena);
         if ($ordenSalidaDecimal >= 0.5) {
-            $ordenSalida = ceil($ordenSalida);
+            $ordenSalidaDecena = ceil($ordenSalidaDecena);
         } else {
-            $ordenSalida = floor($ordenSalida);
+            $ordenSalidaDecena = floor($ordenSalidaDecena);
         }
+        $ordenSalida = 10 * $ordenSalidaDecena;
     } else {
         $ordenSalida = 0;
     }

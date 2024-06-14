@@ -125,7 +125,10 @@ $tabla = '
 </tr>';
 $nro  = 1;
 foreach ($clients as $key => $value) {
-  $nombre = ucfirst($value['name']) . ' ' . ucfirst($value['lastname']) . ' ' . ucfirst($value['mother_lastname']);
+  $nombre = ucfirst($value['owner_name']);
+  if ($nombre == '' || $nombre == null) {
+    $nombre = ucfirst($value['name']) . ' ' . ucfirst($value['lastname']) . ' ' . ucfirst($value['mother_lastname']);
+  }
   if ($value['ci'] == '') {
     $cinit = $value['nit'];
   } else {
