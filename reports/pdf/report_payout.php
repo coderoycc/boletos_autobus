@@ -31,6 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $trip = new Trip($con, $trip_id);
     $fechaTrip = $trip->departure_date;
     $fechaTripFormato = date('d/m/Y', strtotime($fechaTrip));
+    $horaTrip = $trip->departure_time;
+    $horaTripFormato = date('H:i', strtotime($horaTrip));
     $driver = new Driver($con, $trip->driver_id);
     $locationOrigen = new Location($con, $trip->location_id_origin);
     $locationDestino = new Location($con, $trip->location_id_dest);
@@ -95,7 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <td colspan="20"><b>Salida de: </b>' . $locationOrigen->location . '<b> a </b>' . $locationDestino->location . '</td>
     </tr>
     <tr>
-    <td colspan="20" style="font-size: 9px; border-bottom: 0.5px solid black;"><b>Fecha: </b>' . $fechaTripFormato . '</td>
+    <td colspan="10" style="font-size: 9px; border-bottom: 0.5px solid black;"><b>Fecha: </b>' . $fechaTripFormato . '</td>
+    <td colspan="10" style="font-size: 9px; border-bottom: 0.5px solid black;"><b>H. Sal.: </b>' . $horaTripFormato . '</td>
     </tr>
     <tr>
     <td colspan="20" style="font-size: 2px;"></td>
