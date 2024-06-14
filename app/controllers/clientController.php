@@ -42,12 +42,12 @@ class ClientController {
     public function create($data){
         $con = DBWebProvider::getSessionDataDB();
         if ($con) {
-            if(Client::existsByCi($con, $data['ci']))
+            /*if(Client::existsByCi($con, $data['ci']))
                 Response::error_json(['message' => 'El CI ingresado ya se encuentra registrado.'], 200);
 
 
             if(Client::existsByNit($con, $data['nit']))
-                Response::error_json(['message' => 'El NIT ingresado ya se encuentra registrado.'], 200);
+                Response::error_json(['message' => 'El NIT ingresado ya se encuentra registrado.'], 200);*/
                
             $client = new Client($con);
             $client->name = $data['name'];

@@ -60,6 +60,10 @@ date_default_timezone_set('America/La_Paz');
   include('components/liquidation_modal.php');
   ?>
 
+  <script src="../js/options.js"></script>
+  <script src="../js/functions.js"></script>
+  <script src="../js/forms.js"></script>
+  <script src="../js/services/liquidations.js"></script>
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>

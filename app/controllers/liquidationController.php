@@ -24,13 +24,17 @@ class LiquidationController
     $liquidation->correspondence = floatval($body['correspondence']);
     if ($body['liquidation_id'] == 0) {
       if ($liquidation->save() > 0) {
-        Response::success_json('Liquidacion registrada', [$liquidation]);
+        Response::success_json('Liquidacion registrada', [
+          'liquidation' => $liquidation
+        ]);
       } else {
         Response::error_json(['message' => 'Error al registrar la liquidacion'], 200);
       }
     } else {
       if ($liquidation->update() > 0) {
-        Response::success_json('Liquidacion registrada', [$liquidation]);
+        Response::success_json('Liquidacion registrada', [
+          'liquidation' => $liquidation
+        ]);
       } else {
         Response::error_json(['message' => 'Error al registrar la liquidacion'], 200);
       }
@@ -42,7 +46,9 @@ class LiquidationController
     $con = DBWebProvider::getSessionDataDB();
     $liquidation = new Liquidation($con, $trip_id);
     if ($liquidation->id) {
-      Response::success_json('Se obtuvieron correctamente los datos', [$liquidation]);
+      Response::success_json('Se obtuvieron correctamente los datos', [
+        'liquidation' => $liquidation
+      ]);
     } else {
       Response::error_json(['message' => 'Hubo un problema al encontrar los datos.'], 200);
     }

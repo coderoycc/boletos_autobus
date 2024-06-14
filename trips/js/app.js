@@ -8,6 +8,7 @@ $(document).ready(() => {
 
 $(document).on("show.bs.modal", "#trip_edit", open_modal_edit);
 $(document).on("show.bs.modal", "#liquidation_data", open_modal_liquidation);
+$(document).on("hide.bs.modal", "#liquidation_data", close_modal_liquidation);
 $(document).on("show.bs.modal", "#depa_delete", open_modal_delete);
 $(document).on("change", "#add_trip_origen", destination_values);
 $(document).on("change", "#edit_trip_origen", destination_values_edit);
@@ -34,23 +35,29 @@ function open_modal_delete(e) {
   $("#id_depa_delete").val(id);
 }
 async function open_modal_liquidation(e) {
+  const ACTION = 'SHOW LIQUIDATION';
   const id = e.relatedTarget.dataset.tripid;
-  $("#trip_id_modal").val(id);
-  const res = await $.ajax({
-    url: "../app/liquidation/getInfo",
-    type: "POST",
-    data: { id },
-    dataType: "json",
-  });
-  if (res.success) {
-    data = res.data[0];
-    console.log("vemos la data", data);
-    $("#liquidation_id_modal").val(data['id']);
-    $('input[name="correspondence"]').val(data['correspondence']);
-    $('input[name="other_amount"]').val(data['discount']);
-    $('input[name="other_concept"]').val(data['observation']);
-    $('input[name="other_concept_amount"]').val(data['observation_discount']);
+  const request = await showLiquidation({id: id});
+  if(request.success){
+    const liquidation = request.data.liquidation;
+    $('#trip_id_modal').val(liquidation.trip_id);
+    $("#liquidation_id_modal").val(liquidation.id);
+    $('input[name="correspondence"]').val(liquidation.correspondence);
+    $('input[name="other_amount"]').val(liquidation.discount);
+    $('input[name="other_concept"]').val(liquidation.observation);
+    $('input[name="other_concept_amount"]').val(liquidation.observation_discount);
+  }else{
+    $('#trip_id_modal').val(id);
   }
+  console.log(ACTION, request.message);
+}
+async function close_modal_liquidation(e) {
+  $("#trip_id_modal").val(0);
+  $("#liquidation_id_modal").val(0);
+  $('input[name="correspondence"]').val(0);
+  $('input[name="other_amount"]').val(20);
+  $('input[name="other_concept"]').val('');
+  $('input[name="other_concept_amount"]').val(0);
 }
 async function delete_department() {
   const id = $("#id_depa_delete").val();
@@ -191,26 +198,22 @@ function list__from_filters(e) {
   list_data({ date: date, exact: true });
 }
 async function send_form_liquidation() {
-  buttonDisabledById("liquidation_btn_modal");
-  const data = $("#liquidation_form").serializeArray();
-  const trip_id = $("#trip_id_modal").val();
-  const res = await $.ajax({
-    url: "../app/liquidation/create",
-    type: "POST",
-    data,
-    dataType: "json",
-  });
-  if (res.success) {
-    toast("Operación exitosa", "Liquidación creada", "success", 2000);
+  const ACTION = 'CREATE LIQUIDATION';
+  const form = document.getElementById('liquidation_form');
+  const btnSend = document.getElementById('liquidation_btn_modal');
+  btnSend.disabled = true;
+  const request = await createLiquidation([form]);
+  if(request.success){
     cleanModalLiquidation();
     window.open(
-      "../reports/pdf/report_payout.php?trip_id=" + trip_id,
+      "../reports/pdf/report_payout.php?trip_id=" + request.data.liquidation.trip_id,
       "_blank"
     );
-  } else {
-    toast("Ocurrió un error", res.message, "error", 3000);
-    buttonEnabledById("liquidation_btn_modal");
+    setTimeout(() => location.reload(), 1500);
   }
+  toast(ACTION, request.message, request.success ? 'success' : 'error');
+  console.log(ACTION, request.message);
+  btnSend.disabled = false;
 }
 function buttonDisabledById(id, text = "ENVIANDO") {
   $("#" + id)
