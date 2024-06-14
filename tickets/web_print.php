@@ -37,7 +37,7 @@ if (!isset($_GET['tid'])) {
   $nombre_suc = 'Sucursal Central';
   $ciudad = $datos_emp['location'];
   $routes = "Uyuni - Oruro - Potosí - La Paz - Cocha.";
-  $companyName = "Trans. 25 de Diciembre";
+  $companyName = "TRANS. 25 DE DICIEMBRE";
   $phone = "67258945";
   $laneNumber = "3";
   $footerMessage = "El pasajero debe estar 30 minutos antes de la salida del bus, <b>NO SE ACEPTAN DEVOLUCIONES</b>.";
@@ -102,30 +102,22 @@ if (!isset($_GET['tid'])) {
   $dataCenter = "";
   $tabla = '<table border="0" cellpadding="0">
   <tr>
-    <td colspan="380" align="center"><b style="font-size:110%;">' . $companyName . '</b></td>
-    <td colspan="120"></td>
+    <td colspan="500" align="center"><b style="font-size:130%;">' . $companyName . '</b></td>
   </tr>
   <tr>
-    <td colspan="380" align="center">' . $routes . '</td>
-    <td colspan="120"></td>
+    <td colspan="500" align="center">' . $routes . '</td>
   </tr>
   <tr>
-    <td colspan="380" align="center" >Cel. ' . $phone . ' </td>
-    <td colspan="120"></td>
+    <td colspan="500" align="center" >Cel. ' . $phone . ' </td>
   </tr>
   <tr>
-    <td colspan="380" align="center"><b style="font-size:120%;">Boleto #' . $ticket->id . '</b>
-    </td>
+    <td colspan="500" align="center"><b style="font-size:120%;">Boleto #' . $ticket->id . '</b></td>
   </tr>
   <tr>
-    <td colspan="90"></td>
-    <td colspan="200" align="center" style="border:1px solid #000">Asiento Nro. ' . $ticket->seat_number . '</td>
-    <td colspan="90"></td>
-    <td colspan="120"></td>
+    <td colspan="500" align="center" style="font-size:100%;"><b>Asiento(s): ' . $cadenaSeats . '</b></td>
   </tr>
   <tr>
-    <td colspan="500" style="border-bottom: 1px solid #000;"><b style="font-size:110%;"></b>
-    </td>
+    <td colspan="500" align="center" style="border-bottom: 1px solid #000;font-size:100%;"><b>Carril: ' . $laneNumber . '</b></td>
   </tr>
   </table>';
   $dataCenter .= '<table border="0" cellpadding="0">
@@ -152,14 +144,15 @@ if (!isset($_GET['tid'])) {
                 <td colspan="500"><b>Lugar destino: </b> ' . strtoupper($destino->location) . ' ' . ($intermediate->id == 0 ? '' : '(' . strtoupper($intermediate->location) . ')') . '</td>
               </tr>
               <tr>
-                <td colspan="500"><b>Fecha y hora de salida: </b>' . date('d/m/Y', strtotime($trip->departure_date)) . ' ' . date('H:i', strtotime($trip->departure_time)) . ' </td>
+                <td colspan="250"><b>Fecha salida: </b>' . date('d/m/Y', strtotime($trip->departure_date)) . ' </td>
+                <td colspan="250"><b>Hora salida: </b>' . date('H:i', strtotime($trip->departure_time)) . ' </td>
+              </tr>
+              <tr>
+                <td colspan="250"><b>Asiento(s):</b> ' . $cadenaSeats . '</td>
+                <td colspan="250"><b>Carril:</b> ' . $laneNumber . '</td>
               </tr>
               <tr>
                 <td colspan="500"><b>Usuario: </b>' . strtoupper($user->username) . ' </td>
-              </tr>
-              <tr>
-                <td colspan="250"><b>ASIENTO (S): ' . $cadenaSeats . '</b></td>
-                <td colspan="250" style="text-align:right;"><b>CARRIL: ' . $laneNumber . '</b></td>
               </tr>
             </table>';
   $tabla .= $tabla1;

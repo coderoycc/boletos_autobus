@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         </tr>';
     }
     $totalIngresos = $totalPorPasajeros + $correspEncom;
-    if ($totalIngresos > 450) {
+    if ($totalIngresos >= 450) {
         $ordenSalida = ($porcentajeDescuento / 100) * $totalIngresos;
         // para el redondeo
         $ordenSalidaDecena = $ordenSalida / 10;
