@@ -83,10 +83,12 @@ class Trip {
 
       $date = $filters['date'] ?? date('Y-m-d');
       $time = $filters['time'] ?? date('H:i:s');
+      // Sumar 30 minutos a la hora actual
+      $newTime = date('H:i:s', strtotime('-30 minutes', strtotime($time)));
 
       $filter = $exact
         ? "a.departure_date = '$date'"
-        : "CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24)) >= '$date $time'";
+        : "CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24)) >= '$date $newTime'";
 
       $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa, e.fullname as conductor,
                 CONCAT(CONVERT(varchar,a.departure_date,23),' ',CONVERT(varchar,a.departure_time,24)), f.id as liq_id
