@@ -19,6 +19,7 @@ class Ticket {
   public String $status;
   public string $owner_name;
   public int $is_minor;
+  public string $owner_ci;
 
   public function __construct($db = null, $id = null) {
     $this->objectNull();
@@ -49,6 +50,7 @@ class Ticket {
     $this->status = $row['status'] ?? '';
     $this->owner_name = $row['owner_name'] ?? '';
     $this->is_minor = $row['is_minor'] ?? 0;
+    $this->owner_ci = $row['owner_ci'] ?? '';
   }
 
   public function objectNull() {
@@ -63,6 +65,7 @@ class Ticket {
     $this->status = '';
     $this->owner_name = '';
     $this->is_minor = 0;
+    $this->owner_ci = '';
   }
 
   public static function reservedSeats($con, $trip_id, $status = 'VENDIDO') {
@@ -94,14 +97,14 @@ class Ticket {
       $resp = 0;
       $this->con->beginTransaction();
       $sql = "INSERT 
-                    INTO tickets (seat_number, trip_id, client_id, created_at, sold_by, price, intermediate_id, status, owner_name, is_minor)
-                    VALUES (:seat_number, :trip_id, :client_id, :created_at, :sold_by, :price, :intermediate_id, :status, :owner_name, :is_minor);";
+                    INTO tickets (seat_number, trip_id, client_id, created_at, sold_by, price, intermediate_id, status, owner_name, is_minor, owner_ci)
+                    VALUES (:seat_number, :trip_id, :client_id, :created_at, :sold_by, :price, :intermediate_id, :status, :owner_name, :is_minor, :owner_ci);";
       $params = [
         'seat_number' => $this->seat_number, 'trip_id' => $this->trip_id,
         'client_id' => $this->client_id, 'created_at' => $this->created_at,
         'sold_by' => $this->sold_by, 'price' => $this->price,
         'intermediate_id' => $this->intermediate_id, 'status' => $this->status,
-        'owner_name' => $this->owner_name, 'is_minor' => $this->is_minor,
+        'owner_name' => $this->owner_name, 'is_minor' => $this->is_minor, 'owner_ci' => $this->owner_ci
       ];
       $stmt = $this->con->prepare($sql);
       $res = $stmt->execute($params);

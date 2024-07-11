@@ -143,7 +143,7 @@ class Client {
 
   public static function getAllClientsByTrip($con, $trip_id) {
     try {
-      $sql = "SELECT c.*, t.seat_number, t.owner_name, t.is_minor
+      $sql = "SELECT c.*, t.seat_number, t.owner_name, t.is_minor, t.owner_ci 
                     FROM  tickets t
                     LEFT JOIN clients c ON c.id = t.client_id
                     WHERE t.trip_id = $trip_id;";

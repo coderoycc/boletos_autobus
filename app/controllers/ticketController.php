@@ -34,6 +34,7 @@ class TicketController {
       $res = $client->save();
       if ($res) {
         $names = $data['name_passenger'];
+        $cis = $data['ci_passenger'];
         $minor = $data['minor'] ?? [];
         $n = count($arrTickets);
         $ok = 0;
@@ -49,6 +50,7 @@ class TicketController {
           $ticket->status = $data['status'];
           $ticket->is_minor = isset($minor[$s_num]) ? 1 : 0;
           $ticket->owner_name = isset($names[$s_num]) ? $names[$s_num] : '';
+          $ticket->owner_ci = isset($cis[$s_num]) ? $cis[$s_num] : '';
           $res = $ticket->save();
           if ($res)
             $ok++;

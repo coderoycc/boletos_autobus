@@ -128,11 +128,13 @@ foreach ($clients as $key => $value) {
   $nombre = ucwords($value['owner_name']);
   if ($nombre == '' || $nombre == null) {
     $nombre = ucfirst($value['name']) . ' ' . ucfirst($value['lastname']) . ' ' . ucfirst($value['mother_lastname']);
-  }
-  if ($value['ci'] == '') {
-    $cinit = $value['nit'];
+    if ($value['ci'] == '') {
+      $cinit = $value['nit'];
+    } else {
+      $cinit = $value['ci'];
+    }
   } else {
-    $cinit = $value['ci'];
+    $cinit = $value['owner_ci'];
   }
   $tabla .= '
     <tr>
