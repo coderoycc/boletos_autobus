@@ -32,7 +32,7 @@ $('#btn-create-sale').on('click', async (e) => {
         }
       });
     } else if (type == 'VENDIDO') {
-      // executeBluetoothPrinter(requestSale.data.ticket);
+      executeBluetoothPrinter(requestSale.data.ticket);
       setTimeout(() => {
         location.reload();
       }, 200);
