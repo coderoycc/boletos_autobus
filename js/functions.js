@@ -50,12 +50,12 @@ const executeBluetoothPrinter = (ticket) => {
     /*const dbName = getCookieValue('base_server');
     const server = getCookieValue('ipconfig');*/
     const dbName = 'boletos';
-    const deepLink = `app://printer.com/sale/${ticket.id}|${dbName}`;
+    const deepLink = `app://printer.com/sale/${ticket.client_id}|${dbName}`;
     // Abriendo la aplicacion de Impresion
     window.location.href = deepLink;
-    window.open(`../tickets/web_print.php?tid=${ticket.id}`, '_blank');
+    window.open(`../tickets/web_print.php?cid=${ticket.client_id}`, '_blank');
   } else {
-    window.open(`../tickets/web_print.php?tid=${ticket.id}`, '_blank');
+    window.open(`../tickets/web_print.php?cid=${ticket.client_id}`, '_blank');
   }
   console.log(ACCION, SO ? 'Ejecutando aplicación' : 'El Sistema Operativo no es Android.');
 }

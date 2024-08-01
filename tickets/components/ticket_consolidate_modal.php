@@ -31,9 +31,10 @@
                     </table>
                 </div>
                 <div class="col-md-12">    
-                    <input type="hidden" value="" id="ticket-id" name="ticket_id" />
-                    <label class="form-label text-secondary fw-semibold ms-2" for="ticket-consolidate-price">Precio</label>
-                    <input type="number" class="form-control" id="ticket-consolidate-price" placeholder="Ingresar precio restante" value="" name="price" required>
+                    <input type="hidden" value="" id="client-id" name="client_id" />
+                    <label class="form-label text-secondary fw-semibold ms-2" for="ticket-consolidate-price" id="labelPrecioPagar">Precio a Pagar</label>
+                    <input type="number" class="form-control" id="ticket-consolidate-price" placeholder="Ingresar precio restante" value="" name="price2" required>
+                    <input type="hidden" class="form-control" id="ticket-consolidate-price-divided" value="0" name="price">
                 </div>
             </div>
         </form>

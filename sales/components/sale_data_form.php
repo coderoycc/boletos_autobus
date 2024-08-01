@@ -21,10 +21,12 @@
           <input type="text" class="form-control" id="numero-asiento" name="seat_number" placeholder="Número de Asiento" autocomplete="off" readonly required>
         </div>
         <div class="col-md-5 mb-3">
-          <label for="precio-asiento" class="form-label text-secondary fw-semibold">Precio x asiento:</label>
-          <input type="number" class="form-control" id="precio-asiento" name="price" placeholder="Total a Pagar" autocomplete="off" required>
+          <label for="precio-asiento" class="form-label text-secondary fw-semibold" id="label-precio">Precio x asiento:</label>
+          <label for="precio-asiento" class="form-label text-secondary fw-semibold" id="label-adelanto">Adelanto:</label>
+          <input type="number" class="form-control" id="precio-asiento" name="price2" placeholder="Total a Pagar" autocomplete="off" required>
+          <input type="number" id="precio-asiento-hide" name="price" value="0" hidden>
         </div>
-        <div class="col-md-12 mb-0">
+        <div class="col-md-12 mb-0" id="total-amount-view">
           <p class="mb-0 float-end fw-bold">Total: <span id="total_amount">0</span></p>
         </div>
         <div class="col-md-12">

@@ -19,7 +19,7 @@ use App\Models\Trip;
 use App\Models\Location;
 use App\Providers\DBWebProvider;
 
-if (!isset($_GET['tid'])) {
+if (!isset($_GET['cid'])) {
   echo '<h1 align="center">Parametro id necesario</h1>';
   die();
 } else {
@@ -41,22 +41,23 @@ if (!isset($_GET['tid'])) {
   $phone = "67258945";
   $laneNumber = "3";
   $footerMessage = "El pasajero debe estar 30 minutos antes de la salida del bus, <b>NO SE ACEPTAN DEVOLUCIONES</b>.";
-  $ticket = new Ticket($con, $_GET['tid']);
-  $ticket_seats = Ticket::tickets_by_client($con, $ticket->trip_id, $ticket->client_id);
+  // $ticket = new Ticket($con, $_GET['tid']);
+  $ticket = Ticket::detail_by_client($con, $_GET['cid']);
+  $ticket_seats = Ticket::tickets_by_client($con, $ticket['trip_id'], $ticket['client_id']);
   $cantidad = count($ticket_seats);
   $cadenaSeats = implode('-', $ticket_seats);
 
-  if ($ticket->id == 0) {
+  if ($ticket['client_id'] == 0) {
     header('Location: ../');
     die();
   }
 
-  $trip = new Trip($con, $ticket->trip_id);
+  $trip = new Trip($con, $ticket['trip_id']);
   $origen = $trip->origin();
   $destino = $trip->destination();
-  $client = new Client($con, $ticket->client_id);
-  $user = new User($con, $ticket->sold_by);
-  $intermediate = new Location($con, ($ticket->intermediate_id == 0 ? null : $ticket->intermediate_id));
+  $client = new Client($con, $ticket['client_id']);
+  $user = new User($con, $ticket['sold_by']);
+  $intermediate = new Location($con, ($ticket['intermediate_id'] == 0 ? null : $ticket['intermediate_id']));
 
   $width = 210;
   $height = 260;
@@ -95,7 +96,7 @@ if (!isset($_GET['tid'])) {
   );
   // $pdf->write2DBarcode($codeqr, 'QRCODE,Q', 145, 0, 60, 60, $style, 'N'); // 2 en vez de 20
 
-  $costo = $cantidad * $ticket->price;
+  $costo = $cantidad * $ticket['sold_price'];
   $nit_ci = ($client->nit == '') ? $client->ci : $client->nit;
   $costo_literal = numtoletras($costo);
   // $porPagar = $envio->pagado ?? 'POR PAGAR';
@@ -111,7 +112,7 @@ if (!isset($_GET['tid'])) {
     <td colspan="500" align="center" >Cel. ' . $phone . ' </td>
   </tr>
   <tr>
-    <td colspan="500" align="center"><b style="font-size:120%;">Boleto #' . $ticket->id . '</b></td>
+    <td colspan="500" align="center"><b style="font-size:120%;">Boleto #' . $ticket['client_id'] . '</b></td>
   </tr>
   <tr>
     <td colspan="500" align="center" style="font-size:100%;"><b>Asiento(s): ' . $cadenaSeats . '</b></td>
@@ -122,7 +123,7 @@ if (!isset($_GET['tid'])) {
   </table>';
   $dataCenter .= '<table border="0" cellpadding="0">
                     <tr>
-                      <td colspan="380" align="center"><b style="font-size:120%;">Boleto #' . $ticket->id . '</b>
+                      <td colspan="380" align="center"><b style="font-size:120%;">Boleto #' . $ticket['client_id'] . '</b>
                       </td>
                     </tr>
                   </table>';
@@ -130,7 +131,7 @@ if (!isset($_GET['tid'])) {
               <tr><td colspan="500" style="font-size:50%;"></td></tr>
               <tr><td colspan="500"><b>Cliente: </b>' . strtoupper($client->name . ' ' . $client->lastname . ' ' . $client->mothers_lastname) . '</td></tr>
               <tr><td colspan="500"><b>NIT/CI/CEX: </b> ' . $nit_ci . '</td></tr>
-              <tr><td colspan="500"><b>Fecha de emisión: </b>' . date('d/m/Y H:i', strtotime($ticket->created_at)) . '</td></tr>
+              <tr><td colspan="500"><b>Fecha de emisión: </b>' . date('d/m/Y H:i', strtotime($ticket['sold_datetime'])) . '</td></tr>
               </table>';
 
   $tabla1 = '<table border="0" cellpadding="0">
@@ -203,7 +204,7 @@ EOD;
 
   //$pdf->IncludeJS($js);
   // Add Javascript code
-  $pdf->output('Venta-Boleto-' . $ticket->id . '.pdf', 'I');
+  $pdf->output('Venta-Boleto-' . $ticket['client_id'] . '.pdf', 'I');
 }
 
 function contarLineas($cadena, $anchoPagina, $tamanoFuente) {

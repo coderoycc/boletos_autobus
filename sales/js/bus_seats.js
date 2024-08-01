@@ -14,7 +14,7 @@ var seatData = {
 $(document).ready(async function () {
   const tripId = getParam(window.location, "trip_id");
   $("#trip-id").val(tripId);
-
+  $("#label-adelanto").hide();
   const requestDataDistributions = await getDataDistributions(tripId);
 
   if (!requestDataDistributions.success) {
@@ -23,6 +23,10 @@ $(document).ready(async function () {
   }
   loadLocations(requestDataDistributions.data.trip.location_id_dest);
   $("#precio-asiento").prop(
+    "min",
+    requestDataDistributions.data.trip.min_price
+  );
+  $("#precio-asiento-hide").prop(
     "min",
     requestDataDistributions.data.trip.min_price
   );
@@ -199,13 +203,24 @@ $(document).ready(async function () {
   $("#precio-asiento").val(
     parseFloat(requestDataDistributions.data.trip.price)
   );
+  $("#precio-asiento-hide").val(
+    parseFloat(requestDataDistributions.data.trip.price)
+  );
   /**
    * CONFIGURACION DE DATOS DEL VIAJE
    */
   $('input[type=radio][name="status"]').change((e) => {
     const value = e.target.value;
     if (value == "VENDIDO") {
+      $("#total_amount").text("0");
+      $("#label-precio").show();
+      $("#label-adelanto").hide();
+      $("#total-amount-view").show();
       $("#precio-asiento").prop(
+        "min",
+        requestDataDistributions.data.trip.min_price
+      );
+      $("#precio-asiento-hide").prop(
         "min",
         requestDataDistributions.data.trip.min_price
       );
@@ -213,10 +228,18 @@ $(document).ready(async function () {
       $("#precio-asiento").val(
         parseFloat(requestDataDistributions.data.trip.price)
       );
+      $("#precio-asiento-hide").val(
+        parseFloat(requestDataDistributions.data.trip.price)
+      );
     } else if (value == "RESERVA") {
+      $("#label-precio").hide();
+      $("#label-adelanto").show();
+      $("#total-amount-view").hide();
       $("#precio-asiento").prop("min", 0);
+      $("#precio-asiento-hide").prop("min", 0);
       $("#precio-asiento").prop("required", false);
       $("#precio-asiento").val(0);
+      $("#precio-asiento-hide").val(0);
     }
   });
 });
@@ -262,6 +285,7 @@ function seatsRecalculate() {
   const total = cantidad * precio;
   $("#total_amount").html(total.toFixed(2));
   showSeats();
+  calculoPrecios(value);
 }
 function showSeats() {
   const seats = Array.from(seats_selected.keys()).join("-");
@@ -280,6 +304,29 @@ $('input[type=radio][name="options-floor"]').change((e) => {
     $(`#container-lower-floor`).show();
   }
 });
+$("#precio-asiento").change((e) => {
+  let value = e.currentTarget.value;
+  calculoPrecios(value);
+});
+
+function calculoPrecios(value = 0) {
+  let radioValue = $('input[type=radio][name="status"]:checked').val();
+  if (radioValue == "VENDIDO") {
+    $("#precio-asiento-hide").val(value);
+  } else if (radioValue == "RESERVA") {
+    let numeroAsiento = $("#numero-asiento").val();
+    let arrayNumeroAsiento = [];
+    if (numeroAsiento != "") {
+      arrayNumeroAsiento = numeroAsiento.split("-");
+    }
+    let numeroElementosAsiento = arrayNumeroAsiento.length;
+    let nuevoValue = 0;
+    if (numeroElementosAsiento != 0) {
+      nuevoValue = value / numeroElementosAsiento;
+    }
+    $("#precio-asiento-hide").val(nuevoValue.toFixed(3));
+  }
+}
 function generateInputHtml(seatNumber) {
   let html = `
   <div id="i_seat_${seatNumber}">

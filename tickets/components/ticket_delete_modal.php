@@ -17,7 +17,7 @@
               </div>
               <div class="col-md-12">
                 <label class="form-label text-secondary fw-semibold ms-2" for="password-user">Contraseña</label>
-                <input type="hidden" value="" id="ticket-id-delete" name="ticket_id" />
+                <input type="hidden" value="" id="ticket-id-delete" name="id" />
                 <input type="password" class="form-control" id="ticket-password-confirm" placeholder="Ingresar contraseña" value="" name="password" min="4" required>
               </div>
           </div>

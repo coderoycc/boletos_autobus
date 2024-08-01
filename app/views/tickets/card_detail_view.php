@@ -1,3 +1,6 @@
+<?php
+$arraySeatNumber = explode("-", $ticket['seat_number']);
+?>
 <div class="card" style="max-width: 800px;">
     <div class="card-header">
         <h4 class="card-title m-0 p-2 text-center text-secondary fw-semibold">
@@ -12,40 +15,40 @@
                         <td colspan="2"><b class="fw-semibold"><i class="fas fa-user-circle ms-2 me-2"></i>Cliente</b></td>
                     </tr>
                     <tr align="center">
-                        <td colspan="2"><?=strtoupper($client->name." ".$client->lastname." ".$client->mothers_lastname)?></td>
+                        <td colspan="2"><?= strtoupper($client->name . " " . $client->lastname . " " . $client->mothers_lastname) ?></td>
                     </tr>
                     <tr>
                         <td class="me-2">
-                            <b class="text-secondary me-2">CI:</b><?=$client->ci?>
+                            <b class="text-secondary me-2">CI:</b><?= $client->ci ?>
                         </td>
                         <td class="me-2">
-                            <b class="text-secondary me-2">NIT:</b><?=$client->nit?>
+                            <b class="text-secondary me-2">NIT:</b><?= $client->nit ?>
                         </td>
                     </tr>
                     <tr class="table-secondary">
                         <td colspan="2"><b class="fw-semibold"><i class="fas fa-bus ms-2 me-2"></i>Bus</b></td>
                     </tr>
                     <tr>
-                        <td class="me-2"><b class="fw-semibold me-2">Descripción:</b><?=$bus->description?></td>
-                        <td class="me-2"><b class="fw-semibold me-2">Placa:</b><?=$bus->placa?></td>
+                        <td class="me-2"><b class="fw-semibold me-2">Descripción:</b><?= $bus->description ?></td>
+                        <td class="me-2"><b class="fw-semibold me-2">Placa:</b><?= $bus->placa ?></td>
                     </tr>
                     <tr class="table-secondary">
                         <td colspan="2"><b class="fw-semibold"><i class="fas fa-map-marker-alt ms-2 me-2"></i>Viaje</b></td>
                     </tr>
                     <tr>
                         <td class="me-2">
-                            <b class="fw-semibold me-2">Salida:</b><?=(new DateTime($trip->departure_date))->format('d/m/Y')?>
+                            <b class="fw-semibold me-2">Salida:</b><?= (new DateTime($trip->departure_date))->format('d/m/Y') ?>
                         </td>
                         <td class="me-2">
-                            <b class="fw-semibold me-2">Hora:</b><?=(new DateTime($trip->departure_time))->format('H:i')?>
+                            <b class="fw-semibold me-2">Hora:</b><?= (new DateTime($trip->departure_time))->format('H:i') ?>
                         </td>
                     </tr>
                     <tr>
                         <td class="me-2">
-                            <b class="fw-semibold me-2">Origen:</b><?=strtoupper($origin->location)?>
+                            <b class="fw-semibold me-2">Origen:</b><?= strtoupper($origin->location) ?>
                         </td>
                         <td class="me-4">
-                            <b class="fw-semibold me-2">Destino:</b><?=strtoupper($destination->location)?>
+                            <b class="fw-semibold me-2">Destino:</b><?= strtoupper($destination->location) ?>
                         </td>
                     </tr>
                     <tr class="table-secondary">
@@ -53,18 +56,18 @@
                     </tr>
                     <tr>
                         <td class="me-2">
-                            <b class="fw-semibold me-2">Fecha:</b><?=(new DateTime($ticket->created_at))->format('d/m/Y')?>
+                            <b class="fw-semibold me-2">Fecha:</b><?= (new DateTime($ticket['sold_datetime']))->format('d/m/Y') ?>
                         </td>
                         <td class="me-2">
-                            <b class="fw-semibold me-2">Hora:</b><?=(new DateTime($ticket->created_at))->format('H:i')?>
+                            <b class="fw-semibold me-2">Hora:</b><?= (new DateTime($ticket['sold_datetime']))->format('H:i') ?>
                         </td>
                     </tr>
                     <tr>
                         <td class="me-2">
-                            <b class="fw-semibold me-2">Número de Asiento:</b><?=$ticket->seat_number?>
+                            <b class="fw-semibold me-2">Número de Asiento(s):</b><?= $ticket['seat_number'] ?>
                         </td>
                         <td class="me-2">
-                            <b class="fw-semibold me-2">Precio:</b><span class="text-dark fw-bold"><?=number_format($ticket->price, 2) . " Bs"?></span>
+                            <b class="fw-semibold me-2">Precio:</b><span class="text-dark fw-bold"><?= $ticket['status'] == 'RESERVA' ? number_format($ticket['sold_price'] * count($arraySeatNumber), 2) : number_format($ticket['sold_price'], 2) . " Bs" ?></span>
                         </td>
                     </tr>
                 </tbody>

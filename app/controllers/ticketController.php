@@ -9,14 +9,17 @@ use App\Models\Trip;
 use App\Models\Location;
 use App\Models\Bus;
 use App\Providers\DBWebProvider;
+use DateTime;
 use Helpers\Resources\Request;
 use Helpers\Resources\Response;
 use Helpers\Resources\Render;
 use Helpers\Resources\ReportPrintApp;
 
-class TicketController {
+class TicketController
+{
 
-  public function create($data) {
+  public function create($data)
+  {
     $con = DBWebProvider::getSessionDataDB();
     if ($con) {
       $arrTickets = $data['seat_number'];
@@ -68,7 +71,8 @@ class TicketController {
     }
   }
 
-  public function reservedSeats($query) {
+  public function reservedSeats($query)
+  {
     if (!Request::required(['trip_id'], $query))
       Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
 
@@ -79,7 +83,8 @@ class TicketController {
     ]);
   }
 
-  public function PrintTicketApp($data) {
+  public function PrintTicketApp($data)
+  {
     if (!Request::required(['ticket_id', 'db_name'], $data))
       Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
 
@@ -100,16 +105,18 @@ class TicketController {
     }
   }
 
-  public function TicketDetail($query) {
+  public function TicketDetail($query)
+  {
     $query['db_name'] = 'boletos_25_diciembre';
     $db_name = $query['db_name'];
-    $ticket_id = $query['ticket_id'];
+    $client_id = $query['client_id'];
     DBWebProvider::start_session_app(['dbname' => $db_name]);
     $con = DBWebProvider::getSessionDataDB();
-    $ticket = new Ticket($con, $ticket_id);
-    if ($ticket->id > 0) {
-      $client = new Client($con, $ticket->client_id);
-      $trip = new Trip($con, $ticket->trip_id);
+    // $ticket = new Ticket($con, $client_id);
+    $ticket = Ticket::detail_by_client($con, $client_id);
+    if (count($ticket) > 0) {
+      $client = new Client($con, $ticket['client_id']);
+      $trip = new Trip($con, $ticket['trip_id']);
       $origin = new Location($con, $trip->location_id_origin);
       $destination = new Location($con, $trip->location_id_dest);
       $bus = new Bus($con, $trip->bus_id);
@@ -126,33 +133,47 @@ class TicketController {
     }
   }
 
-  public function getAllTicketsView($data) {
+  public function getAllTicketsView($data)
+  {
     $con = DBWebProvider::getSessionDataDB();
+    $info_trip_array = array('origin' => '', 'destination' => '', 'date' => '', 'time' => '');
     if (!isset($data['trip_id']) || $data['trip_id'] == '0' || $data['trip_id'] == 0) {
       $last_trip = Trip::get_first_trip_today($con);
       $data['trip_id'] = $last_trip->id;
+    } else {
+      $current_trip = new Trip($con, $data['trip_id']);
+      $origin_trip = $current_trip->origin();
+      $destination_trip = $current_trip->destination();
+      $info_trip_array['origin'] = $origin_trip->location;
+      $info_trip_array['destination'] = $destination_trip->location;
+      $dateTime = new DateTime($current_trip->departure_date . ' ' . $current_trip->departure_time);
+      $info_trip_array['date'] = $dateTime->format('d/m/Y H:i');
+      // $info_trip_array['time'] = $current_trip->departure_time;
     }
     $records = Ticket::index($con, $data);
     Render::view('tickets/ticket_list_view', [
       'records' => $records,
       'trip_id' => $data['trip_id'],
+      'info_trip' => $info_trip_array
     ]);
   }
 
-  public function deleteSoldTicket($data) {
-    if (!Request::required(['password', 'ticket_id'], $data))
+  public function deleteSoldTicket($data)
+  {
+    if (!Request::required(['password', 'id'], $data))
       Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
 
     $con = DBWebProvider::getSessionDataDB();
-    $id = $data['ticket_id'];
+    $id = $data['id'];
     $password = hash('sha256', $data['password']);
     $userId = json_decode($_SESSION['user'])->id;
 
     $user = new User($con, $userId);
 
     if ($password == $user->password) {
-      $ticket = new Ticket($con, $id);
-      $res = $ticket->delete();
+      // $ticket = new Ticket($con, $id);
+      // $res = $ticket->delete();
+      $res = Ticket::delete_by_client($con, $id);
       if ($res) {
         Response::success_json('Venta eliminada correctamente.', []);
       } else {
@@ -163,20 +184,27 @@ class TicketController {
     }
   }
 
-  public function consolidateSale($data) {
-    if (!Request::required(['price', 'ticket_id'], $data))
+  public function consolidateSale($data)
+  {
+    if (!Request::required(['price', 'client_id'], $data))
       Response::error_json(['message' => 'Faltan parámetros necesarios.'], 200);
 
     $con = DBWebProvider::getSessionDataDB();
     if ($con) {
-      $ticket_id = $data['ticket_id'];
+      $client_id = $data['client_id'];
       $price = floatval($data['price']);
-      $ticket = new Ticket($con, $ticket_id);
-      if ($ticket->id > 0) {
-        $ticket->price += $price;
-        $ticket->status = "VENDIDO";
-        $ticket->created_at = date('Y-m-d H:i:s');
-        $response = $ticket->update();
+      // $ticket = new Ticket($con, $client_id);
+      $ticket = Ticket::detail_by_client($con, $client_id);
+      // print_r($ticket);
+      if ($client_id > 0) {
+        $newPrice = $price + $ticket['sold_price'];
+        $status = "VENDIDO";
+        $created_at = date('Y-m-d\TH:i:s');
+        // echo $created_at;
+        // $response = $ticket->update();
+        $response = Ticket::update_by_client($con, $client_id, $newPrice, $status, $created_at);
+        // print_r($response);
+        // echo $response;
         if ($response) {
           Response::success_json('Venta consolidada correctamente.', [
             'ticket' => $ticket,
@@ -185,13 +213,14 @@ class TicketController {
           Response::error_json(['message' => 'No se pudo consolidar la venta.'], 200);
         }
       } else {
-        Response::error_json(['message' => 'No se encontro el boleto.'], 200);
+        Response::error_json(['message' => 'No se encontró el cliente.'], 200);
       }
     } else {
       Response::error_json(['message' => 'No se pudo conectar a la BD.'], 200);
     }
   }
-  public function get_data_ticket($query) {
+  public function get_data_ticket($query)
+  {
     $con = DBWebProvider::getSessionDataDB();
     if ($con) {
       $ticket = Ticket::ticket_by_seat($con, $query['trip_id'], $query['seat_number']);

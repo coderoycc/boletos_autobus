@@ -4,7 +4,8 @@ namespace App\Models;
 
 use PDO;
 
-class Ticket {
+class Ticket
+{
 
   private $con;
 
@@ -21,7 +22,8 @@ class Ticket {
   public int $is_minor;
   public string $owner_ci;
 
-  public function __construct($db = null, $id = null) {
+  public function __construct($db = null, $id = null)
+  {
     $this->objectNull();
     if ($db) {
       $this->con = $db;
@@ -38,7 +40,8 @@ class Ticket {
     }
   }
 
-  public function load($row) {
+  public function load($row)
+  {
     $this->id = $row['id'];
     $this->seat_number = $row['seat_number'];
     $this->trip_id = $row['trip_id'];
@@ -53,7 +56,8 @@ class Ticket {
     $this->owner_ci = $row['owner_ci'] ?? '';
   }
 
-  public function objectNull() {
+  public function objectNull()
+  {
     $this->id = 0;
     $this->seat_number = 0;
     $this->trip_id = 0;
@@ -68,7 +72,8 @@ class Ticket {
     $this->owner_ci = '';
   }
 
-  public static function reservedSeats($con, $trip_id, $status = 'VENDIDO') {
+  public static function reservedSeats($con, $trip_id, $status = 'VENDIDO')
+  {
     try {
       $sql = "SELECT t.seat_number
                     FROM tickets t
@@ -89,7 +94,8 @@ class Ticket {
     return [];
   }
 
-  public function save() {
+  public function save()
+  {
     if ($this->con == null) {
       return -1;
     }
@@ -124,7 +130,8 @@ class Ticket {
     }
   }
 
-  public function update() {
+  public function update()
+  {
     if ($this->con == null) {
       return -1;
     }
@@ -161,7 +168,8 @@ class Ticket {
     }
   }
 
-  public function delete() {
+  public function delete()
+  {
     if ($this->con == null) {
       return -1;
     }
@@ -170,7 +178,7 @@ class Ticket {
       $this->con->beginTransaction();
       $sql = "DELETE 
               FROM tickets  
-              WHERE id = :id;";
+              WHERE client_id = :id;";
       $params = [
         'id' => $this->id,
       ];
@@ -191,7 +199,82 @@ class Ticket {
     }
   }
 
-  public static function get_ticket_all($con, $query) {
+  public static function detail_by_client($con, $client_id)
+  {
+    try {
+      $resp = 0;
+      $con->beginTransaction();
+      $sql = "SELECT temporal.*, asientos.seat_number FROM ( SELECT DISTINCT t.client_id, t.price as sold_price, FORMAT(t.created_at, 'yyyy-MM-dd HH:mm') as sold_datetime, t.trip_id, t.status, t.sold_by, t.intermediate_id FROM tickets t WHERE t.client_id = '$client_id') as temporal LEFT JOIN ( SELECT client_id, STRING_AGG(seat_number, '-') as seat_number from tickets GROUP BY client_id) as asientos ON temporal.client_id = asientos.client_id ORDER BY temporal.client_id DESC;";
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      return $row;
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+    return [];
+  }
+
+  public static function update_by_client($con, $client_id, $newPrice, $status, $created_at)
+  {
+    if ($con == null) {
+      return -1;
+    }
+    try {
+      $price = number_format($newPrice, 2);
+      $resp = 0;
+      $isTransactionActive = $con->inTransaction();
+      if (!$isTransactionActive) {
+        $con->beginTransaction();
+      }
+      // $con->beginTransaction();
+      $sql = "UPDATE tickets SET price = '$price', status = '$status', created_at = '$created_at' WHERE client_id = '$client_id';";
+      $stmt = $con->prepare($sql);
+      $res = $stmt->execute();
+      if ($res) {
+        $con->commit();
+        $resp = 1;
+      } else {
+        $resp = -1;
+        $con->rollBack();
+      }
+      return $resp;
+    } catch (\Throwable $th) {
+      $con->rollBack();
+      return $th;
+    }
+  }
+
+  public static function delete_by_client($con, $client_id)
+  {
+    try {
+      $resp = 0;
+      $con->beginTransaction();
+      $sql = "DELETE 
+              FROM tickets  
+              WHERE client_id = :id;";
+      $params = [
+        'id' => $client_id,
+      ];
+      $stmt = $con->prepare($sql);
+      $res = $stmt->execute($params);
+      if ($res) {
+        $con->commit();
+        $resp = 1;
+      } else {
+        $resp = -1;
+        $con->rollBack();
+      }
+      return $resp;
+    } catch (\Throwable $th) {
+      //print_r($th);
+      $con->rollBack();
+      return -1;
+    }
+  }
+
+  public static function get_ticket_all($con, $query)
+  {
     try {
       $sql = "SELECT a.id as id_ticket, a.price as monto_fin, a.seat_number, b.*, c.location as origen, d.location as destino, e.ci, e.nit, e.name, e.lastname, e.mothers_lastname 
         FROM tickets a 
@@ -215,28 +298,17 @@ class Ticket {
     return [];
   }
 
-  public static function index($con, $data) {
+  public static function index($con, $data)
+  {
     try {
       $client = $data['client'];
       $trip_id = $data['trip_id'] ?? 0;
       $filterByDestination = intval($trip_id) > 0 ? "AND t.trip_id = $trip_id" : "";
-      $sql = "SELECT t.id as ticket, t.price as sold_price, t.seat_number, t.created_at as sold_datetime,
-                      b.description as bus_description, b.placa,
-                      tr.*, o.location as origin, d.location as destination, 
-                      e.ci, e.nit, CONCAT(e.name, ' ', e.lastname, ' ', e.mothers_lastname) AS client,
-                      i.location AS intermediate,
-                      u.username, t.status, tr.price, tr.min_price
-              FROM tickets t
-              LEFT JOIN trips tr ON t.trip_id = tr.id
-              LEFT JOIN locations o ON tr.location_id_origin = o.id 
-              LEFT JOIN locations d ON tr.location_id_dest = d.id
-              LEFT JOIN locations i ON t.intermediate_id = i.id
-              LEFT JOIN clients e ON t.client_id = e.id
-              LEFT JOIN buses b ON b.id = tr.bus_id
-              LEFT JOIN users u ON u.id = t.sold_by
-              WHERE CONCAT(e.name, ' ', e.lastname, ' ', e.mothers_lastname) LIKE '%$client%'
-                    $filterByDestination
-              ORDER BY t.id DESC;";
+      $sql = "SELECT * FROM (
+      SELECT DISTINCT t.client_id, t.price as sold_price, FORMAT(t.created_at, 'yyyy-MM-dd HH:mm') as sold_datetime, b.description as bus_description, b.placa, tr.*, o.location as origin, d.location as destination, e.ci, e.nit, CONCAT(e.name, ' ', e.lastname, ' ', e.mothers_lastname) AS client, i.location AS intermediate, u.username, t.status, tr.price as trip_price, tr.min_price as trip_min_price FROM tickets t LEFT JOIN trips tr ON t.trip_id = tr.id LEFT JOIN locations o ON tr.location_id_origin = o.id LEFT JOIN locations d ON tr.location_id_dest = d.id LEFT JOIN locations i ON t.intermediate_id = i.id LEFT JOIN clients e ON t.client_id = e.id LEFT JOIN buses b ON b.id = tr.bus_id LEFT JOIN users u ON u.id = t.sold_by WHERE CONCAT(e.name, ' ', e.lastname, ' ', e.mothers_lastname) LIKE '%$client%' $filterByDestination ) as temporal LEFT JOIN (
+      SELECT client_id, STRING_AGG(seat_number,'-') as seat_number from tickets GROUP BY client_id
+      ) as asientos ON temporal.client_id = asientos.client_id;";
+      // echo $sql;
       $stmt = $con->prepare($sql);
       $stmt->execute();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -247,7 +319,8 @@ class Ticket {
     return [];
   }
 
-  public static function countSumTicket($con, $trip_id) {
+  public static function countSumTicket($con, $trip_id)
+  {
     try {
       $sql = "SELECT price, COUNT(price) as countTickets, SUM(price) as sumTickets  FROM tickets WHERE trip_id = '$trip_id' GROUP BY price;";
       $stmt = $con->prepare($sql);
@@ -260,7 +333,8 @@ class Ticket {
   /**
    * @return array de los numeros de asientos de un mismo viaje que compro un cliente
    */
-  public static function tickets_by_client($con, $trip_id, $client_id) {
+  public static function tickets_by_client($con, $trip_id, $client_id)
+  {
     try {
       $sql = "SELECT seat_number FROM tickets WHERE trip_id = ? AND client_id = ?";
       $stmt = $con->prepare($sql);
@@ -276,7 +350,8 @@ class Ticket {
     }
     return [];
   }
-  public static function ticket_by_seat($con, $trip_id, $seat_number): Ticket {
+  public static function ticket_by_seat($con, $trip_id, $seat_number): Ticket
+  {
     $ticket = new Ticket($con);
     try {
       $sql = "SELECT a.*, b.lastname FROM tickets a INNER JOIN clients b ON a.client_id = b.id 
@@ -293,7 +368,8 @@ class Ticket {
     }
     return $ticket;
   }
-  public static function are_sold($con, $trip_id, $seats): bool {
+  public static function are_sold($con, $trip_id, $seats): bool
+  {
     try {
       $cad = '';
       foreach ($seats as $seat) {

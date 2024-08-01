@@ -18,8 +18,8 @@ const getReservedSeats = async (trip_id) => {
 /**
  * Obtener detalles de la venta
  */
-const getTicketDetailView = async (ticket_id) => {
-    const URL = `../app/ticket/ticketDetail?ticket_id=${ticket_id}`;
+const getTicketDetailView = async (client_id) => {
+    const URL = `../app/ticket/ticketDetail?client_id=${client_id}`;
     const request = await fetch(URL, requestOptionsGet( ));
     return (await request.text());
 };
