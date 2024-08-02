@@ -28,6 +28,8 @@
         <?php foreach ($records as $key => $record) {
            if ($record['status'] == 'RESERVA') {
             $arraySeats = explode('-', $record['seat_number']);
+           } else {
+            $arraySeats = explode('-', $record['seat_number']);
            }
            ?>
           <tr>
@@ -37,7 +39,7 @@
             <td><?= strtoupper($record['destination']) . ' ' . (strlen($record['intermediate']) == 0 ? '' : '(' . strtoupper($record['intermediate']) . ')') ?></td>
             <td align="center"><?= (new DateTime($record['departure_date']))->format('d/m/Y') . " " . (new DateTime($record['departure_time']))->format('H:i') ?></td> -->
             <td class="text-center fw-bold text-primary"><?= strtoupper($record['seat_number']) ?></td>
-            <td class="fw-bold text-success text-center"><?= $record['status'] == 'RESERVA' ? number_format($record['sold_price'] * count($arraySeats), 2) : number_format($record['sold_price'], 2) . " Bs" ?></td>
+            <td class="fw-bold text-success text-center"><?= $record['status'] == 'RESERVA' ? number_format($record['sold_price'] * count($arraySeats), 2) : number_format($record['sold_price'] * count($arraySeats), 2) . " Bs" ?></td>
             <td align="center"><span class="badge text-bg-light"><?= strtoupper($record['username']) ?></span></td>
             <td align="center"><?= (new DateTime($record['sold_datetime']))->format('d/m/Y') . " " . (new DateTime($record['sold_datetime']))->format('H:i') ?></td>
             <td align="center"><?= $record['client'] ?></td>

@@ -212,7 +212,7 @@ $(document).ready(async function () {
   $('input[type=radio][name="status"]').change((e) => {
     const value = e.target.value;
     if (value == "VENDIDO") {
-      $("#total_amount").text("0");
+      $("#total_amount").text((requestDataDistributions.data.trip.price * seats_selected.size).toFixed(2));
       $("#label-precio").show();
       $("#label-adelanto").hide();
       $("#total-amount-view").show();
