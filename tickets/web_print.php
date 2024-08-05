@@ -37,7 +37,7 @@ if (!isset($_GET['cid'])) {
   $nombre_suc = 'Sucursal Central';
   $ciudad = $datos_emp['location'];
   $routes = "Uyuni - Oruro - Potosí - La Paz - Cocha.";
-  $companyName = "TRANS. 25 DE DICIEMBRE";
+  $companyName = "ASOCIACION DE TRANSPORTE LIBRE<br>25 DE DICIEMBRE";
   $phone = "67258945";
   $laneNumber = "3";
   $footerMessage = "El pasajero debe estar 30 minutos antes de la salida del bus, <b>NO SE ACEPTAN DEVOLUCIONES</b>.";
@@ -103,7 +103,7 @@ if (!isset($_GET['cid'])) {
   $dataCenter = "";
   $tabla = '<table border="0" cellpadding="0">
   <tr>
-    <td colspan="500" align="center"><b style="font-size:130%;">' . $companyName . '</b></td>
+    <td colspan="500" align="center"><b style="font-size:120%;">' . $companyName . '</b></td>
   </tr>
   <tr>
     <td colspan="500" align="center">' . $routes . '</td>
@@ -115,7 +115,7 @@ if (!isset($_GET['cid'])) {
     <td colspan="500" align="center"><b style="font-size:120%;">Boleto #' . $ticket['client_id'] . '</b></td>
   </tr>
   <tr>
-    <td colspan="500" align="center" style="font-size:100%;"><b>Asiento(s): ' . $cadenaSeats . '</b></td>
+    <td colspan="500" align="center" style="font-size:120%;"><b>Asiento(s): ' . $cadenaSeats . '</b></td>
   </tr>
   <tr>
     <td colspan="500" align="center" style="border-bottom: 1px solid #000;font-size:100%;"><b>Carril: ' . $laneNumber . '</b></td>

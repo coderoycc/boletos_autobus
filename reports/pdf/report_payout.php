@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $pdf->setPrintHeader(false);
     $pdf->setPrintFooter(false);
     $pdf->SetMargins(5, 7, 5, false);
-    $pdf->SetFont('helvetica', '', 10);
+    $pdf->SetFont('helvetica', '', 9);
     $pdf->addPage();
 
     $correspEncom = $liquidation->correspondence;
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $tabla = '
     <table border="0" cellpadding="0.5">
     <tr>
-    <td align="center" style="font-size: 12px;"><b>TRANS 25 DE DICIEMBRE</b></td>
+    <td align="center" style="font-size: 10px;"><b>ASOCIACION DE TRANSPORTE LIBRE<br>25 DE DICIEMBRE</b></td>
     </tr>
     <tr>
     <td align="center" style="font-size: 9px;">Uyuni-Oruro-Potosí-La Paz-Cochabamba</td>
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     </table>
     <table border="0" cellpadding="1">
     <tr>
-    <td colspan="10" align="center" style="font-size: 11px; border-bottom: 0.5px solid black;"><b>BOLETA DE LIQUIDACION</b></td>
+    <td colspan="10" align="center" style="font-size: 10px; border-bottom: 0.5px solid black;"><b>BOLETA DE LIQUIDACION</b></td>
     </tr>
     </table>
     <table border="0" cellpadding="0.5">

@@ -81,7 +81,7 @@ $pdf->addPage();
 $tabla = '
 <table border="0" cellpadding="0.5">
 <tr>
-<td align="center" style="font-size: 10px;"><b>TRANS 25 DE DICIEMBRE</b></td>
+<td align="center" style="font-size: 10px;"><b>ASOCIACION DE TRANSPORTE LIBRE<br>25 DE DICIEMBRE</b></td>
 </tr>
 <tr>
 <td align="center" style="font-size: 8px;">Uyuni-Oruro-Potosí-La Paz-Cochabamba</td>
